@@ -38,4 +38,5 @@ as_gg_list <- function(x) {
   } else {
     stop("Not a list")
   }
+  x
 }
