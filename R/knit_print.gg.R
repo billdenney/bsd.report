@@ -26,3 +26,16 @@ knit_print.gg_list <- function(x, ..., fig_suffix="\\clearpage\n") {
   lapply(X=x, FUN=knit_print, ..., fig_suffix=fig_suffix)
   invisible(x)
 }
+
+#' Make a gg_list object (a list of ggplots) for knit_printing
+#' 
+#' @param x The list
+#' @return A gg_list object (just adding the class to the list)
+#' @export
+as_gg_list <- function(x) {
+  if (is.list(x)) {
+    class(x) <- "gg_list"
+  } else {
+    stop("Not a list")
+  }
+}
