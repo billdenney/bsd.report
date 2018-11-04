@@ -12,6 +12,8 @@ single_value(x, missing = NA, warn_if_all_missing = FALSE,
 
 \item{missing}{The vector of values to consider missing in \code{x}}
 
+\item{warn_if_all_missing}{Generate a warning if all values are missing?}
+
 \item{info}{If more than one value is found, append this to the warning or
 error to assist with determining the location of the issue.}
 }

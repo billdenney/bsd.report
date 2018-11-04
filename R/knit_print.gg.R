@@ -1,6 +1,9 @@
 #' Print a ggplot object with space around it
-#' 
+#'
 #' @param x The plot object
+#' @param ... Passed to \code{print}.
+#' @param fig_prefix,fig_suffix Character strings passed to \code{cat} before
+#'   and after printing \code{x} (if not missing).
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg_list}}
 #' @export
@@ -19,6 +22,8 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix) {
 
 #' Print a list of ggplot objects with space around each
 #' @param x A list of plot objects
+#' @param ... Passed to \code{knit_print}.
+#' @inheritParams knit_print.gg
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg}}
 #' @export

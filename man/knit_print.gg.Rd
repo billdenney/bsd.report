@@ -8,6 +8,11 @@
 }
 \arguments{
 \item{x}{The plot object}
+
+\item{...}{Passed to \code{print}.}
+
+\item{fig_prefix, fig_suffix}{Character strings passed to \code{cat} before
+and after printing \code{x} (if not missing).}
 }
 \value{
 \code{x} invisibly

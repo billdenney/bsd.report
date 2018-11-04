@@ -5,6 +5,7 @@
 #'
 #' @param x The vector which should have a single value
 #' @param missing The vector of values to consider missing in \code{x}
+#' @param warn_if_all_missing Generate a warning if all values are missing?
 #' @param info If more than one value is found, append this to the warning or
 #'   error to assist with determining the location of the issue.
 #' @return \code{x} as the scalar single value found throughout (or an error if
@@ -115,19 +116,24 @@ setdiff_bidir <- function(x, y) {
 }
 
 #' Extract numeric, BLQ, and text data from a vector.
-#' 
+#'
 #' @param x The character vector to extract data from.
-#' @param blq_pattern A regex or vector of regex values for extracting 
-#'   BLQ.  If a vector, all regexes will be tested.
+#' @param blq_pattern A regex or vector of regex values for extracting BLQ.  If
+#'   a vector, all regexes will be tested.
+#' @param number_pattern A regex or vector of regex values for finding numbers.
+#' @param replace_blq The value to place in the "number" column when a BLQ is
+#'   matched (typically \code{0} or \code{NA_real_}).
 #' @param ... Parameters passed to \code{grep} and \code{grepl} for
 #'   \code{blq_pattern} searching.
 #' @return a data.frame with columns named "text", "number", and "blq".
 #' @examples
 #' make_blq(c("1", "A", "<1"))
+#' make_blq(c("1", "A", "<1"), replace_blq=NA_real_)
 #' @export
 make_blq <- function(x,
                      blq_pattern="^< *\\(? *([0-9]*\\.?[0-9]+) *\\)?$",
                      number_pattern="^(+-)?[0-9]+(\\.[0-9]*)?([eE][+-]?[0-9]+)?$",
+                     replace_blq=0,
                      ...) {
   if (!is.character(x)) {
     stop("x must be a character vector.")
@@ -140,7 +146,7 @@ make_blq <- function(x,
   for (i in seq_along(blq_pattern)) {
     mask_blq_current <- grepl(blq_pattern[[i]], ret$text, ...)
     if (any(mask_blq_current)) {
-      ret$blq[mask_blq_current] <- 0
+      ret$blq[mask_blq_current] <- replace_blq
       blq_value_current <-
         as.numeric(
           gsub(blq_pattern[[i]],

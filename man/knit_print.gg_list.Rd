@@ -8,6 +8,11 @@
 }
 \arguments{
 \item{x}{A list of plot objects}
+
+\item{...}{Passed to \code{knit_print}.}
+
+\item{fig_suffix}{Character strings passed to \code{cat} before
+and after printing \code{x} (if not missing).}
 }
 \value{
 \code{x} invisibly

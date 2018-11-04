@@ -1,6 +1,7 @@
 #' Print the sessionInfo in a way that is usable in knitr/rmarkdown reports
 #' 
 #' @param x The output of sessionInfo() (if missing, it is generated)
+#' @param ... Ignored
 #' @return A knitr \code{asis_output()} version of the session info.
 #' @importFrom utils sessionInfo
 #' @export

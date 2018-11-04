@@ -5,13 +5,19 @@
 \title{Extract numeric, BLQ, and text data from a vector.}
 \usage{
 make_blq(x, blq_pattern = "^< *\\\\(? *([0-9]*\\\\.?[0-9]+) *\\\\)?$",
-  number_pattern = "^(+-)?[0-9]+(\\\\.[0-9]*)?([eE][+-]?[0-9]+)?$", ...)
+  number_pattern = "^(+-)?[0-9]+(\\\\.[0-9]*)?([eE][+-]?[0-9]+)?$",
+  replace_blq = 0, ...)
 }
 \arguments{
 \item{x}{The character vector to extract data from.}
 
-\item{blq_pattern}{A regex or vector of regex values for extracting 
-BLQ.  If a vector, all regexes will be tested.}
+\item{blq_pattern}{A regex or vector of regex values for extracting BLQ.  If
+a vector, all regexes will be tested.}
+
+\item{number_pattern}{A regex or vector of regex values for finding numbers.}
+
+\item{replace_blq}{The value to place in the "number" column when a BLQ is
+matched (typically \code{0} or \code{NA_real_}).}
 
 \item{...}{Parameters passed to \code{grep} and \code{grepl} for
 \code{blq_pattern} searching.}
@@ -24,4 +30,5 @@ Extract numeric, BLQ, and text data from a vector.
 }
 \examples{
 make_blq(c("1", "A", "<1"))
+make_blq(c("1", "A", "<1"), replace_blq=NA_real_)
 }

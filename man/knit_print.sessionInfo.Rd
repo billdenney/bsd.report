@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{The output of sessionInfo() (if missing, it is generated)}
+
+\item{...}{Ignored}
 }
 \value{
 A knitr \code{asis_output()} version of the session info.
