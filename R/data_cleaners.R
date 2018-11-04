@@ -115,62 +115,82 @@ setdiff_bidir <- function(x, y) {
   c(x=setdiff(x, y), y=setdiff(y, x))
 }
 
-#' Extract numeric, BLQ, and text data from a vector.
+#' Extract numeric, below/above the lower/upper limits of quantification (LLQ
+#' and ULQ), and text data from a vector.
+#'
+#' @details If \code{llq_pattern} or \code{ulq_pattern} are regular expressions
+#'   that extract a value, then the extracted value will be used in the
+#'   "llq"/"ulq" column.  If not, then the value \code{-1} will be inserted.  If
+#'   all "llq"/"ulq" values match the \code{number_pattern}, then the
+#'   "llq"/"ulq" columns will be converted to numeric (if not, a warning will be
+#'   given).
 #'
 #' @param x The character vector to extract data from.
-#' @param blq_pattern A regex or vector of regex values for extracting BLQ.  If
-#'   a vector, all regexes will be tested.
+#' @param llq_pattern,ulq_pattern A regex or vector of regex values for
+#'   extracting llq and ULQ.  If a vector, all regexes will be tested.
 #' @param number_pattern A regex or vector of regex values for finding numbers.
-#' @param replace_blq The value to place in the "number" column when a BLQ is
-#'   matched (typically \code{0} or \code{NA_real_}).
+#' @param replace_llq,replace_ulq The value to place in the "number" column when
+#'   a llq/ulq is matched (typically \code{0} and \code{Inf}, respecitvely or
+#'   \code{NA_real_} for both).
 #' @param ... Parameters passed to \code{grep} and \code{grepl} for
-#'   \code{blq_pattern} searching.
-#' @return a data.frame with columns named "text", "number", and "blq".
+#'   \code{llq_pattern} searching.
+#' @return a data.frame with columns named "text", "number", "llq", and "ulq".
 #' @examples
-#' make_blq(c("1", "A", "<1"))
-#' make_blq(c("1", "A", "<1"), replace_blq=NA_real_)
+#' make_loq(c("1", "A", "<1", ">60"))
+#' make_loq(c("1", "A", "<1", ">60"), replace_llq=NA_real_)
+#' make_loq(c("1", "A", "<1", ">60"), replace_llq=NA_real_, replace_ulq=NA_real_)
+#' make_loq(c("1", "A", "<1", ">ULQ"), replace_llq=NA_real_, replace_ulq=NA_real_)
+#' make_loq(c("1", "A", "<1", ">ULQ"), replace_llq=NA_real_, replace_ulq=NA_real_, ulq_pattern=">ULQ")
 #' @export
-make_blq <- function(x,
-                     blq_pattern="^< *\\(? *([0-9]*\\.?[0-9]+) *\\)?$",
+make_loq <- function(x,
+                     llq_pattern="^< *\\(? *([0-9]*\\.?[0-9]+) *\\)?$",
+                     ulq_pattern="^> *\\(? *([0-9]*\\.?[0-9]+) *\\)?$",
                      number_pattern="^(+-)?[0-9]+(\\.[0-9]*)?([eE][+-]?[0-9]+)?$",
-                     replace_blq=0,
+                     replace_llq=0,
+                     replace_ulq=Inf,
                      ...) {
   if (!is.character(x)) {
     stop("x must be a character vector.")
   }
   ret <- data.frame(text=x,
                     number=NA_real_,
-                    blq=NA_real_,
+                    llq=NA_character_,
+                    ulq=NA_character_,
                     stringsAsFactors=FALSE)
-  # Extract the BLQ data
-  for (i in seq_along(blq_pattern)) {
-    mask_blq_current <- grepl(blq_pattern[[i]], ret$text, ...)
-    if (any(mask_blq_current)) {
-      ret$blq[mask_blq_current] <- replace_blq
-      blq_value_current <-
-        as.numeric(
-          gsub(blq_pattern[[i]],
-               "\\1",
-               ret$text[mask_blq_current],
-               ...))
-      mask_blq_value <- !is.na(blq_value_current)
-      if (any(mask_blq_value)) {
-        ret$blq[mask_blq_current][mask_blq_value] <-
-          blq_value_current[mask_blq_value]
+  loq_patterns <- list(llq=llq_pattern, ulq=ulq_pattern)
+  loq_replacement <- list(llq=replace_llq, ulq=replace_ulq)
+  # Extract the llq/ulq data
+  for (current_direction in names(loq_patterns)) {
+    for (current_pattern in loq_patterns[[current_direction]]) {
+      mask_loq_current <- grepl(current_pattern, ret$text, ...)
+      if (any(mask_loq_current)) {
+        # Update the number column with the appropriate replacement value
+        ret$number[mask_loq_current] <-
+          loq_replacement[[current_direction]]
+        # Update the current LOQ column with the appropriate replacement value
+        ret[[current_direction]][mask_loq_current] <-
+          gsub(
+            pattern=current_pattern,
+            replacement="\\1",
+            x=ret$text[mask_loq_current],
+            ...
+          )
+        # Set the original value to NA and set the numeric value to 0
+        ret$text[mask_loq_current] <- NA_character_
       }
-      # Set the original value to NA and set the numeric value to 0
-      ret$text[mask_blq_current] <- NA_character_
-      ret$number[mask_blq_current] <- 0
+    }
+    if (all(grepl_multi_pattern(pattern=number_pattern, x=ret[[current_direction]], ...) |
+            is.na(ret[[current_direction]]))) {
+      ret[[current_direction]] <- as.numeric(ret[[current_direction]])
+    } else {
+      warning("Not all ", current_direction, " values are numeric, not converting.")
     }
   }
   # Extract the numeric data
-  for (i in seq_along(number_pattern)) {
-    number_mask_current <- grepl(number_pattern[[i]], ret$text, ...)
-    if (any(number_mask_current)) {
-      ret$number[number_mask_current] <-
-        as.numeric(x[number_mask_current])
-      ret$text[number_mask_current] <- NA_character_
-    }
+  number_mask <- grepl_multi_pattern(pattern=number_pattern, x=ret$text, ...)
+  if (any(number_mask)) {
+    ret$number[number_mask] <- as.numeric(x[number_mask])
+    ret$text[number_mask] <- NA_character_
   }
   ret
 }
