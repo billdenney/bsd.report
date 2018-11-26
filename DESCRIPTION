@@ -8,6 +8,7 @@ Description: Report writing can be made easier by using some simplifying
 Depends:
   R (>= 3.5)
 Imports:
+  dplyr,
   knitr,
   utils
 License: AGPL-3
