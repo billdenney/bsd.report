@@ -1,0 +1,4 @@
+name: Generic Report
+description: >
+   A general report well-suited for pdf output.
+create_dir: FALSE
