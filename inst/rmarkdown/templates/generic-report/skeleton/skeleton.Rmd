@@ -6,7 +6,7 @@ output:
   pdf_document:
     toc: yes
     toc_depth: 6
-header-include:
+header-includes:
 # Allow the \blandscape and \elandscape commands to start and end landsape
 # sections of the document.  (Note that any \blandscape must have a matching
 # \elandscape.)
