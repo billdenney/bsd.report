@@ -31,6 +31,7 @@ knitr::opts_chunk$set(
 library(knitr)
 library(bsd.report)
 library(tidyverse)
+library(cowplot)
 library(pander)
 panderOptions("table.split.table", 1e6)
 ```

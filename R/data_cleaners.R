@@ -194,3 +194,17 @@ make_loq <- function(x,
   }
   ret
 }
+
+#' Determine duplicate elements (including the first duplicate)
+#'
+#' @param x A vector, data.frame, an array, or NULL.
+#' @param ... Passed to \code{duplicated}
+#' @param fromLast Ignored (included as an argument to prevent passing to
+#'   \code{duplicated})
+#' @return A vector the same length as the return from \code{duplicated} with
+#'   the first duplicated value also flagged rather than just values from the
+#'   second to the last (as is returned from \code{duplicated}).
+#' @export
+duplicated_including_first <- function(x, ..., fromLast=NULL) {
+  duplicated(x, ..., fromLast=FALSE) | duplicated(x, ..., fromLast=TRUE)
+}
