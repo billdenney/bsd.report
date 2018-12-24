@@ -32,8 +32,12 @@ library(knitr)
 library(bsd.report)
 library(tidyverse)
 library(cowplot)
+library(assertr)
 library(pander)
 panderOptions("table.split.table", 1e6)
+
+scale_colour_ordinal <- scale_colour_hue
+scale_fill_ordinal <- scale_fill_hue
 ```
 
 # Summary
