@@ -1,3 +1,5 @@
+context("knit_print.formula")
+
 test_that("knit_print.formula, simple formulas work", {
   expect_equal(
     knit_print.formula(a~b),
