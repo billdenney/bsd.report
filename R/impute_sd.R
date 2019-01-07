@@ -1,10 +1,12 @@
 #' Check the input of impute_sd functions
 #' @inheritParams impute_sd
 #' @noRd
-impute_sd_check_input <- function(point, var1, var2, n, vartype) {
+impute_sd_check_input <- function(point, var1, var2, n, vartype, allow_na_vartype=FALSE) {
   stopifnot(all(c(length(var1), length(var2), length(n)) == length(point)))
   stopifnot(length(vartype) %in% c(1, length(point)))
-  stopifnot(all(!is.na(vartype)))
+  if (!allow_na_vartype) {
+    stopifnot(all(!is.na(vartype)))
+  }
 }
 
 #' Impute standard deviation from measures of dispersion.
@@ -22,7 +24,7 @@ impute_sd_check_input <- function(point, var1, var2, n, vartype) {
 #'   \url{https://handbook-5-1.cochrane.org/chapter_7/7_7_3_data_extraction_for_continuous_outcomes.htm}
 #' @export
 impute_sd <- function(point, var1, var2, n, vartype) {
-  impute_sd_check_input(point, var1, var2, n, vartype)
+  impute_sd_check_input(point, var1, var2, n, vartype, allow_na_vartype=TRUE)
   input_data <-
     data.frame(
       point=point,
@@ -48,14 +50,23 @@ impute_sd <- function(point, var1, var2, n, vartype) {
         impute_sd_iqr
       } else if (current_vartype %in% "RANGE") {
         impute_sd_range
+      } else if (current_vartype %in% NA) {
+        message(
+          sum(current_mask), " NA vartype ",
+          ngettext(n=sum(current_mask), msg1="value", msg2="values"),
+          " is imputed as NA."
+        )
+        NA
       } else {
         stop("Unrecognized vartype")
       }
-    input_data$sd[current_mask] <-
-      with(
-        input_data[current_mask,],
-        impute_sd_FUN(point, var1, var2, n, vartype)
-      )
+    if (!identical(NA, impute_sd_FUN)) {
+      input_data$sd[current_mask] <-
+        with(
+          input_data[current_mask,],
+          impute_sd_FUN(point, var1, var2, n, vartype)
+        )
+    }
   }
   input_data$sd
 }

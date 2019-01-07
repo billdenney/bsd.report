@@ -1,7 +1,14 @@
 context("impute_sd")
 
 test_that("input checks work", {
-  for (current_fun in c(impute_sd, impute_sd_ci, impute_sd_cv, impute_sd_iqr, impute_sd_range, impute_sd_sd, impute_sd_se)) {
+  # impute_sd does not give an error for NA, so it is pulled out.
+  expect_error(impute_sd(point=1:2, var1=1, var2=1, n=1, vartype="SD"))
+  expect_error(impute_sd(point=1, var1=1:2, var2=1, n=1, vartype="SD"))
+  expect_error(impute_sd(point=1, var1=1, var2=1:2, n=1, vartype="SD"))
+  expect_error(impute_sd(point=1, var1=1, var2=1, n=1:2, vartype="SD"))
+  expect_error(impute_sd(point=1, var1=1, var2=1, n=1, vartype=rep("SD", 2)))
+  expect_error(impute_sd(point=1:3, var1=1:3, var2=1:3, n=1:3, vartype=rep("SD", 2)))
+  for (current_fun in c(impute_sd_ci, impute_sd_cv, impute_sd_iqr, impute_sd_range, impute_sd_sd, impute_sd_se)) {
     # Mismatch in argument lengths
     expect_error(current_fun(point=1:2, var1=1, var2=1, n=1, vartype="SD"))
     expect_error(current_fun(point=1, var1=1:2, var2=1, n=1, vartype="SD"))
@@ -41,6 +48,24 @@ test_that("imputation selects the correct method", {
   expect_equal(
     expect_warning(impute_sd(point=1, var1=0, var2=2, n=5, vartype="RANGE")),
     expect_warning(impute_sd_range(point=1, var1=0, var2=2, n=5, vartype="RANGE"))
+  )
+  expect_equal(
+    expect_message(
+      impute_sd(point=1, var1=0.5, var2=1.5, n=5, vartype=NA),
+      "is imputed as NA"
+    ),
+    NA_real_
+  )
+  expect_equal(
+    expect_message(
+      impute_sd(point=c(1, 1, NA), var1=c(5, 0.5, NA), var2=c(NA_real_, 1.5, NA), n=c(5, 5, NA), vartype=c("CV", "IQR", NA)),
+      "is imputed as NA"
+    ),
+    c(
+      impute_sd_cv(point=1, var1=5, var2=NA_real_, n=5, vartype="%CV"),
+      impute_sd_iqr(point=1, var1=0.5, var2=1.5, n=5, vartype="IQR"),
+      NA_real_
+    )
   )
 })
 
