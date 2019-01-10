@@ -151,14 +151,14 @@ impute_sd_ci <- function(point, var1, var2, n, vartype) {
     )/100
   lower_ci <- point - var1
   upper_ci <- var2 - point
-  if (ci_frac <= 0 | ci_frac >= 1) {
+  if (any(ci_frac <= 0 | ci_frac >= 1)) {
     stop("The value for the confidence interval percent must be an integer between 0 and 100, exclusive.")
   }
   if (!all(is.na(lower_ci) | lower_ci > 0)) {
-    stop("var1 must be <= point.")
+    stop("For CI, `var1` must be <= `point`.")
   }
   if (!all(is.na(upper_ci) | upper_ci > 0)) {
-    stop("var2 must be >= point.")
+    stop("For CI, `var2` must be >= `point`.")
   }
   qval <- qt(p=1-(1-ci_frac)/2, df=n)
   lower_sd <- lower_ci/qval
@@ -182,9 +182,9 @@ impute_sd_iqr <- function(point, var1, var2, n, vartype) {
     stop("vartype must be 'IQR'")
   }
   if (!all(var1 < point)) {
-    stop("`var1` must be < `point`.")
+    stop("For IQR, `var1` must be < `point`.")
   } else if (!all(var2 > point)) {
-    stop("`var2` must be > `point`.")
+    stop("For IQR, `var2` must be > `point`.")
   }
   (var2 - var1)/(2*qt(p=0.75, df=n))
 }
@@ -205,9 +205,9 @@ impute_sd_range <- function(point, var1, var2, n, vartype) {
     stop("vartype must be 'RANGE'")
   }
   if (!all(var1 < point)) {
-    stop("`var1` must be < `point`.")
+    stop("For range, `var1` must be < `point`.")
   } else if (!all(var2 > point)) {
-    stop("`var2` must be > `point`.")
+    stop("For range, `var2` must be > `point`.")
   }
   (var2 - var1)/4
 }

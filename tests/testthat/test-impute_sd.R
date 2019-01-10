@@ -129,22 +129,22 @@ test_that("ci imputation works", {
   )
   expect_error(
     impute_sd_ci(point=1, var1=1, var2=2, n=5, vartype="90% CI"),
-    regexp="var1 must be <= point", fixed=TRUE,
+    regexp="`var1` must be <= `point`", fixed=TRUE,
     info="var1 == point"
   )
   expect_error(
     impute_sd_ci(point=1, var1=2, var2=2, n=5, vartype="90% CI"),
-    regexp="var1 must be <= point", fixed=TRUE,
+    regexp="`var1` must be <= `point`", fixed=TRUE,
     info="var1 > point"
   )
   expect_error(
     impute_sd_ci(point=1, var1=0, var2=1, n=5, vartype="90% CI"),
-    regexp="var2 must be >= point", fixed=TRUE,
+    regexp="`var2` must be >= `point`", fixed=TRUE,
     info="var2 == point"
   )
   expect_error(
     impute_sd_ci(point=1, var1=0, var2=0, n=5, vartype="90% CI"),
-    regexp="var2 must be >= point", fixed=TRUE,
+    regexp="`var2` must be >= `point`", fixed=TRUE,
     info="var2 < point"
   )
   expect_equal(
