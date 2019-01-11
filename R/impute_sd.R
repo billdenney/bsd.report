@@ -181,12 +181,24 @@ impute_sd_iqr <- function(point, var1, var2, n, vartype) {
   if (!all(toupper(vartype) %in% "IQR")) {
     stop("vartype must be 'IQR'")
   }
-  if (!all(var1 < point)) {
-    stop("For IQR, `var1` must be < `point`.")
-  } else if (!all(var2 > point)) {
-    stop("For IQR, `var2` must be > `point`.")
+  if (!all(var1 <= point)) {
+    stop("For IQR, `var1` must be <= `point`.")
+  } else if (!all(var2 >= point)) {
+    stop("For IQR, `var2` must be >= `point`.")
   }
-  (var2 - var1)/(2*qt(p=0.75, df=n))
+  ret <- (var2 - var1)/(2*qt(p=0.75, df=n))
+  mask_bad_distribution_point_edge <-
+    (!is.na(var1) & !is.na(point) & var1 == point) |
+    (!is.na(var2) & !is.na(point) & var2 == point)
+  if (any(mask_bad_distribution_point_edge)) {
+    warning(
+      "For IQR, `point` equals `var1` or `var2` for ",
+      sum(mask_bad_distribution_point_edge),
+      " values.  The distributional assumption of being a t-distribution is not accurate; returning NA for those values."
+    )
+    ret[mask_bad_distribution_point_edge] <- NA_real_
+  }
+  ret
 }
 
 #' @rdname impute_sd
@@ -204,10 +216,22 @@ impute_sd_range <- function(point, var1, var2, n, vartype) {
   if (!all(toupper(vartype) %in% "RANGE")) {
     stop("vartype must be 'RANGE'")
   }
-  if (!all(var1 < point)) {
-    stop("For range, `var1` must be < `point`.")
-  } else if (!all(var2 > point)) {
-    stop("For range, `var2` must be > `point`.")
+  if (!all(var1 <= point)) {
+    stop("For range, `var1` must be <= `point`.")
+  } else if (!all(var2 >= point)) {
+    stop("For range, `var2` must be >= `point`.")
   }
-  (var2 - var1)/4
+  ret <- (var2 - var1)/4
+  mask_bad_distribution_point_edge <-
+    (!is.na(var1) & !is.na(point) & var1 == point) |
+    (!is.na(var2) & !is.na(point) & var2 == point)
+  if (any(mask_bad_distribution_point_edge)) {
+    warning(
+      "For range, `point` equals `var1` or `var2` for ",
+      sum(mask_bad_distribution_point_edge),
+      " values.  The distributional assumption is not accurate; returning NA for those values."
+    )
+    ret[mask_bad_distribution_point_edge] <- NA_real_
+  }
+  ret
 }

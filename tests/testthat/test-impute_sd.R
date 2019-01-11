@@ -173,13 +173,21 @@ test_that("iqr imputation works", {
     impute_sd_iqr(point=1, var1=1, var2=NA_real_, n=5, vartype="foo"),
     info="correct vartype"
   )
-  expect_error(
-    impute_sd_iqr(point=1, var1=1, var2=1, n=5, vartype="IQR"),
-    regexp="`var1` must be < `point`.", fixed=TRUE
+  expect_equal(
+    expect_warning(
+      impute_sd_iqr(point=1, var1=1, var2=1, n=5, vartype="IQR"),
+      regexp="distributional assumption",
+      fixed=TRUE
+    ),
+    NA_real_
   )
-  expect_error(
-    impute_sd_iqr(point=1, var1=0, var2=1, n=5, vartype="IQR"),
-    regexp="`var2` must be > `point`.", fixed=TRUE
+  expect_equal(
+    expect_warning(
+      impute_sd_iqr(point=1, var1=0, var2=1, n=5, vartype="IQR"),
+      regexp="distributional assumption",
+      fixed=TRUE
+    ),
+    NA_real_
   )
   expect_equal(
     impute_sd_iqr(point=1, var1=0, var2=2, n=5, vartype="IQR"),
@@ -192,13 +200,21 @@ test_that("range imputation works", {
     expect_warning(impute_sd_range(point=1, var1=1, var2=NA_real_, n=5, vartype="foo")),
     info="correct vartype"
   )
-  expect_error(
-    expect_warning(impute_sd_range(point=1, var1=1, var2=1, n=5, vartype="RANGE")),
-    regexp="`var1` must be < `point`.", fixed=TRUE
+  expect_equal(
+    expect_warning(
+      impute_sd_range(point=1, var1=1, var2=1, n=5, vartype="RANGE"),
+      regexp="distributional assumption",
+      fixed=TRUE
+    ),
+    NA_real_
   )
-  expect_error(
-    expect_warning(impute_sd_range(point=1, var1=0, var2=1, n=5, vartype="RANGE")),
-    regexp="`var2` must be > `point`.", fixed=TRUE
+  expect_equal(
+    expect_warning(
+      impute_sd_range(point=1, var1=0, var2=1, n=5, vartype="RANGE"),
+      regexp="distributional assumption",
+      fixed=TRUE
+    ),
+    NA_real_
   )
   expect_equal(
     expect_warning(impute_sd_range(point=1, var1=0, var2=2, n=5, vartype="RANGE")),
