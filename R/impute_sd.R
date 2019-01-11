@@ -53,8 +53,8 @@ impute_sd <- function(point, var1, var2, n, vartype) {
       } else if (current_vartype %in% NA) {
         message(
           sum(current_mask), " NA vartype ",
-          ngettext(n=sum(current_mask), msg1="value", msg2="values"),
-          " is imputed as NA."
+          ngettext(n=sum(current_mask), msg1="value is", msg2="values are"),
+          " imputed as NA."
         )
         NA
       } else {
