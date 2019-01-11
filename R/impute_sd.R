@@ -194,7 +194,8 @@ impute_sd_iqr <- function(point, var1, var2, n, vartype) {
     warning(
       "For IQR, `point` equals `var1` or `var2` for ",
       sum(mask_bad_distribution_point_edge),
-      " values.  The distributional assumption of being a t-distribution is not accurate; returning NA for those values."
+      ngettext(sum(mask_bad_distribution_point_edge), msg1=" value", msg2=" values"),
+      ".  The distributional assumption of being a t-distribution is not accurate; returning NA for those values."
     )
     ret[mask_bad_distribution_point_edge] <- NA_real_
   }
