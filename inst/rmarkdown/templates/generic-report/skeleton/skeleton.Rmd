@@ -7,16 +7,27 @@ output:
     toc: yes
     toc_depth: 6
 header-includes:
+#- \usepackage{siunitx}
+#- \usepackage{topiclongtable}
+# Enable the \FloatBarrier command, and default to keeping floats within
+# the section defining the float.
+- \usepackage[section]{placeins}
 # Allow the \blandscape and \elandscape commands to start and end landsape
 # sections of the document.  (Note that any \blandscape must have a matching
 # \elandscape.)
 - \usepackage{lscape}
 - \newcommand{\blandscape}{\begin{landscape}}
 - \newcommand{\elandscape}{\end{landscape}}
-# Enable the \FloatBarrier command, and default to keeping floats within
-# the section defining the float.
-- \usepackage[section]{placeins}
+- \newcommand{\reportstatus}{Draft}
+#- \newcommand{\reportnumber}{}
+#- \newcommand{\sponsor}{}
+#- \newcommand{\sponsoraddress}{}
+- \hypersetup{colorlinks,breaklinks,urlcolor=[rgb]{0,0,1},linkcolor=[rgb]{0,0,1}}
+- \input{fancytitle.tex}
 ---
+
+\listoffigures
+\listoftables
 
 # Version History
 

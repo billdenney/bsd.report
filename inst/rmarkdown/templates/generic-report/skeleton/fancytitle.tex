@@ -1,0 +1,45 @@
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{\sponsor}
+\fancyhead[R]{Confidential}
+\fancyfoot[L]{\reportnumber}
+\fancyfoot[C]{\reportstatus}
+\fancyfoot[R]{\thepage}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage
+  \null
+  \vskip 2em%
+  \begin{center}%
+  \let \footnote \thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em%
+    {\large
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        Author: \@author
+      \end{tabular}\par}%
+    \vskip 2cm
+    \rule{8cm}{0.4pt} \par
+    Author Signature
+  \end{center}%
+  \vskip 1em%
+  \ifdefined\sponsor
+  Sponsor: \sponsor
+  \ifdefined\sponsoraddress
+  ; \sponsoraddress
+  \fi
+  \newline
+  \fi
+  Report Date: \@date\newline
+  \ifdefined\reportnumber
+  Report Number: \reportnumber\newline
+  Report Status: \reportstatus\newline
+  \fi
+  \par
+  \vskip 1.5em
+  \newpage}
+\makeatother
