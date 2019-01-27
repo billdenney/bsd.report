@@ -6,7 +6,7 @@
 #'   other columns in the updated data are used to patch the source data).
 #' @param ... Ignored
 #' @param replace Values selected in \code{basedata} for replacement with values
-#'   in \code{patchdata} (via \code{%in%}).  (If \code{NULL}, all values may be
+#'   in \code{patchdata} (via \code{\%in\%}).  (If \code{NULL}, all values may be
 #'   replaced.)
 #' @param do_not_replace Values in \code{patchdata} not to use for replacement
 #'   of values in \code{basedata}.  (If \code{NULL}, all values may be used for

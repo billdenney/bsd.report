@@ -14,6 +14,10 @@ patch_data(basedata, patchdata, by = dplyr::group_vars(basedata), ...,
 
 \item{...}{Ignored}
 
+\item{replace}{Values selected in \code{basedata} for replacement with values
+in \code{patchdata} (via \code{\%in\%}).  (If \code{NULL}, all values may be
+replaced.)}
+
 \item{do_not_replace}{Values in \code{patchdata} not to use for replacement
 of values in \code{basedata}.  (If \code{NULL}, all values may be used for
 replacement.)}
