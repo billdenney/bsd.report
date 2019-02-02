@@ -3,11 +3,14 @@
 \name{latex_reference}
 \alias{latex_reference}
 \alias{latex_label}
+\alias{latex_label_clean}
 \title{Generate a latex label or reference to the label}
 \usage{
 latex_reference(x)
 
 latex_label(x)
+
+latex_label_clean(x)
 }
 \arguments{
 \item{x}{The label (a character vector, usually starting with "fig:" for figures and "tab:" for tables)}
@@ -21,5 +24,8 @@ Generate a latex label or reference to the label
 \section{Functions}{
 \itemize{
 \item \code{latex_label}: Generate a latex label (location to be found by a reference).
+
+\item \code{latex_label_clean}: Clean latex labels so that they are usable
+(remove spaces and pass through \code{Hmisc::latexTranslate}).
 }}
 
