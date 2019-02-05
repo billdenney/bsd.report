@@ -7,7 +7,7 @@
 \usage{
 emax_fun(x, e0, emax, ex50, hill = 1)
 
-inverse_emax(effect, e0, emax, ec50, hill = 1)
+inverse_emax(effect, e0, emax, ex50, hill = 1)
 }
 \arguments{
 \item{e0}{Baseline effect}

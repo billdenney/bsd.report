@@ -16,7 +16,7 @@ emax_fun <- function(x, e0, emax, ex50, hill=1) {
 }
 #' @describeIn emax_fun Inverse emax
 #' @export
-inverse_emax <- function(effect, e0, emax, ec50, hill=1) {
+inverse_emax <- function(effect, e0, emax, ex50, hill=1) {
   current_effect <- effect - e0
-  (current_effect*(ec50^hill)/(emax*(1-current_effect/emax)))^(1/hill)
+  (current_effect*(ex50^hill)/(emax*(1-current_effect/emax)))^(1/hill)
 }
