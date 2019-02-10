@@ -29,3 +29,31 @@ comma_and <- function(x, oxford_comma=TRUE, conjunction="and") {
   }
   ret
 }
+
+#' Make a confidence interval from a point estimate and standard error.
+#'
+#' @param point The point estimate (numeric vector)
+#' @param se The standard error of the estimate (numeric vector)
+#' @param level The confidence level
+#' @param transform A function that takes a matrix input and returns a matrix
+#'   output of the confidence interval values transformed.
+#' @param numeric Should the transformed point estimate be returned instead of
+#'   the character representation?
+#' @return If \code{numeric=FALSE} a character vector of the confidence
+#'   intervals represented as "X [X, X]" where X are numbers with three
+#'   significant figures.  If \code{numeric=TRUE}, a numeric vector of the point
+#'   estimates.
+#' @export
+make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE) {
+  values <- point + outer(qnorm(p=level)*se, c(0, -1, 1), FUN=`*`)
+  if (!is.null(transform)) {
+    values <- transform(values)
+  }
+  if (numeric) {
+    ret <- values[,1]
+  } else {
+    ret <- sprintf("%0.3g [%0.3g, %0.3g]", values[,1], values[,2], values[,3])
+    ret[is.na(point)] <- NA_character_
+  }
+  ret
+}
