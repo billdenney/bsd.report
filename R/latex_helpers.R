@@ -23,6 +23,7 @@ latex_label <- function(x) {
 #' @describeIn latex_reference Clean latex labels so that they are usable
 #'   (remove spaces and pass through \code{Hmisc::latexTranslate}).
 #' @export
+#' @importFrom Hmisc latexTranslate
 latex_label_clean <- function(x) {
   Hmisc::latexTranslate(gsub(pattern=" ", replacement="-", x=x))
 }

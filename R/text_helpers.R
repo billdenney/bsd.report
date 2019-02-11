@@ -41,19 +41,34 @@ comma_and <- function(x, oxford_comma=TRUE, conjunction="and") {
 #'   the character representation?
 #' @return If \code{numeric=FALSE} a character vector of the confidence
 #'   intervals represented as "X [X, X]" where X are numbers with three
-#'   significant figures.  If \code{numeric=TRUE}, a numeric vector of the point
-#'   estimates.
+#'   significant figures (or if the transform returns a character matrix, those
+#'   text).  If \code{numeric=TRUE}, a numeric vector of the point estimates.
 #' @export
 make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE) {
-  values <- point + outer(qnorm(p=level)*se, c(0, -1, 1), FUN=`*`)
+  values <- cbind(point, point + outer(qnorm(p=0.5+level/2)*se, c(-1, 1), FUN=`*`))
   if (!is.null(transform)) {
     values <- transform(values)
   }
   if (numeric) {
     ret <- values[,1]
-  } else {
-    ret <- sprintf("%0.3g [%0.3g, %0.3g]", values[,1], values[,2], values[,3])
+  } else if (is.numeric(values)) {
+    ret <-
+      ifelse(
+        is.na(values[,2]),
+        sprintf("%0.3g [%0.3g]", values[,1], NA),
+        sprintf("%0.3g [%0.3g, %0.3g]", values[,1], values[,2], values[,3])
+      )
+    ret[is.na(point)] <- NA_character_
+  } else if (is.character(values)) {
+    ret <-
+      ifelse(
+        is.na(values[,2]),
+        sprintf("%s [%s]", values[,1], NA),
+        sprintf("%s [%s, %s]", values[,1], values[,2], values[,3])
+      )
+    
     ret[is.na(point)] <- NA_character_
   }
   ret
 }
+

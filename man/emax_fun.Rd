@@ -10,6 +10,8 @@ emax_fun(x, e0, emax, ex50, hill = 1)
 inverse_emax(effect, e0, emax, ex50, hill = 1)
 }
 \arguments{
+\item{x}{The input paramter (often a concentration)}
+
 \item{e0}{Baseline effect}
 
 \item{emax}{Maximum effect (at the limit as \code{x} approaches \code{Inf})}
@@ -29,7 +31,7 @@ Compute the Emax or its inverse.
 \details{
 The equation for the Emax function is
 
-  \deqn{effect = e0 + \frac{emax \times x^{hill}}{ex50^{hill} + x^{hill}}}
+  \deqn{effect = e0 + emax * x^{hill}/(ex50^{hill} + x^{hill})}
 }
 \section{Functions}{
 \itemize{

@@ -2,8 +2,9 @@
 #'
 #' @details The equation for the Emax function is
 #'
-#'   \deqn{effect = e0 + \frac{emax \times x^{hill}}{ex50^{hill} + x^{hill}}}
+#'   \deqn{effect = e0 + emax * x^{hill}/(ex50^{hill} + x^{hill})}
 #'
+#' @param x The input paramter (often a concentration)
 #' @param effect The effect
 #' @param e0 Baseline effect
 #' @param emax Maximum effect (at the limit as \code{x} approaches \code{Inf})

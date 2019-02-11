@@ -22,8 +22,8 @@ the character representation?}
 \value{
 If \code{numeric=FALSE} a character vector of the confidence
   intervals represented as "X [X, X]" where X are numbers with three
-  significant figures.  If \code{numeric=TRUE}, a numeric vector of the point
-  estimates.
+  significant figures (or if the transform returns a character matrix, those
+  text).  If \code{numeric=TRUE}, a numeric vector of the point estimates.
 }
 \description{
 Make a confidence interval from a point estimate and standard error.
