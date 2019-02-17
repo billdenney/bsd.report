@@ -23,5 +23,5 @@ Run grepl on a vector of patterns.
 grepl_multi_pattern(pattern=c("A", "B", "C"), LETTERS)
 }
 \seealso{
-\code{\link{gsub_multi_patter}}
+\code{\link{gsub_multi_pattern}}
 }

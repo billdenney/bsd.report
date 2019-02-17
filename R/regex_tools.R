@@ -8,7 +8,7 @@
 #'   pattern or no pattern.
 #' @return A vector of \code{NA_character_} when no match occurs and the
 #'   replaced value when a match occurs.
-#' @seealso \code{\link{grepl_multi_patter}}
+#' @seealso \code{\link{grepl_multi_pattern}}
 #' @export
 gsub_multi_pattern <- function(x, patterns, replacement, ..., verbose=FALSE) {
   ret <- rep(NA_character_, length(x))
@@ -48,7 +48,7 @@ gsub_multi_pattern <- function(x, patterns, replacement, ..., verbose=FALSE) {
 #' @return A boolean vector if any pattern is matched
 #' @examples
 #' grepl_multi_pattern(pattern=c("A", "B", "C"), LETTERS)
-#' @seealso \code{\link{gsub_multi_patter}}
+#' @seealso \code{\link{gsub_multi_pattern}}
 #' @export
 grepl_multi_pattern <- function(pattern, x, ...) {
   ret <- rep(FALSE, length(x))

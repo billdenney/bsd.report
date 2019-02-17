@@ -25,5 +25,5 @@ A vector of \code{NA_character_} when no match occurs and the
 Substitute from a vector of patterns with a single replacement
 }
 \seealso{
-\code{\link{grepl_multi_patter}}
+\code{\link{grepl_multi_pattern}}
 }
