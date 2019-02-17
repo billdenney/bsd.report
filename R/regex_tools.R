@@ -1,3 +1,45 @@
+#' Substitute from a vector of patterns with a single replacement
+#'
+#' @param x,replacement See \code{\link[base]{gsub}}
+#' @param patterns A vector of patterns as used individually in
+#'   \code{\link[base]{gsub}} and \code{\link[base]{grepl}}
+#' @param ... Passed to \code{\link[base]{gsub}} and \code{\link[base]{grepl}}
+#' @param verbose Signal messages with the count of values that matched each
+#'   pattern or no pattern.
+#' @return A vector of \code{NA_character_} when no match occurs and the
+#'   replaced value when a match occurs.
+#' @seealso \code{\link{grepl_multi_patter}}
+#' @export
+gsub_multi_pattern <- function(x, patterns, replacement, ..., verbose=FALSE) {
+  ret <- rep(NA_character_, length(x))
+  matched <- rep(FALSE, length(x))
+  while (length(patterns) & any(!matched)) {
+    current_pattern <- patterns[1]
+    patterns <- patterns[-1]
+    current_match <-
+      !matched &
+      grepl(pattern=current_pattern, x=x, ...)
+    matched <- matched | current_match
+    ret[current_match] <- gsub(
+      pattern=current_pattern,
+      replacement=replacement,
+      x=x[current_match],
+      ...
+    )
+    if (verbose) {
+      message(
+        sum(current_match),
+        " values matched the following pattern: ",
+        current_pattern
+      )
+    }
+  }
+  if (verbose) {
+    message(sum(!matched), " values matched no pattern.")
+  }
+  ret
+}
+
 #' Run grepl on a vector of patterns.
 #' 
 #' @param pattern One or more patterns (see grepl)
@@ -6,6 +48,7 @@
 #' @return A boolean vector if any pattern is matched
 #' @examples
 #' grepl_multi_pattern(pattern=c("A", "B", "C"), LETTERS)
+#' @seealso \code{\link{gsub_multi_patter}}
 #' @export
 grepl_multi_pattern <- function(pattern, x, ...) {
   ret <- rep(FALSE, length(x))
