@@ -9,6 +9,9 @@ cumsum_reset(x, reset = NA)
 }
 \arguments{
 \item{x}{The vector to sum over}
+
+\item{reset}{The value when found in \code{x} to reset the sum to zero at.
+(Note that the value at \code{x \%in\% reset} is zero.}
 }
 \value{
 A vector the same length as \code{x}

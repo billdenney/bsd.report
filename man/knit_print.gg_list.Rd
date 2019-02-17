@@ -4,7 +4,7 @@
 \alias{knit_print.gg_list}
 \title{Print a list of ggplot objects with space around each}
 \usage{
-\method{knit_print}{gg_list}(x, ..., fig_suffix = "\\\\clearpage\\n")
+\method{knit_print}{gg_list}(x, ..., fig_suffix = "\\n\\n")
 }
 \arguments{
 \item{x}{A list of plot objects}

@@ -27,7 +27,7 @@ inverse_emax <- function(effect, e0, emax, ex50, hill=1) {
 #'
 #' @param x The vector to sum over
 #' @param reset The value when found in \code{x} to reset the sum to zero at.
-#'   (Note that the value at \code{x %in% reset} is zero.
+#'   (Note that the value at \code{x \%in\% reset} is zero.
 #' @return A vector the same length as \code{x}
 #' @export
 cumsum_reset <- function(x, reset=NA) {

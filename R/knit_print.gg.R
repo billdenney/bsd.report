@@ -27,7 +27,7 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix) {
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg}}
 #' @export
-knit_print.gg_list <- function(x, ..., fig_suffix="\\clearpage\n") {
+knit_print.gg_list <- function(x, ..., fig_suffix="\n\n") {
   lapply(X=x, FUN=knit_print, ..., fig_suffix=fig_suffix)
   invisible(x)
 }
