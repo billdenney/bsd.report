@@ -12,6 +12,7 @@ translate_value <- function(x, old, new, ...) {
 }
 
 #' @describeIn translate_value Convert all columns (unless excluded)
+#' @export
 #' @importFrom dplyr mutate_at
 translate_value.data.frame <- function(x, old, new, ..., exclude_col=NULL) {
   dplyr::mutate_at(
@@ -23,17 +24,20 @@ translate_value.data.frame <- function(x, old, new, ..., exclude_col=NULL) {
 }
 
 #' @describeIn translate_value Convert the levels
+#' @export
 translate_value.factor <- function(x, old, new, ...) {
   levels(x) <- translate_value(levels(x), old, new, ...)
   x
 }
 
 #' @describeIn translate_value Use gsub.
+#' @export
 translate_value.character <- function(x, old, new, ..., fixed=TRUE) {
   gsub(pattern=old, replacement=new, x=x, fixed=fixed, ...)
 }
 
 #' @describeIn translate_value No translation done.
+#' @export
 translate_value.default <- function(x, old, new, ...) {
   x
 }
