@@ -26,6 +26,17 @@ paste_missing <- function(..., sep=" ", collapse=NULL, missing_values=NA, paste_
     }
   } else {
     # There are at least 2 arguments; collapse the first two and recurse
+    a1 <- args[[1]]
+    a2 <- args[[2]]
+    if (length(a1) != length(a2)) {
+      if (length(a1) == 1) {
+        a1 <- rep(a1, length(a2))
+      } else if (length(a2) == 1) {
+        a2 <- rep(a2, length(a1))
+      } else {
+        stop("Arguments must be the same length or one argument must be a scalar.")
+      }
+    }
     mask1 <- !(args[[1]] %in% missing_values)
     mask2 <- !(args[[2]] %in% missing_values)
     mask_both <- mask1 & mask2
