@@ -38,20 +38,22 @@ mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-l
   }
 }
 
-#' Return the minimum of the differences of x for the first value after 
-#' the choices.
-#' 
+#' Return the minimum of the differences of x for the first value after the
+#' choices.
+#'
 #' @param x The values to select choices for.
 #' @param choices The choices from which to select the minimum value.
-#' @param none What do you do if \code{x < min(choices)}?  Return a 
+#' @param include_zero Should choices only be selected if they are strictly
+#'   after or should zero be allowed?
+#' @param none What do you do if \code{x < min(choices)}?  Return a
 #'   \code{"negative"} value or return \code{NA}?
-#' @return A vector the same length as \code{x} with the minimum 
-#'   difference between \code{x} and any value of \code{choices}.  If
-#'   \code{choices} has length 0, then return a vector of \code{NA} the
-#'   same length as \code{x} (with a warning).
+#' @return A vector the same length as \code{x} with the minimum difference
+#'   between \code{x} and any value of \code{choices}.  If \code{choices} has
+#'   length 0, then return a vector of \code{NA} the same length as \code{x}
+#'   (with a warning).
 #' @seealso \code{\link{mindiff}}
 #' @export
-mindiff_after <- function(x, choices, include.zero=TRUE, none=c("negative", "na")) {
+mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na")) {
   none <- match.arg(none)
   if (length(choices) > 0) {
     choices <- sort(choices)
@@ -63,7 +65,7 @@ mindiff_after <- function(x, choices, include.zero=TRUE, none=c("negative", "na"
     apply(X=distances,
           MARGIN=2,
           FUN=function(x, none) {
-            if (include.zero) {
+            if (include_zero) {
               ret <- which(x >= 0)
             } else {
               ret <- which(x > 0)

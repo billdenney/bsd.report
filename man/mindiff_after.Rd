@@ -2,10 +2,10 @@
 % Please edit documentation in R/mindiff.R
 \name{mindiff_after}
 \alias{mindiff_after}
-\title{Return the minimum of the differences of x for the first value after 
-the choices.}
+\title{Return the minimum of the differences of x for the first value after the
+choices.}
 \usage{
-mindiff_after(x, choices, include.zero = TRUE, none = c("negative",
+mindiff_after(x, choices, include_zero = TRUE, none = c("negative",
   "na"))
 }
 \arguments{
@@ -13,18 +13,21 @@ mindiff_after(x, choices, include.zero = TRUE, none = c("negative",
 
 \item{choices}{The choices from which to select the minimum value.}
 
-\item{none}{What do you do if \code{x < min(choices)}?  Return a 
+\item{include_zero}{Should choices only be selected if they are strictly
+after or should zero be allowed?}
+
+\item{none}{What do you do if \code{x < min(choices)}?  Return a
 \code{"negative"} value or return \code{NA}?}
 }
 \value{
-A vector the same length as \code{x} with the minimum 
-  difference between \code{x} and any value of \code{choices}.  If
-  \code{choices} has length 0, then return a vector of \code{NA} the
-  same length as \code{x} (with a warning).
+A vector the same length as \code{x} with the minimum difference
+  between \code{x} and any value of \code{choices}.  If \code{choices} has
+  length 0, then return a vector of \code{NA} the same length as \code{x}
+  (with a warning).
 }
 \description{
-Return the minimum of the differences of x for the first value after 
-the choices.
+Return the minimum of the differences of x for the first value after the
+choices.
 }
 \seealso{
 \code{\link{mindiff}}
