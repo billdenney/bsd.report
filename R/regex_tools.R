@@ -1,9 +1,9 @@
 #' Substitute from a vector of patterns with a single replacement
 #'
-#' @param x,replacement See \code{\link[base]{gsub}}
-#' @param patterns A vector of patterns as used individually in
-#'   \code{\link[base]{gsub}} and \code{\link[base]{grepl}}
-#' @param ... Passed to \code{\link[base]{gsub}} and \code{\link[base]{grepl}}
+#' @param x,replacement See \code{gsub}
+#' @param patterns A vector of patterns as used individually in \code{gsub} and
+#'   \code{grepl}
+#' @param ... Passed to \code{gsub} and \code{grepl}
 #' @param verbose Signal messages with the count of values that matched each
 #'   pattern or no pattern.
 #' @return A vector of \code{NA_character_} when no match occurs and the

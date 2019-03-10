@@ -39,13 +39,16 @@ comma_and <- function(x, oxford_comma=TRUE, conjunction="and") {
 #'   output of the confidence interval values transformed.
 #' @param numeric Should the transformed point estimate be returned instead of
 #'   the character representation?
+#' @param format_numeric,format_character Formats for use in \code{sprintf} for
+#'   the output of the \code{transform} function.
 #' @return If \code{numeric=FALSE} a character vector of the confidence
 #'   intervals represented as "X [X, X]" where X are numbers with three
 #'   significant figures (or if the transform returns a character matrix, those
 #'   text).  If \code{numeric=TRUE}, a numeric vector of the point estimates.
 #' @export
+#' @importFrom stats qnorm
 make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE, format_numeric="%0.3g", format_character="%s") {
-  values <- cbind(point, point + outer(qnorm(p=0.5+level/2)*se, c(-1, 1), FUN=`*`))
+  values <- cbind(point, point + outer(stats::qnorm(p=0.5+level/2)*se, c(-1, 1), FUN=`*`))
   if (!is.null(transform)) {
     values <- transform(values)
   }

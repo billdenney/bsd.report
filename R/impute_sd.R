@@ -139,6 +139,7 @@ impute_sd_se <- function(point, var1, var2, n, vartype) {
 #'   required.  If only an upper or lower bound of the CI is available, set the
 #'   other to \code{NA}.  Imputation assumes a t-distribution.
 #' @export
+#' @importFrom stats qt
 impute_sd_ci <- function(point, var1, var2, n, vartype) {
   impute_sd_check_input(point, var1, var2, n, vartype)
   pattern_vartype <- "^([0-9]+)% CI$"
@@ -160,7 +161,7 @@ impute_sd_ci <- function(point, var1, var2, n, vartype) {
   if (!all(is.na(upper_ci) | upper_ci > 0)) {
     stop("For CI, `var2` must be >= `point`.")
   }
-  qval <- qt(p=1-(1-ci_frac)/2, df=n)
+  qval <- stats::qt(p=1-(1-ci_frac)/2, df=n)
   lower_sd <- lower_ci/qval
   upper_sd <- upper_ci/qval
   # average the lower and upper CI
@@ -174,6 +175,7 @@ impute_sd_ci <- function(point, var1, var2, n, vartype) {
 #'   (ignoring case); and \code{n} is required.  Imputation assumes a
 #'   t-distribution.
 #' @export
+#' @importFrom stats qt
 impute_sd_iqr <- function(point, var1, var2, n, vartype) {
   # Ref Cochrane Handbook version 5.1, section 7.7.3.5
   # (https://handbook-5-1.cochrane.org/chapter_7/7_7_3_5_mediansand_interquartile_ranges.htm)
@@ -186,7 +188,7 @@ impute_sd_iqr <- function(point, var1, var2, n, vartype) {
   } else if (!all(var2 >= point)) {
     stop("For IQR, `var2` must be >= `point`.")
   }
-  ret <- (var2 - var1)/(2*qt(p=0.75, df=n))
+  ret <- (var2 - var1)/(2*stats::qt(p=0.75, df=n))
   mask_bad_distribution_point_edge <-
     (!is.na(var1) & !is.na(point) & var1 == point) |
     (!is.na(var2) & !is.na(point) & var2 == point)

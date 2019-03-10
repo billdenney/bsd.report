@@ -7,12 +7,12 @@
 gsub_multi_pattern(x, patterns, replacement, ..., verbose = FALSE)
 }
 \arguments{
-\item{x, replacement}{See \code{\link[base]{gsub}}}
+\item{x, replacement}{See \code{gsub}}
 
-\item{patterns}{A vector of patterns as used individually in
-\code{\link[base]{gsub}} and \code{\link[base]{grepl}}}
+\item{patterns}{A vector of patterns as used individually in \code{gsub} and
+\code{grepl}}
 
-\item{...}{Passed to \code{\link[base]{gsub}} and \code{\link[base]{grepl}}}
+\item{...}{Passed to \code{gsub} and \code{grepl}}
 
 \item{verbose}{Signal messages with the count of values that matched each
 pattern or no pattern.}

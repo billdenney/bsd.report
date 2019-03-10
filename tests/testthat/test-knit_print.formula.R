@@ -220,7 +220,8 @@ test_that("knit_print.formula, function calls work with 0 or more arguments", {
     knitr::asis_output(
       "$a \\sim b()$",
       cacheable=TRUE
-    )
+    ),
+    info="Function with zero arguments"
   )
   
   expect_equal(
@@ -228,7 +229,8 @@ test_that("knit_print.formula, function calls work with 0 or more arguments", {
     knitr::asis_output(
       "$a \\sim b\\left(c\\right)$",
       cacheable=TRUE
-    )
+    ),
+    info="Function with one argument"
   )
   
   expect_equal(
@@ -236,7 +238,8 @@ test_that("knit_print.formula, function calls work with 0 or more arguments", {
     knitr::asis_output(
       "$a \\sim b\\left(c, d\\right)$",
       cacheable=TRUE
-    )
+    ),
+    info="Function with two arguments"
   )
   
   expect_equal(
@@ -244,7 +247,8 @@ test_that("knit_print.formula, function calls work with 0 or more arguments", {
     knitr::asis_output(
       "$a \\sim b\\left(c, d, e\\right)$",
       cacheable=TRUE
-    )
+    ),
+    info="Function with three arguments"
   )
 })
 

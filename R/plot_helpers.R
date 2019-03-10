@@ -20,7 +20,7 @@ plot_grid_one_legend <- function(...) {
 
 #' Remove the legend(s) from a ggplot
 #' 
-#' @param A ggplot2 object
+#' @param x A ggplot2 object
 #' @return The object with legends hidden.
 #' @family plot legend helpers
 #' @export

@@ -12,6 +12,9 @@ patch_data(basedata, patchdata, by = dplyr::group_vars(basedata), ...,
 
 \item{patchdata}{The updated data}
 
+\item{by}{The variables to match between source and updated data (all
+other columns in the updated data are used to patch the source data).}
+
 \item{...}{Ignored}
 
 \item{replace}{Values selected in \code{basedata} for replacement with values
@@ -23,9 +26,6 @@ of values in \code{basedata}.  (If \code{NULL}, all values may be used for
 replacement.)}
 
 \item{verbose}{Report on replacement count by column.}
-
-\item{byvars}{The variables to match between source and updated data (all
-other columns in the updated data are used to patch the source data).}
 }
 \value{
 The \code{basedata} updated with values from \code{patchdata}

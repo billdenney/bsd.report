@@ -4,7 +4,8 @@
 \alias{make_ci}
 \title{Make a confidence interval from a point estimate and standard error.}
 \usage{
-make_ci(point, se, level = 0.95, transform = NULL, numeric = FALSE)
+make_ci(point, se, level = 0.95, transform = NULL, numeric = FALSE,
+  format_numeric = "\%0.3g", format_character = "\%s")
 }
 \arguments{
 \item{point}{The point estimate (numeric vector)}
@@ -18,6 +19,9 @@ output of the confidence interval values transformed.}
 
 \item{numeric}{Should the transformed point estimate be returned instead of
 the character representation?}
+
+\item{format_numeric, format_character}{Formats for use in \code{sprintf} for
+the output of the \code{transform} function.}
 }
 \value{
 If \code{numeric=FALSE} a character vector of the confidence

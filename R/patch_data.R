@@ -2,7 +2,7 @@
 #'
 #' @param basedata The original (source) data
 #' @param patchdata The updated data
-#' @param byvars The variables to match between source and updated data (all
+#' @param by The variables to match between source and updated data (all
 #'   other columns in the updated data are used to patch the source data).
 #' @param ... Ignored
 #' @param replace Values selected in \code{basedata} for replacement with values
@@ -14,7 +14,7 @@
 #' @param verbose Report on replacement count by column.
 #' @return The \code{basedata} updated with values from \code{patchdata}
 #' @export
-#' @importFrom dplyr group_vars
+#' @importFrom dplyr group_vars full_join
 patch_data <- function(basedata, patchdata, by=dplyr::group_vars(basedata), ...,
                        replace=NA, do_not_replace=NA, verbose=TRUE) {
   if (length(by) < 1) {
@@ -30,9 +30,12 @@ patch_data <- function(basedata, patchdata, by=dplyr::group_vars(basedata), ...,
     warning("Some column names are in patchdata but not in basedata (new columns will be added): ",
             paste(missing_names, collapse=", "))
   }
-  ret <- full_join(basedata, patchdata,
-                   by=by,
-                   suffix=c("", ".patch"))
+  ret <-
+    dplyr::full_join(
+      basedata, patchdata,
+      by=by,
+      suffix=c("", ".patch")
+    )
   for (nm in patch_cols) {
     col_patch <- paste0(nm, ".patch")
     if (!is.null(do_not_replace)) {

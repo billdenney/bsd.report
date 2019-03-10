@@ -7,7 +7,7 @@
 remove_ggplot_legend(x)
 }
 \arguments{
-\item{A}{ggplot2 object}
+\item{x}{A ggplot2 object}
 }
 \value{
 The object with legends hidden.

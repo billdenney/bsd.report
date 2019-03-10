@@ -16,7 +16,7 @@ inverse_emax(effect, e0, emax, ex50, hill = 1)
 
 \item{emax}{Maximum effect (at the limit as \code{x} approaches \code{Inf})}
 
-\item{ex50}{Amount of x yielding 50% of the maximum effect}
+\item{ex50}{Amount of x yielding 50\% of the maximum effect}
 
 \item{hill}{The hill slope (also known as the sigmoidicity)}
 
@@ -31,7 +31,7 @@ Compute the Emax or its inverse.
 \details{
 The equation for the Emax function is
 
-  \deqn{effect = e0 + emax * x^{hill}/(ex50^{hill} + x^{hill})}
+  \deqn{effect = e0 + emax * x^{hill}/(ex50^{hill} + x^{hill})}{effect = e0 + emax * x^hill/(ex50^hill + x^hill)}
 }
 \section{Functions}{
 \itemize{
