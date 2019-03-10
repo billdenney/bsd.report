@@ -35,4 +35,9 @@ test_that("make_ci", {
     c("1 [-0.645, 2.64]", "1 [NA]"),
     check.attributes=FALSE
   )
+  expect_equal(
+    make_ci(c(1, 1), c(1, NA), level=0.9, format_numeric="%0.4g"),
+    c("1 [-0.6449, 2.645]", "1 [NA]"),
+    check.attributes=FALSE
+  )
 })

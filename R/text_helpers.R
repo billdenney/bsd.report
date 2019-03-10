@@ -44,7 +44,7 @@ comma_and <- function(x, oxford_comma=TRUE, conjunction="and") {
 #'   significant figures (or if the transform returns a character matrix, those
 #'   text).  If \code{numeric=TRUE}, a numeric vector of the point estimates.
 #' @export
-make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE) {
+make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE, format_numeric="%0.3g", format_character="%s") {
   values <- cbind(point, point + outer(qnorm(p=0.5+level/2)*se, c(-1, 1), FUN=`*`))
   if (!is.null(transform)) {
     values <- transform(values)
@@ -55,20 +55,31 @@ make_ci <- function(point, se, level=0.95, transform=NULL, numeric=FALSE) {
     ret <-
       ifelse(
         is.na(values[,2]),
-        sprintf("%0.3g [%0.3g]", values[,1], NA),
-        sprintf("%0.3g [%0.3g, %0.3g]", values[,1], values[,2], values[,3])
+        sprintf(
+          paste0(format_numeric, " [", format_numeric, "]"),
+          values[,1], NA
+        ),
+        sprintf(
+          paste0(format_numeric, " [", format_numeric, ", ", format_numeric, "]"),
+          values[,1], values[,2], values[,3]
+        )
       )
     ret[is.na(point)] <- NA_character_
   } else if (is.character(values)) {
     ret <-
       ifelse(
         is.na(values[,2]),
-        sprintf("%s [%s]", values[,1], NA),
-        sprintf("%s [%s, %s]", values[,1], values[,2], values[,3])
+        sprintf(
+          paste0(format_character, " [", format_character, "]"),
+          values[,1], NA
+        ),
+        sprintf(
+          paste0(format_character, " [", format_character, ", ", format_character, "]"),
+          values[,1], values[,2], values[,3]
+        )
       )
     
     ret[is.na(point)] <- NA_character_
   }
   ret
 }
-
