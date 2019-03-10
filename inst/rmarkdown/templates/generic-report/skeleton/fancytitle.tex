@@ -2,10 +2,14 @@
 \pagestyle{fancy}
 \fancyhead{}
 \fancyfoot{}
+\ifdefined\sponsor
 \fancyhead[L]{\sponsor}
+\fi
 \fancyhead[R]{Confidential}
+\ifdefined\reportnumber
 \fancyfoot[L]{\reportnumber}
 \fancyfoot[C]{\reportstatus}
+\fi
 \fancyfoot[R]{\thepage}
 
 \makeatletter

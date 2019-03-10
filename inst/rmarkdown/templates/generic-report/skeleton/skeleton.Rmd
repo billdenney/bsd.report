@@ -8,14 +8,15 @@ output:
     toc_depth: 6
 header-includes:
 #- \usepackage{siunitx}
-#- \usepackage{topiclongtable}
+# Enable use of the TopicLongTable R package
+- \usepackage{topiclongtable}
 # Enable the \FloatBarrier command, and default to keeping floats within
 # the section defining the float.
 - \usepackage[section]{placeins}
 # Allow the \blandscape and \elandscape commands to start and end landsape
 # sections of the document.  (Note that any \blandscape must have a matching
 # \elandscape.)
-- \usepackage{lscape}
+- \usepackage{pdflscape}
 - \newcommand{\blandscape}{\begin{landscape}}
 - \newcommand{\elandscape}{\end{landscape}}
 - \newcommand{\reportstatus}{Draft}
@@ -39,6 +40,7 @@ knitr::opts_chunk$set(
   warning=FALSE,
   message=FALSE
 )
+library(TopicLongTable)
 library(knitr)
 library(bsd.report)
 library(tidyverse)
