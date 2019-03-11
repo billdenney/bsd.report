@@ -37,7 +37,7 @@ latex_label_clean <- function(x) {
 #'   into \code{latex_label}).
 #' @return \code{c(x, paste0(latex_label(value[2]), value[1]))} or \code{c(x, value)}
 #' @export
-`add_caption<-` <- function(x, value) {
+add_caption <- function(x, value) {
   c(
     x,
     if (length(value) == 2) {
@@ -48,4 +48,10 @@ latex_label_clean <- function(x) {
       stop("value must have length 1 or 2.")
     }
   )
+}
+
+#' @rdname add_caption
+#' @export
+`add_caption<-` <- function(x, value) {
+  add_caption(x, value)
 }
