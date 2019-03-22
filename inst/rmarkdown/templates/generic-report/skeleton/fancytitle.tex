@@ -16,34 +16,43 @@
 \def\@maketitle{%
   \newpage
   \null
-  \vskip 2em%
   \begin{center}%
   \let \footnote \thanks
     {\LARGE \@title \par}%
-    \vskip 1.5em%
-    {\large
-      \lineskip .5em%
-      \begin{tabular}[t]{c}%
-        Author: \@author
-      \end{tabular}\par}%
     \vskip 2cm
-    \rule{8cm}{0.4pt} \par
-    Author Signature
   \end{center}%
-  \vskip 1em%
+  \begin{tabular}{ll}
   \ifdefined\sponsor
-  Sponsor: \sponsor
+  Sponsor: & \sponsor \\
   \ifdefined\sponsoraddress
-  ; \sponsoraddress
+  Sponsor address: & \sponsoraddress \\
   \fi
-  \newline
   \fi
-  Report Date: \@date\newline
+  Author:  & \@author \\
+  Author Contact information: & \begin{minipage}[t]{0.5\columnwidth}Chief Scientist\par Human Predictions, LLC\par Cambridge, MA 02139\par United States\par wdenney@humanpredictions.com\end{minipage} \\
+  Report Date: & \@date \\
   \ifdefined\reportnumber
-  Report Number: \reportnumber\newline
-  Report Status: \reportstatus\newline
+  Report Number: & \reportnumber \\
+  Report Status: & \reportstatus \\
   \fi
-  \par
+  \end{tabular}
   \vskip 1.5em
+  \begin{center}%
+  \let \footnote \thanks
+    \vskip 1.5em
+    \begin{tabular}[t]{ccl}%
+    \textbf{Signature} & \textbf{Date} & \textbf{Role} \\
+    \rule{0pt}{2cm} \rule{8cm}{0.4pt} & \rule{4cm}{0.4pt} & Author \\
+    \@author & & \\
+    \ifdefined\reviewername
+    \rule{0pt}{2cm} \rule{8cm}{0.4pt} & \rule{4cm}{0.4pt} & Reviewer \\
+    \reviewername & & \\
+    \fi
+    \ifdefined\approvername
+    \rule{0pt}{2cm} \rule{8cm}{0.4pt} & \rule{4cm}{0.4pt} & Approver \\
+    \approvername & & \\
+    \fi
+    \end{tabular}
+  \end{center}
   \newpage}
 \makeatother

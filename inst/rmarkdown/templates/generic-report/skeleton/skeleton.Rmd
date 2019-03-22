@@ -19,10 +19,14 @@ header-includes:
 - \usepackage{pdflscape}
 - \newcommand{\blandscape}{\begin{landscape}}
 - \newcommand{\elandscape}{\end{landscape}}
+# For the title page (mainly)
 - \newcommand{\reportstatus}{Draft}
 #- \newcommand{\reportnumber}{}
 #- \newcommand{\sponsor}{}
 #- \newcommand{\sponsoraddress}{}
+# For the signature blocks
+#- \newcommand{\reviewername}{}
+#- \newcommand{\approvername}{}
 - \hypersetup{colorlinks,breaklinks,urlcolor=[rgb]{0,0,1},linkcolor=[rgb]{0,0,1}}
 - \input{fancytitle.tex}
 ---
