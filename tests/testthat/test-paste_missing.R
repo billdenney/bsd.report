@@ -51,4 +51,12 @@ test_that("standard missing paste", {
     ),
     c("A", "B C", "D E", NA, NA)
   )
+  expect_equal(
+    paste_missing(c("A", NA), "B"),
+    c("A B", "B")
+  )
+  expect_equal(
+    paste_missing("B", c("A", NA)),
+    c("B A", "B")
+  )
 })

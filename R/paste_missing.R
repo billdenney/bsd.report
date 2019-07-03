@@ -37,17 +37,17 @@ paste_missing <- function(..., sep=" ", collapse=NULL, missing_values=NA, paste_
         stop("Arguments must be the same length or one argument must be a scalar.")
       }
     }
-    mask1 <- !(args[[1]] %in% missing_values)
-    mask2 <- !(args[[2]] %in% missing_values)
+    mask1 <- !(a1 %in% missing_values)
+    mask2 <- !(a2 %in% missing_values)
     mask_both <- mask1 & mask2
     mask_only2 <- (!mask1) & mask2
-    firsttwo <- args[[1]]
+    firsttwo <- a1
     if (any(mask_only2)) {
-      firsttwo[mask_only2] <- args[[2]][mask_only2]
+      firsttwo[mask_only2] <- a2[mask_only2]
     }
     if (any(mask_both)) {
       # Collapse only occurs on the final pasting
-      firsttwo[mask_both] <- paste(args[[1]][mask_both], args[[2]][mask_both], sep=sep, collapse=NULL)
+      firsttwo[mask_both] <- paste(a1[mask_both], a2[mask_both], sep=sep, collapse=NULL)
     }
     new_args <- append(list(firsttwo), args[-(1:2)])
     new_args$sep <- sep
