@@ -28,26 +28,6 @@ single_value <- function(x, missing=NA, warn_if_all_missing=FALSE, info=NULL) {
   }
 }
 
-#' Round a value to a fraction, optionally then rounding to a number of digits.
-#'
-#' @param x The number to round
-#' @param denominator The denominator of the fraction for rounding
-#' @param digits The number of digits for rounding after rounding to the
-#'   fraction (\code{Inf} indicates no subsequent rounding)
-#' @return x rounded to a decimal value that has an integer numerator relative
-#'   to \code{denominator} (possibly subsequently rounded to a number of decimal
-#'   digits).
-#' @examples
-#' round_to_fraction(0.7, 3)
-#' @export
-round_to_fraction <- function(x, denominator, digits = Inf) {
-  ret <- round(x * denominator, digits=0) / denominator
-  if (!is.infinite(digits)) {
-    ret <- round(ret, digits = digits)
-  }
-  ret
-}
-
 #' Find the columns that have more than one value
 #' 
 #' @param x The object (typically a data.frame) with columns to check.
