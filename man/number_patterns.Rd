@@ -4,7 +4,7 @@
 \name{number_patterns}
 \alias{number_patterns}
 \title{Regular expression patterns for numbers}
-\format{An object of class \code{list} of length 8.}
+\format{An object of class \code{list} of length 9.}
 \usage{
 number_patterns
 }
@@ -48,6 +48,8 @@ Regular expression patterns for numbers
     \item{a optional +-}
     \item{integer}
   }
+  \item{number_relaxed}{Any number format above (based on
+    scientific_notation_relaxed with the exponent as an optional component}
 }
 }
 \examples{

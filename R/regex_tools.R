@@ -97,6 +97,8 @@ grepl_multi_pattern <- function(pattern, x, ...) {
 #'     \item{a optional +-}
 #'     \item{integer}
 #'   }
+#'   \item{number_relaxed}{Any number format above (based on
+#'     scientific_notation_relaxed with the exponent as an optional component}
 #' }
 #' @examples
 #' grepl(pattern=number_patterns$scientific_notation_relaxed, "1e5")
@@ -139,4 +141,11 @@ number_patterns$scientific_notation_relaxed <-
     number_patterns$float_or_integer_relaxed,
     "[eEdD]",
     number_patterns$integer
+  )
+number_patterns$number_relaxed <-
+  paste0(
+    number_patterns$float_or_integer_relaxed,
+    "(?:[eEdD]",
+    number_patterns$integer,
+    ")?"
   )
