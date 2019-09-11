@@ -12,6 +12,15 @@
 \fi
 \fancyfoot[R]{\thepage}
 
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+% Allows \begin{lstlisting}\end{lstlisting} with pretty line wrapping
+
 \makeatletter
 \def\@maketitle{%
   \newpage
