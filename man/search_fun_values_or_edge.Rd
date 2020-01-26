@@ -4,8 +4,12 @@
 \alias{search_fun_values_or_edge}
 \title{Go to a value or the edge}
 \usage{
-search_fun_values_or_edge(values, from = c("row", "column"),
-  skip = c(0, 0), exclude_value = FALSE)
+search_fun_values_or_edge(
+  values,
+  from = c("row", "column"),
+  skip = c(0, 0),
+  exclude_value = FALSE
+)
 }
 \arguments{
 \item{values}{The value to search for}
@@ -29,7 +33,8 @@ A number for the distance to the edge.
 Go to a value or the edge
 }
 \seealso{
-Other Sub-table finding: \code{\link{find_sub_table}},
-  \code{\link{search_fun_edge}}
+Other Sub-table finding: 
+\code{\link{find_sub_table}()},
+\code{\link{search_fun_edge}()}
 }
 \concept{Sub-table finding}

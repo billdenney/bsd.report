@@ -5,8 +5,7 @@
 \title{Return the minimum of the differences of x for the first value after the
 choices.}
 \usage{
-mindiff_after(x, choices, include_zero = TRUE, none = c("negative",
-  "na"))
+mindiff_after(x, choices, include_zero = TRUE, none = c("negative", "na"))
 }
 \arguments{
 \item{x}{The values to select choices for.}

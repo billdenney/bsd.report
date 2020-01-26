@@ -16,7 +16,8 @@ The legend grob from that object
 Extract the legend from a ggplot2 object
 }
 \seealso{
-Other plot legend helpers: \code{\link{plot_grid_one_legend}},
-  \code{\link{remove_ggplot_legend}}
+Other plot legend helpers: 
+\code{\link{plot_grid_one_legend}()},
+\code{\link{remove_ggplot_legend}()}
 }
 \concept{plot legend helpers}

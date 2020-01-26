@@ -4,8 +4,7 @@
 \alias{mindiff}
 \title{Find the minimum difference between a vector and a set of choices.}
 \usage{
-mindiff(x, choices, tie = c("first", "last", "median-first",
-  "median-last"))
+mindiff(x, choices, tie = c("first", "last", "median-first", "median-last"))
 }
 \arguments{
 \item{x}{The vector of values to adjust}

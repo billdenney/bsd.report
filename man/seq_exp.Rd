@@ -4,8 +4,14 @@
 \alias{seq_exp}
 \title{Sequence generation on an expoential scale}
 \usage{
-seq_exp(from = 1, to = 1, length.out = NULL, by = NULL,
-  add_values = double(length = 0), ...)
+seq_exp(
+  from = 1,
+  to = 1,
+  length.out = NULL,
+  by = NULL,
+  add_values = double(length = 0),
+  ...
+)
 }
 \arguments{
 \item{from}{the starting and (maximal) end values of the

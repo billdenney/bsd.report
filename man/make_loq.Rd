@@ -5,10 +5,15 @@
 \title{Extract numeric, below/above the lower/upper limits of quantification (LLQ
 and ULQ), and text data from a vector.}
 \usage{
-make_loq(x, llq_pattern = "^< *\\\\(? *([0-9]*\\\\.?[0-9]+) *\\\\)?$",
+make_loq(
+  x,
+  llq_pattern = "^< *\\\\(? *([0-9]*\\\\.?[0-9]+) *\\\\)?$",
   ulq_pattern = "^> *\\\\(? *([0-9]*\\\\.?[0-9]+) *\\\\)?$",
   number_pattern = "^(+-)?[0-9]+(\\\\.[0-9]*)?([eE][+-]?[0-9]+)?$",
-  replace_llq = 0, replace_ulq = Inf, ...)
+  replace_llq = 0,
+  replace_ulq = Inf,
+  ...
+)
 }
 \arguments{
 \item{x}{The character vector to extract data from.}

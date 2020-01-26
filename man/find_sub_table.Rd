@@ -36,7 +36,8 @@ When data are provided as blocks of tables within a larger data set,
 extract those sub-tables as a list.
 }
 \seealso{
-Other Sub-table finding: \code{\link{search_fun_edge}},
-  \code{\link{search_fun_values_or_edge}}
+Other Sub-table finding: 
+\code{\link{search_fun_edge}()},
+\code{\link{search_fun_values_or_edge}()}
 }
 \concept{Sub-table finding}

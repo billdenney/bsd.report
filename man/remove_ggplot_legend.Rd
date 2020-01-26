@@ -16,7 +16,8 @@ The object with legends hidden.
 Remove the legend(s) from a ggplot
 }
 \seealso{
-Other plot legend helpers: \code{\link{extract_ggplot_legend}},
-  \code{\link{plot_grid_one_legend}}
+Other plot legend helpers: 
+\code{\link{extract_ggplot_legend}()},
+\code{\link{plot_grid_one_legend}()}
 }
 \concept{plot legend helpers}

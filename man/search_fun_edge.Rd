@@ -16,7 +16,8 @@ A number for the distance to the edge.
 Go to the edge
 }
 \seealso{
-Other Sub-table finding: \code{\link{find_sub_table}},
-  \code{\link{search_fun_values_or_edge}}
+Other Sub-table finding: 
+\code{\link{find_sub_table}()},
+\code{\link{search_fun_values_or_edge}()}
 }
 \concept{Sub-table finding}

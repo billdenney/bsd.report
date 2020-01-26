@@ -19,7 +19,8 @@ Extract the legend from the first figure, remove the legends from all plots,
 and put the legend at the end.
 }
 \seealso{
-Other plot legend helpers: \code{\link{extract_ggplot_legend}},
-  \code{\link{remove_ggplot_legend}}
+Other plot legend helpers: 
+\code{\link{extract_ggplot_legend}()},
+\code{\link{remove_ggplot_legend}()}
 }
 \concept{plot legend helpers}

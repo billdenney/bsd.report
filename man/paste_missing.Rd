@@ -4,17 +4,22 @@
 \alias{paste_missing}
 \title{Concatenate strings dropping missing values}
 \usage{
-paste_missing(..., sep = " ", collapse = NULL, missing_values = NA,
-  paste_last = FALSE)
+paste_missing(
+  ...,
+  sep = " ",
+  collapse = NULL,
+  missing_values = NA,
+  paste_last = FALSE
+)
 }
 \arguments{
 \item{...}{one or more \R objects, to be converted to character vectors.}
 
 \item{sep}{a character string to separate the terms.  Not
-    \code{\link{NA_character_}}.}
+    \code{\link[base]{NA_character_}}.}
 
 \item{collapse}{an optional character string to separate the results.  Not
-    \code{\link{NA_character_}}.}
+    \code{\link[base]{NA_character_}}.}
 
 \item{missing_values}{Values considered missing to be ignored in pasting.}
 

@@ -4,8 +4,15 @@
 \alias{patch_data}
 \title{Patch one data set using another}
 \usage{
-patch_data(basedata, patchdata, by = dplyr::group_vars(basedata), ...,
-  replace = NA, do_not_replace = NA, verbose = TRUE)
+patch_data(
+  basedata,
+  patchdata,
+  by = dplyr::group_vars(basedata),
+  ...,
+  replace = NA,
+  do_not_replace = NA,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{basedata}{The original (source) data}

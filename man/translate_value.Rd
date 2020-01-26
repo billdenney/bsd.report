@@ -10,8 +10,7 @@
 \usage{
 translate_value(x, old, new, ...)
 
-\method{translate_value}{data.frame}(x, old, new, ...,
-  exclude_col = NULL)
+\method{translate_value}{data.frame}(x, old, new, ..., exclude_col = NULL)
 
 \method{translate_value}{factor}(x, old, new, ...)
 

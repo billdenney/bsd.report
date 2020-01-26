@@ -4,8 +4,15 @@
 \alias{make_ci}
 \title{Make a confidence interval from a point estimate and standard error.}
 \usage{
-make_ci(point, se, level = 0.95, transform = NULL, numeric = FALSE,
-  format_numeric = "\%0.3g", format_character = "\%s")
+make_ci(
+  point,
+  se,
+  level = 0.95,
+  transform = NULL,
+  numeric = FALSE,
+  format_numeric = "\%0.3g",
+  format_character = "\%s"
+)
 }
 \arguments{
 \item{point}{The point estimate (numeric vector)}

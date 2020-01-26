@@ -4,8 +4,7 @@
 \alias{knit_print.formula}
 \title{Generate LaTeX math from an R formula}
 \usage{
-\method{knit_print}{formula}(x, inline = TRUE, replacements = list(),
-  ..., width = 80)
+\method{knit_print}{formula}(x, inline = TRUE, replacements = list(), ..., width = 80)
 }
 \arguments{
 \item{x}{A formula}

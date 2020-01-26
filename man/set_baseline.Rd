@@ -4,8 +4,14 @@
 \alias{set_baseline}
 \title{Set a single baseline value given input data.}
 \usage{
-set_baseline(x, time, min_bl_time = -Inf, max_bl_time = 0,
-  summaryfun = mean, ...)
+set_baseline(
+  x,
+  time,
+  min_bl_time = -Inf,
+  max_bl_time = 0,
+  summaryfun = mean,
+  ...
+)
 }
 \arguments{
 \item{x}{A vector of observations}

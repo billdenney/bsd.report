@@ -4,8 +4,7 @@
 \alias{single_value}
 \title{Ensure that a vector has only a single value throughout.}
 \usage{
-single_value(x, missing = NA, warn_if_all_missing = FALSE,
-  info = NULL)
+single_value(x, missing = NA, warn_if_all_missing = FALSE, info = NULL)
 }
 \arguments{
 \item{x}{The vector which should have a single value}
