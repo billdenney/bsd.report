@@ -101,6 +101,7 @@ find_sub_table <- function(data, value_search, edge_search, ...) {
 #' Go to the edge
 #' 
 #' @param data,row,column,direction,found_edges See \code{\link{find_sub_table}}
+#' @param ... Ignored
 #' @return A number for the distance to the edge.
 #' @family Sub-table finding
 #' @export

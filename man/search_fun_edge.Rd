@@ -8,6 +8,8 @@ search_fun_edge(data, row, column, direction, found_edges, ...)
 }
 \arguments{
 \item{data, row, column, direction, found_edges}{See \code{\link{find_sub_table}}}
+
+\item{...}{Ignored}
 }
 \value{
 A number for the distance to the edge.
