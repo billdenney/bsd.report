@@ -14,6 +14,7 @@
 #'       )
 #'   )
 #' }
+#' @importFrom digest digest
 add_hash_to_file <- function(filename) {
   structure(
     filename,

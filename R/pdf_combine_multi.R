@@ -23,7 +23,7 @@ pdf_combine_multi <- function(input, pages, output=NULL, password="") {
         )
     }
   }
-  ret <- qpdf:::cpp_pdf_combine(infiles=combine_inputs, outfile=output, password=password)
+  ret <- qpdf::pdf_combine(infiles=combine_inputs, outfile=output, password=password)
   if (!missing(pages)) {
     # clean up temporary files
     file.remove(combine_inputs)

@@ -35,6 +35,8 @@ knit_print_helper_formula <- function(x, ...) {
   UseMethod("knit_print_helper_formula")
 }
 
+#' @method knit_print_helper_formula formula
+#' @export
 knit_print_helper_formula.formula <- function(x, ...) {
   if (!inherits(x, "formula")) {
     stop('x must be a formula.')
@@ -57,6 +59,8 @@ knit_print_helper_formula.formula <- function(x, ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula name
+#' @export
 knit_print_helper_formula.name <- function(x, ...) {
   if (!is.name(x)) {
     stop("x must be a name.")
@@ -78,6 +82,8 @@ knit_print_helper_formula.name <- function(x, ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula call
+#' @export
 knit_print_helper_formula.call <- function(x, ...) {
   if (!is.call(x)) {
     stop("x must be a call.")
@@ -132,6 +138,8 @@ knit_print_helper_formula.call <- function(x, ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula (
+#' @export
 `knit_print_helper_formula.(` <- function(x, ...) {
   # parentheses appear to be handled differently
   ret <-
@@ -140,6 +148,8 @@ knit_print_helper_formula.call <- function(x, ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula character
+#' @export
 knit_print_helper_formula.character <- function(x, ...) {
   if (!is.character(x)) {
     stop("x must be a character.")
@@ -151,6 +161,8 @@ knit_print_helper_formula.character <- function(x, ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula numeric
+#' @export
 knit_print_helper_formula.numeric <- function(x, format_numeric="%g", ...) {
   if (!is.numeric(x)) {
     stop("x must be numeric.")
@@ -165,6 +177,8 @@ knit_print_helper_formula.numeric <- function(x, format_numeric="%g", ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula logical
+#' @export
 knit_print_helper_formula.logical <- function(x, format_numeric="%g", ...) {
   if (!is.logical(x)) {
     stop("x must be logical.")
@@ -175,10 +189,14 @@ knit_print_helper_formula.logical <- function(x, format_numeric="%g", ...) {
   knit_print_helper_formula_replacements(ret, ...)
 }
 
+#' @method knit_print_helper_formula default
+#' @export
 knit_print_helper_formula.default <- function(x, ...) {
   stop("Cannot handle class(es): ", paste(class(x), collapse=", "))
 }
 
+#' @method knit_print_helper_formula function_call
+#' @export
 knit_print_helper_formula.function_call <- function(x, ...) {
   ret <-
     if (length(x) > 1) {
