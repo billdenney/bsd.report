@@ -49,7 +49,7 @@ test_that("coalesce_same vector warnings and errors", {
   )
   expect_error(
     coalesce_same(1:3, 3:1),
-    regexp="Some items in argument 2 overlap with prior values, but the value is not the same.",
+    regexp="Some items in argument 2 overlap with prior values, but the value is not the same:\n  1 becomes 3; 3 becomes 1",
     fixed=TRUE
   )
 })
@@ -116,6 +116,20 @@ test_that("coalesce_same data.frame warnings and errors", {
   expect_error(
     coalesce_same(data.frame(A=1), NULL),
     regexp="Argument 2 must be a data.frame since the first argument is a data.frame",
+    fixed=TRUE
+  )
+  expect_error(
+    coalesce_same(
+      data.frame(
+        a=1:3,
+        b=NA_character_,
+        stringsAsFactors=FALSE
+      ),
+      data.frame(
+        a="A"
+      )
+    ),
+    regexp="Column `a`: Argument 2 must be a integer, not a factor.",
     fixed=TRUE
   )
 })

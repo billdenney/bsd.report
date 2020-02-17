@@ -9,12 +9,15 @@ values are the same.}
 \usage{
 coalesce_same(...)
 
-\method{coalesce_same}{default}(...)
+\method{coalesce_same}{default}(..., message_prefix = "")
 
 \method{coalesce_same}{data.frame}(...)
 }
 \arguments{
 \item{...}{Values to fill in and compare}
+
+\item{message_prefix}{A prefix to place before any message (e.g. error or
+warning) to assist with understanding the reason for the message.}
 }
 \value{
 The value filled in
