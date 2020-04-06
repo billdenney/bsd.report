@@ -4,7 +4,9 @@
 \name{number_patterns}
 \alias{number_patterns}
 \title{Regular expression patterns for numbers}
-\format{An object of class \code{list} of length 9.}
+\format{
+An object of class \code{list} of length 9.
+}
 \usage{
 number_patterns
 }
