@@ -7,7 +7,6 @@
 #' @export
 #' @importFrom dplyr recode
 as.data.frame.power.htest <- function(x, ..., digits=3) {
-  browser()
   value <-
     sapply(
       X=x,
