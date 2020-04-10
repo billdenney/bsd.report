@@ -1,7 +1,7 @@
 #' Create a string of the filename with its hash as an attribute to allow change detection in drake
 #' 
-#' @param filename The file to generate a hash for
-#' @return The filename with an attribute of `hash` added.
+#' @param filename The filename or vector of filenames to generate a hash for
+#' @return `filename` with an attribute of `hash` added.
 #' @export
 #' @examples
 #' \dontrun{
@@ -18,6 +18,6 @@
 add_hash_to_file <- function(filename) {
   structure(
     filename,
-    hash=digest::digest(filename, file=TRUE)
+    hash=sapply(X=filename, FUN=digest::digest, file=TRUE)
   )
 }

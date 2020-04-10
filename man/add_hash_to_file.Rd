@@ -7,10 +7,10 @@
 add_hash_to_file(filename)
 }
 \arguments{
-\item{filename}{The file to generate a hash for}
+\item{filename}{The filename or vector of filenames to generate a hash for}
 }
 \value{
-The filename with an attribute of `hash` added.
+`filename` with an attribute of `hash` added.
 }
 \description{
 Create a string of the filename with its hash as an attribute to allow change detection in drake
