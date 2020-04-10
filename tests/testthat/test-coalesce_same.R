@@ -126,7 +126,7 @@ test_that("coalesce_same data.frame warnings and errors", {
         stringsAsFactors=FALSE
       ),
       data.frame(
-        a="A"
+        a=factor("A")
       )
     ),
     regexp="Column `a`: Argument 2 must be a integer, not a factor.",
