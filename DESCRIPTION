@@ -1,6 +1,6 @@
 Package: bsd.report
 Title: Assistance with Report Writing
-Version: 0.0.0.9050
+Version: 0.0.0.9051
 Authors@R: person("William", "Denney", email = "wdenney@humanpredictions.com", role = c("aut", "cre"))
 Description: Report writing can be made easier by using some simplifying
   functions to help with the text and the conversion to knitr/rmarkdown.
@@ -14,6 +14,7 @@ Imports:
   Hmisc,
   knitr,
   qpdf,
+  stats,
   utils
 License: AGPL-3
 Encoding: UTF-8
