@@ -13,6 +13,9 @@ as.data.frame.power.htest <- function(x, ..., digits=3) {
       FUN=function(y) {
         if (is.numeric(y)) {
           as.character(signif(y, digits=digits))
+        } else if (is.null(y)) {
+          # one-sample tests have a NULL note value
+          "(none)"
         } else {
           y
         }
