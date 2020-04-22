@@ -2,16 +2,40 @@
 % Please edit documentation in R/replace_synonym.R
 \name{replace_synonym}
 \alias{replace_synonym}
+\alias{replace_synonym.character}
+\alias{replace_synonym.data.frame}
 \title{Replace values in a character string with their synonym}
 \usage{
-replace_synonym(x, synonyms, ignore_case = TRUE)
+replace_synonym(x, synonyms, ignore_case = TRUE, ...)
+
+\method{replace_synonym}{character}(x, synonyms, ignore_case = TRUE, ...)
+
+\method{replace_synonym}{data.frame}(
+  x,
+  synonyms,
+  ignore_case = TRUE,
+  ...,
+  replacement_column = "Column",
+  verbatim_column = "Verbatim",
+  preferred_column = "Preferred"
+)
 }
 \arguments{
 \item{x}{The values to possibly replace}
 
-\item{synonyms}{A named character vector where the names are the verbatim value and the values are the values to use for replacement.}
+\item{synonyms}{A named character vector where the names are the verbatim
+value and the values are the values to use for replacement.}
 
 \item{ignore_case}{Should the synonyms be replaced case-insensitively?}
+
+\item{...}{Passed to other `replace_synonym()` methods.}
+
+\item{replacement_column}{The column name in `synonyms` to find where in `x`
+to apply synonyms.}
+
+\item{verbatim_column}{The column name in `synonyms` with verbatim terms.}
+
+\item{preferred_column}{The column name in `synonyms` with preferred terms.}
 }
 \value{
 `x` with preferred values instead of verbatim values.
@@ -28,5 +52,21 @@ replace_synonym(
   c("A", "B", "C", "a"),
   c(A="apple", B="bear", C="cabbage"),
   ignore_case=FALSE
+)
+replace_synonym(
+  x=
+    data.frame(
+      A=rep(c("A", "B"), each=2),
+      B=letters[1:4],
+      stringsAsFactors=FALSE
+    ),
+    synonyms=
+      data.frame(
+        A="A",
+        Column="B",
+        Verbatim=c("a", "c"),
+        Preferred=c("apple", "cherry"),
+        stringsAsFactors=FALSE
+      )
 )
 }
