@@ -136,7 +136,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
   )
   expect_error(
     replace_synonym.data.frame(
-      x=data.frame(A="A"),
+      x=data.frame(A="A", stringsAsFactors=TRUE),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE)
     ),
     regexp="`x` must be a character vector",
