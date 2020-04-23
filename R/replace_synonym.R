@@ -33,11 +33,12 @@
 #'       )
 #' )
 #' @export
-#' @importFrom dplyr recode
-replace_synonym <- function(x, synonyms, ignore_case=TRUE, ...)
+replace_synonym <- function(x, synonyms, ignore_case=TRUE, ...) {
   UseMethod("replace_synonym")
+}
 
 #' @rdname replace_synonym
+#' @importFrom dplyr recode
 #' @export
 replace_synonym.character <- function(x, synonyms, ignore_case=TRUE, ...) {
   if (!is.character(x)) {

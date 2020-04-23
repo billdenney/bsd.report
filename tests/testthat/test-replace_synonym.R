@@ -29,7 +29,7 @@ test_that("replace_synonym.character works", {
 
 test_that("replace_synonym.data.frame works", {
   expect_equal(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=
         data.frame(
           A=rep(c("A", "B"), each=2),
@@ -52,7 +52,7 @@ test_that("replace_synonym.data.frame works", {
     )
   )
   expect_equal(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=
         data.frame(
           A=rep(c("A", "B"), each=2),
@@ -106,12 +106,12 @@ test_that("replace_synonym.character errors appropriately", {
 
 test_that("replace_synonym.data.frame errors appropriately", {
   expect_error(
-    replace_synonym.data.frame(1, 1),
+    replace_synonym(x=data.frame(A="A"), 1),
     regexp="`synonyms` must be a data.frame",
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A"),
       synonyms=data.frame(Column=1, Verbatim=1, Preferred=1, stringsAsFactors=FALSE)
     ),
@@ -119,7 +119,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A"),
       synonyms=data.frame(Column="A", Verbatim=1, Preferred=1, stringsAsFactors=FALSE)
     ),
@@ -127,7 +127,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A"),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred=1, stringsAsFactors=FALSE)
     ),
@@ -135,7 +135,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A", stringsAsFactors=TRUE),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE)
     ),
@@ -143,7 +143,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A", stringsAsFactors=FALSE),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE),
       replacement_column=c("A", "B")
@@ -152,7 +152,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A", stringsAsFactors=FALSE),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE),
       verbatim_column=c("A", "B")
@@ -161,7 +161,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A", stringsAsFactors=FALSE),
       synonyms=data.frame(Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE),
       preferred_column=c("A", "B")
@@ -171,7 +171,7 @@ test_that("replace_synonym.data.frame errors appropriately", {
   )
 
   expect_error(
-    replace_synonym.data.frame(
+    replace_synonym(
       x=data.frame(A="A", stringsAsFactors=FALSE),
       synonyms=data.frame(B="A", Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE)
     ),
