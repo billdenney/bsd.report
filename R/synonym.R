@@ -48,10 +48,25 @@ replace_synonym.character <- function(x, synonyms, ignore_case=TRUE, ...) {
     stop("`synonyms` must be a character vector.")
   } else if (is.null(names(synonyms))) {
     stop("`synonyms` must be named.")
-  } else if (any(names(synonyms) %in% "")) {
-    stop("All `synonyms` must be named, and no names may be blank.")
   } else if (any(duplicated(names(synonyms)))) {
     stop("All names of `synonyms` (verbatim values) must be unique.")
+  }
+  if (any("" %in% names(synonyms))) {
+    # "" is not allowed for recode, make a placeholder value and use it
+    max_value <-
+      paste0(
+        max(
+          c(
+            max(x, na.rm=TRUE),
+            names(synonyms),
+            synonyms
+          ),
+          na.rm=TRUE
+        ),
+        "X"
+      )
+    names(synonyms)[names(synonyms) %in% ""] <- max_value
+    x[x %in% ""] <- max_value
   }
   if (ignore_case) {
     names(synonyms) <- tolower(names(synonyms))

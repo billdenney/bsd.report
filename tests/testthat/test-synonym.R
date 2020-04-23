@@ -25,6 +25,11 @@ test_that("replace_synonym.character works", {
     c("apple", "bear", "cabbage", "D"),
     info="All returned values are not accidentally lower case."
   )
+  expect_equal(
+    replace_synonym(c("A", ""), c(a="a", "B")),
+    c("a", "B"),
+    info="Blank values can be replaced"
+  )
 })
 
 test_that("replace_synonym.data.frame works", {
@@ -90,11 +95,6 @@ test_that("replace_synonym.character errors appropriately", {
   expect_error(
     replace_synonym.character("A", "A"),
     regexp="`synonyms` must be named.",
-    fixed=TRUE
-  )
-  expect_error(
-    replace_synonym.character("A", c(a="A", "B")),
-    regexp="All `synonyms` must be named, and no names may be blank.",
     fixed=TRUE
   )
   expect_error(
