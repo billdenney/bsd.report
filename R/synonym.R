@@ -32,6 +32,7 @@
 #'         stringsAsFactors=FALSE
 #'       )
 #' )
+#' @family Text standardization
 #' @export
 replace_synonym <- function(x, synonyms, ignore_case=TRUE, ...) {
   UseMethod("replace_synonym")
@@ -156,5 +157,43 @@ replace_synonym_single_data_frame <- function(x, synonyms, ignore_case=TRUE,
         )
     }
   }
+  x
+}
+
+#' Correct the case of a vector to be in a preferred case
+#' 
+#' @param x An object to correct the case of
+#' @param preferred A character vector of preferred values
+#' @return `x` where values that match `tolower(x) == tolower(preferred)` are
+#'   converted to the preferred value.
+#' @family Text standardization
+#' @examples
+#' correct_case(c("ABC", "Abc", "aBc", "def"), "Abc")
+#' @export
+correct_case <- function(x, preferred) {
+  UseMethod("correct_case")
+}
+
+#' @export
+correct_case.character <- function(x, preferred) {
+  if (!is.character(preferred)) {
+    stop("`preferred` must be a character vector.")
+  } else if (any(duplicated(tolower(preferred)))) {
+    stop("All `preferred` values must be unique, case-insensitively.")
+  }
+  l_x <- tolower(x)
+  l_pref <- tolower(preferred)
+  mask_replace <- l_x %in% l_pref
+  if (any(mask_replace)) {
+    for (current_pref in preferred) {
+      x[l_x %in% tolower(current_pref)] <- current_pref
+    }
+  }
+  x
+}
+
+#' @export
+correct_case.factor <- function(x, preferred) {
+  levels(x) <- correct_case(levels(x), preferred)
   x
 }

@@ -180,3 +180,51 @@ test_that("replace_synonym.data.frame errors appropriately", {
   )
   
 })
+
+context("correct_case")
+
+test_that("correct_case standardization", {
+  expect_equal(
+    correct_case(c("ABC", "Abc", "aBc", "def"), "Abc"),
+    c("Abc", "Abc", "Abc", "def")
+  )
+  expect_equal(
+    correct_case(factor(c("ABC", "Abc", "aBc", "def")), "Abc"),
+    factor(c("Abc", "Abc", "Abc", "def"))
+  )
+  expect_equal(
+    correct_case(ordered(c("ABC", "Abc", "aBc", "def")), "Abc"),
+    ordered(c("Abc", "Abc", "Abc", "def"))
+  )
+  expect_equal(
+    correct_case(
+      ordered(
+        c("ABC", "Abc", "aBc", "def"),
+        levels=c("def", "ABC", "Abc", "aBc")
+      ), "Abc"
+    ),
+    ordered(c("Abc", "Abc", "Abc", "def"), levels=c("def", "Abc"))
+  )
+  expect_equal(
+    correct_case(
+      ordered(
+        c("ABC", "Abc", "aBc", "def"),
+        levels=c("ABC", "def", "Abc", "aBc")
+      ), "Abc"
+    ),
+    ordered(c("Abc", "Abc", "Abc", "def"), levels=c("Abc", "def"))
+  )
+})
+
+test_that("correct_case errors", {
+  expect_error(
+    correct_case("Abc", 1),
+    regexp="`preferred` must be a character vector.",
+    fixed=TRUE
+  )
+  expect_error(
+    correct_case("Abc", c("A", "a")),
+    regexp="All `preferred` values must be unique, case-insensitively.",
+    fixed=TRUE
+  )
+})
