@@ -1,4 +1,4 @@
-context("replace_synonym")
+context("synonym")
 
 test_that("replace_synonym.character works", {
   expect_equal(
@@ -78,6 +78,39 @@ test_that("replace_synonym.data.frame works", {
       B=c("apple", "b", "c", "durian"),
       stringsAsFactors=FALSE
     )
+  )
+  expect_equal(
+    replace_synonym(
+      x=
+        data.frame(
+          A=rep(c("A", "B"), each=2),
+          B=letters[1:4],
+          stringsAsFactors=FALSE
+        ),
+      synonyms=
+        list(
+          data.frame(
+            A=rep(c("A", "B"), each=2),
+            Column="B",
+            Verbatim=c("a", "c", "b", "d"),
+            Preferred=c("apple", "cherry", "berry", "durian"),
+            stringsAsFactors=FALSE
+          ),
+          data.frame(
+            A="B",
+            Column="B",
+            Verbatim="c",
+            Preferred="clementine",
+            stringsAsFactors=FALSE
+          )
+        )
+    ),
+    data.frame(
+      A=rep(c("A", "B"), each=2),
+      B=c("apple", "b", "clementine", "durian"),
+      stringsAsFactors=FALSE
+    ),
+    info="list synonyms work"
   )
 })
 

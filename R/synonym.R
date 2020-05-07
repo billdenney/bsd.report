@@ -2,7 +2,10 @@
 #' 
 #' @param x The values to possibly replace
 #' @param synonyms A named character vector where the names are the verbatim
-#'   value and the values are the values to use for replacement.
+#'   value and the values are the values to use for replacement.  When `x` is a
+#'   data.frame, this may be a data.frame with columns named
+#'   `replacement_column`, `verbatim_column`, and `preferred_column` or a list
+#'   of such data.frames.
 #' @param ignore_case Should the synonyms be replaced case-insensitively?
 #' @param ... Passed to other `replace_synonym()` methods.
 #' @return `x` with preferred values instead of verbatim values.
@@ -91,6 +94,21 @@ replace_synonym.data.frame <- function(x, synonyms, ignore_case=TRUE, ...,
                                        replacement_column="Column",
                                        verbatim_column="Verbatim",
                                        preferred_column="Preferred") {
+  if (!is.data.frame(synonyms) & is.list(synonyms)) {
+    ret <- x
+    for (current_idx in seq_along(synonyms)) {
+      ret <-
+        replace_synonym.data.frame(
+          ret,
+          synonyms=synonyms[[current_idx]],
+          ignore_case=ignore_case, ...,
+          replacement_column=replacement_column,
+          verbatim_column=verbatim_column,
+          preferred_column=preferred_column
+        )
+    }
+    return(ret)
+  }
   if (!is.data.frame(synonyms)) {
     stop("`synonyms` must be a data.frame if `x` is a data.frame.")
   } else if (!purrr::is_scalar_character(replacement_column)) {

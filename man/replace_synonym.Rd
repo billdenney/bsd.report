@@ -24,7 +24,10 @@ replace_synonym(x, synonyms, ignore_case = TRUE, ...)
 \item{x}{The values to possibly replace}
 
 \item{synonyms}{A named character vector where the names are the verbatim
-value and the values are the values to use for replacement.}
+value and the values are the values to use for replacement.  When `x` is a
+data.frame, this may be a data.frame with columns named
+`replacement_column`, `verbatim_column`, and `preferred_column` or a list
+of such data.frames.}
 
 \item{ignore_case}{Should the synonyms be replaced case-insensitively?}
 
