@@ -90,3 +90,16 @@ join_control_detect <- function(x, control, detect_column, msg_prefix) {
   }
   x
 }
+
+#' @describeIn join_control For the common task of many-to-one mapping, the
+#'   helper function `join_many_to_one()` works.
+#' @importFrom dplyr left_join
+#' @export
+join_many_to_one <- function(x, y) {
+  join_control(
+    x, y,
+    join_fun=dplyr::left_join,
+    x_control=c("all", "unique", "nomissing"),
+    y_control="nomissing"
+  )
+}

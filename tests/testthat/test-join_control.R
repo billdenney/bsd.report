@@ -82,3 +82,17 @@ test_that("join_control algorithm errors", {
     regexp='should be one of .any., .all., .unique.'
   )
 })
+
+test_that("join_many_to_one works", {
+  x <- data.frame(A=rep(1:2, 2), B=1:4)
+  y_nomissing <- data.frame(A=1:2, C=1:2)
+  y_missing <- data.frame(A=1, C=1)
+  expect_equal(
+    join_many_to_one(x, y_nomissing),
+    data.frame(A=rep(1:2, 2), B=1:4, C=rep(1:2, 2))
+  )
+  expect_error(
+    join_many_to_one(x, y_missing),
+    regexp="Rows are missing in the new dataset"
+  )
+})
