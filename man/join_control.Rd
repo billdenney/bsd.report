@@ -2,10 +2,13 @@
 % Please edit documentation in R/join_control.R
 \name{join_control}
 \alias{join_control}
+\alias{join_many_to_one}
 \title{Perform join where the outcome of the join is verifed to match an expected
 pattern.}
 \usage{
 join_control(x, y, join_fun, x_control = "any", y_control = "any", ...)
+
+join_many_to_one(x, y)
 }
 \arguments{
 \item{x, y}{tbls to join}
@@ -41,3 +44,9 @@ The combination of `x_control=c("all", "unique", "nomissing")` (or
 `y_control`) is a common need to confirm that all values are present exactly
 one time and that there are no missing values.
 }
+\section{Functions}{
+\itemize{
+\item \code{join_many_to_one}: For the common task of many-to-one mapping, the
+helper function `join_many_to_one()` works.
+}}
+
