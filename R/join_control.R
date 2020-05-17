@@ -49,24 +49,32 @@ join_control <- function(x, y, join_fun, x_control="any", y_control="any", ...) 
   col_y_detect <- paste0(max_name, "y")
   x[[col_x_detect]] <- seq_len(nrow(x))
   y[[col_y_detect]] <- seq_len(nrow(y))
+  by_cols <-
+    if ("by" %in% names(list(...))) {
+      ...$by
+    } else {
+      intersect(names(x), names(y))
+    }
   ret <- join_fun(x, y, ...)
   join_control_detect(
     x=ret,
     control=x_control,
     detect_column=x[, col_x_detect, drop=FALSE],
-    msg_prefix="x"
+    msg_prefix="x",
+    by_cols=by_cols
   )
   join_control_detect(
     x=ret,
     control=y_control,
     detect_column=y[, col_y_detect, drop=FALSE],
-    msg_prefix="y"
+    msg_prefix="y",
+    by_cols=by_cols
   )
   ret[, setdiff(names(ret), c(col_x_detect, col_y_detect)), drop=FALSE]
 }
 
 #' @importFrom stats na.omit
-join_control_detect <- function(x, control, detect_column, msg_prefix) {
+join_control_detect <- function(x, control, detect_column, msg_prefix, by_cols) {
   # The na.omit() is because NA values are managed by "missing" and "nomissing"
   all_in <- all(detect_column[[1]] %in% stats::na.omit(x[[names(detect_column)]]))
   uniq_in <- !any(duplicated(x[[names(detect_column)]]))
@@ -76,16 +84,35 @@ join_control_detect <- function(x, control, detect_column, msg_prefix) {
     # do nothing
   } else {
     if ("all" %in% control & !all_in) {
-      stop("`", msg_prefix, "`: All rows were are not in the new dataset.")
+      stop(
+        "`", msg_prefix, "`: ",
+        "All rows were are not in the new dataset. Missing rows: ",
+        paste(
+          setdiff(
+            detect_column[[1]],
+            x[[names(detect_column)]]
+          ),
+          collapse=", "
+        )
+      )
     }
     if ("unique" %in% control & !uniq_in) {
-      stop("`", msg_prefix, "`: Rows are not unique in the new dataset.")
+      print(
+        unique(x[duplicated(x[[names(detect_column)]]), by_cols, drop=FALSE])
+      )
+      stop(
+        "`", msg_prefix, "`: ",
+        "Rows are not unique in the new dataset. Keys for duplicated rows are above."
+      )
     }
     if ("missing" %in% control & !missing_in) {
       stop("`", msg_prefix, "`: No rows are missing in the new dataset.")
     }
     if ("nomissing" %in% control & !nomissing_in) {
-      stop("`", msg_prefix, "`: Rows are missing in the new dataset.")
+      print(
+        unique(x[is.na(x[[names(detect_column)]]), by_cols, drop=FALSE])
+      )
+      stop("`", msg_prefix, "`: Rows are missing in the new dataset. Keys for missing rows are above.")
     }
   }
   x
