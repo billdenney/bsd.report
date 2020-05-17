@@ -3,12 +3,15 @@
 \name{join_control}
 \alias{join_control}
 \alias{join_many_to_one}
+\alias{join_one_to_one}
 \title{Perform join where the outcome of the join is verifed to match an expected
 pattern.}
 \usage{
 join_control(x, y, join_fun, x_control = "any", y_control = "any", ...)
 
 join_many_to_one(x, y)
+
+join_one_to_one(x, y)
 }
 \arguments{
 \item{x, y}{tbls to join}
@@ -48,5 +51,8 @@ one time and that there are no missing values.
 \itemize{
 \item \code{join_many_to_one}: For the common task of many-to-one mapping, the
 helper function `join_many_to_one()` works.
+
+\item \code{join_one_to_one}: For the common task of one-to-one mapping, the
+helper function `join_one_to_one()` works.
 }}
 
