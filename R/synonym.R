@@ -36,6 +36,7 @@
 #'       )
 #' )
 #' @family Text standardization
+#' @family Synonyms
 #' @export
 replace_synonym <- function(x, synonyms, ignore_case=TRUE, ...) {
   UseMethod("replace_synonym")
@@ -79,6 +80,50 @@ replace_synonym.character <- function(x, synonyms, ignore_case=TRUE, ...) {
     x[mask_replaced] <- tolower(x[mask_replaced])
   }
   do.call(dplyr::recode, append(list(.x=x), as.list(synonyms)))
+}
+
+#' Use a regular expression to choose the synonyms in a list to replace in a data.frame.
+#' 
+#' @inheritParams replace_synonym
+#' @param pattern The regular expression to use to choose the names from
+#'   `synonyms` to use for replacement.
+#' @param pattern_ignore_case Should case be ignored for name matching in
+#'   `synonyms`?
+#' @param ... Passed to `replace_synonym()`
+#' @return The output of `replace_synonym()` applied to a subset of the list,
+#'   `synonyms`.
+#' @family Synonyms
+#' @export
+replace_synonym_list <- function(x, synonyms,
+                                 pattern="^synonym", pattern_ignore_case=TRUE, ...) {
+  if (is.null(names(synonyms)) || "" %in% names(synonyms)) {
+    stop("All `synonyms` must be named.")
+  } else if (is.data.frame(synonyms) || !is.list(synonyms)) {
+    stop("`synonyms` must be a list and not a data.frame (see `replace_synonym()` for using a data.frame).")
+  }
+  matched_names <-
+    grep(
+      x=names(synonyms),
+      pattern=pattern,
+      ignore.case=pattern_ignore_case,
+      value=TRUE
+    )
+  mask_has_column <-
+    sapply(
+      synonyms[matched_names],
+      FUN=function(current_synonym) any(current_synonym$Column %in% names(x))
+    )
+  matched_names_with_col <- matched_names[mask_has_column]
+  message(
+    "Using the following names as synonyms for possible replacement: ",
+    paste("`", matched_names_with_col, "`", sep="", collapse=", ")
+  )
+  replace_synonym(
+    x,
+    synonyms=
+      synonyms[matched_names_with_col],
+    ...
+  )
 }
 
 #' @rdname replace_synonym

@@ -76,5 +76,9 @@ replace_synonym(
 \seealso{
 Other Text standardization: 
 \code{\link{correct_case}()}
+
+Other Synonyms: 
+\code{\link{replace_synonym_list}()}
 }
+\concept{Synonyms}
 \concept{Text standardization}
