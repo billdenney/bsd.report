@@ -17,12 +17,12 @@ join_one_to_one(x, y)
 \item{x, y}{tbls to join}
 
 \item{join_fun}{Any function that can combine x and y (called as
-`join_fun(x, y, ...)`).  Typically this will be one of `dplyr::left_join`,
-`dplyr::right_join`, etc.}
+\code{join_fun(x, y, ...)}).  Typically this will be one of \code{dplyr::left_join},
+\code{dplyr::right_join}, etc.}
 
-\item{x_control, y_control}{What outcome is expected from the `x`, and `y` tbls? Default is "any" (see details).}
+\item{x_control, y_control}{What outcome is expected from the \code{x}, and \code{y} tbls? Default is "any" (see details).}
 
-\item{...}{Passed to `join_fun()`}
+\item{...}{Passed to \code{join_fun()}}
 }
 \value{
 A joined tbl
@@ -32,19 +32,22 @@ Perform join where the outcome of the join is verifed to match an expected
 pattern.
 }
 \details{
-Options for `x_control` and `y_control` are below and may be combined:
+Options for \code{x_control} and \code{y_control} are below and may be
+  combined:
 
-* `"any"`: Any outcome is acceptable; this overrides all other options.
-* `"all"`: Each row from the input must appear in the output at least one
-  time.
-* `"unique"`: A row may appear in the output zero or one time.
-* `"missing"`: At least one row must not match in the new dataset (the values
-   must be missing).  This option is rarely used.
-* `"nomissing"`: All rows must match in the new dataset (the values must not
-  be missing).
+\itemize{
+\item{\code{"any"}: Any outcome is acceptable; this overrides all other options.}
+\item{\code{"all"}: Each row from the input must appear in the output at least one
+  time.}
+\item{\code{"unique"}: A row may appear in the output zero or one time.}
+\item{\code{"missing"}: At least one row must not match in the new dataset (the values
+   must be missing).  This option is rarely used.}
+\item{\code{"nomissing"}: All rows must match in the new dataset (the values must not
+  be missing).}
+}
 
-The combination of `x_control=c("all", "unique", "nomissing")` (or
-`y_control`) is a common need to confirm that all values are present exactly
+The combination of \code{x_control=c("all", "unique", "nomissing")} (or
+\code{y_control}) is a common need to confirm that all values are present exactly
 one time and that there are no missing values.
 }
 \section{Functions}{

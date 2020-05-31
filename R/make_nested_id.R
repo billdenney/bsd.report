@@ -17,12 +17,12 @@
 #' @return An integer vector with unique identifiers that are nested with
 #'   numbers indicating group identifiers in a way that is stable to changes
 #'   within other groups.
-#' @importFrom dplyr group_by_at
+#' @importFrom dplyr group_by_at tibble
 #' @importFrom purrr pmap
 #' @importFrom tidyr nest unnest
 #' @export
 make_nested_id <- function(..., outer=TRUE) {
-  args <- tibble(...)
+  args <- dplyr::tibble(...)
   ret <- args
   if (ncol(args) == 1) {
     ret[[1]] <- as.integer(factor(args[[1]]))

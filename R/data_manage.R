@@ -15,20 +15,18 @@
 #'   "Column Type".
 #' @family Data Management
 #' @export
-#' @importFrom dplyr `%>%` arrange filter mutate
 #' @importFrom forcats fct_inorder
 get_data_manage_standard_cols <- function(data, coltype) {
   ret_prep <-
-    (if (is.null(coltype)) {
+    if (is.null(coltype)) {
       data
     } else {
-      data %>%
-        dplyr::filter(`Column Type` %in% coltype)
-    }) %>%
-    dplyr::mutate(
-      `Column Type`=forcats::fct_inorder(`Column Type`, ordered=TRUE)
-    ) %>%
-    dplyr::arrange(`Column Type`)
+      data[data[["Column Type"]] %in% coltype, , drop=FALSE]
+    }
+  ret_prep[["Column Type"]] <-
+    forcats::fct_inorder(ret_prep[["Column Type"]], ordered=TRUE)
+  ret_prep <-
+    ret_prep[order(ret_prep[["Column Type"]]), , drop=FALSE]
   # verify that there were no typos in coltype
   missing_coltype <- setdiff(coltype, ret_prep[["Column Type"]])
   if (length(missing_coltype)) {

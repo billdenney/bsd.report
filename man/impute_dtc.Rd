@@ -15,34 +15,33 @@ defined in the details section.}
   added.
 }
 \description{
-Dates and times will be imputed based on the following rules:
+Impute dates and times when data are missing.
 }
 \details{
-* If both date and time are observed, no the observed value will be used.
-* Data are assumed to be grouped by appropriate grouping factors within a
+Dates and times will be imputed based on the following rules:
+
+\itemize{
+\item{If both date and time are observed, no the observed value will be used.}
+\item{Data are assumed to be grouped by appropriate grouping factors within a
   nominal time so that all times may be at the same time, and data are
-  assumed to be sorted in the order specified in the protocol.
-* If nominal time since first dose (NTSFD) is missing, no imputation will be
-  performed (the measure is assumed to be unscheduled).
-* If dates differ within a nominal time measurement, no imputation will be
-  performed (a data issue would appear to exist in that case).
-* If only one date exists within a nominal time measurement, missing dates
-  will be assumed to match the observed date.
-* If only one time exists within a nominal interval, all measurements in the
-  interval will be assigned to the time that exists.
-* If more than one time exists within the nominal interval:
-    * Any measurements before the first time that exists will be assigned to
-      the first time.
-    * Any measurements after the last time that exists will be assigned to
-      the last time.
-    * Any measurements between the first and last time will be imputed as
-      half-way between the measurements that do exist.
+  assumed to be sorted in the order specified in the protocol.}
+\item{If nominal time since first dose (NTSFD) is missing, no imputation will be
+  performed (the measure is assumed to be unscheduled).}
+\item{If dates differ within a nominal time measurement, no imputation will be
+  performed (a data issue would appear to exist in that case).}
+\item{If only one date exists within a nominal time measurement, missing dates
+  will be assumed to match the observed date.}
+\item{If one or more time exists within a nominal interval, all measurements
+  in the interval will be assigned to the median of the times that exist.}
+}
 
 Columns used in calculation are:
 
-* ADTC: (the date and time) formatted as an ISO8601 datetime without the time
+\itemize{
+\item{ADTC: (the date and time) formatted as an ISO8601 datetime without the time
   zone (yyyy-mm-ddThh:mm:ss) where the entire time or the seconds parts are
-  optional.
-* STUDYID, USUBJID, NTSFD: grouping variables for the study number, subject
-  identifier, and nominal time since first dose.
+  optional.}
+\item{STUDYID, USUBJID, NTSFD: grouping variables for the study number, subject
+  identifier, and nominal time since first dose.}
+}
 }
