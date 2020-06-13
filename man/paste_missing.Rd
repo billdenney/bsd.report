@@ -13,13 +13,7 @@ paste_missing(
 )
 }
 \arguments{
-\item{...}{one or more \R objects, to be converted to character vectors.}
-
-\item{sep}{a character string to separate the terms.  Not
-    \code{\link[base]{NA_character_}}.}
-
-\item{collapse}{an optional character string to separate the results.  Not
-    \code{\link[base]{NA_character_}}.}
+\item{..., sep, collapse}{See \code{?paste}}
 
 \item{missing_values}{Values considered missing to be ignored in pasting.}
 

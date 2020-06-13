@@ -6,7 +6,7 @@
 #'   if \code{TRUE}, \code{NA_character_} values will be converted to "NA" (as
 #'   is the case with \code{paste()}).
 #'
-#' @inheritParams base::paste
+#' @param ...,sep,collapse See \code{?paste}
 #' @param missing_values Values considered missing to be ignored in pasting.
 #' @param paste_last When all \code{...} arguments have been combined and only
 #'   one remains, should \code{paste} be called on that last argument?  (Ignored
