@@ -50,10 +50,9 @@ test_that("replace_synonym.data.frame works", {
           stringsAsFactors=FALSE
         )
     ),
-    data.frame(
+    dplyr::tibble(
       A=rep(c("A", "B"), each=2),
-      B=c("apple", "b", "c", "d"),
-      stringsAsFactors=FALSE
+      B=c("apple", "b", "c", "d")
     )
   )
   expect_equal(
@@ -73,10 +72,9 @@ test_that("replace_synonym.data.frame works", {
           stringsAsFactors=FALSE
         )
     ),
-    data.frame(
+    dplyr::tibble(
       A=rep(c("A", "B"), each=2),
-      B=c("apple", "b", "c", "durian"),
-      stringsAsFactors=FALSE
+      B=c("apple", "b", "c", "durian")
     )
   )
   expect_equal(
@@ -105,10 +103,9 @@ test_that("replace_synonym.data.frame works", {
           )
         )
     ),
-    data.frame(
+    dplyr::tibble(
       A=rep(c("A", "B"), each=2),
-      B=c("apple", "b", "clementine", "durian"),
-      stringsAsFactors=FALSE
+      B=c("apple", "b", "clementine", "durian")
     ),
     info="list synonyms work"
   )
