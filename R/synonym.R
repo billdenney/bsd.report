@@ -53,7 +53,11 @@ replace_synonym.character <- function(x, synonyms, ignore_case=TRUE, ...) {
   } else if (is.null(names(synonyms))) {
     stop("`synonyms` must be named.")
   } else if (any(duplicated(names(synonyms)))) {
-    stop("All names of `synonyms` (verbatim values) must be unique.")
+    dupes <- unique(names(synonyms)[duplicated(names(synonyms))])
+    stop(
+      "All names of `synonyms` (verbatim values) must be unique. Duplicated values are: ",
+      paste0("`", dupes, "`", collapse=", ")
+    )
   }
   if (any("" %in% names(synonyms))) {
     # "" is not allowed for recode, make a placeholder value and use it
