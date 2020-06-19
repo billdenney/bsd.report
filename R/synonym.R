@@ -183,11 +183,15 @@ replace_synonym.data.frame <- function(x, synonyms, ignore_case=TRUE, ...,
   }
   synonym_cols <- c(replacement_column, verbatim_column, preferred_column)
   by_cols <- setdiff(names(synonyms), synonym_cols)
-  if (length(by_cols)) {
-    if (!all(by_cols %in% names(x))) {
-      stop("All columns in `synonyms` other than the `replacement_column`, `verbatim_column`, and `preferred_column` must be names of `x`.")
-    }
-
+  if (!all(by_cols %in% names(x))) {
+    warning(
+      "All columns in `synonyms` other than the `replacement_column`, ",
+      "`verbatim_column`, and `preferred_column` must be names of `x`.\n",
+      "No synonyms will be applied due to the following missing columns: ",
+      paste0("`", setdiff(by_cols, names(x)), "`", collapse=", ")
+    )
+    ret <- x
+  } else if (length(by_cols)) {
     synonym_nest <- tidyr::nest(synonyms, synonyms=synonym_cols)
     x_nest <-
       tidyr::nest(x, data=setdiff(names(x), by_cols))

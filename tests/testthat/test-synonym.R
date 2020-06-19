@@ -200,15 +200,17 @@ test_that("replace_synonym.data.frame errors appropriately", {
     fixed=TRUE
   )
 
-  expect_error(
-    replace_synonym(
-      x=data.frame(A="A", stringsAsFactors=FALSE),
-      synonyms=data.frame(B="A", Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE)
+  d1 <- data.frame(A="A", stringsAsFactors=FALSE)
+  expect_equal(
+    expect_warning(
+      replace_synonym(
+        x=d1,
+        synonyms=data.frame(B="A", Column="A", Verbatim="A", Preferred="A", stringsAsFactors=FALSE)
+      ),
+      regexp="All columns in `synonyms` other than the `replacement_column`, `verbatim_column`, and `preferred_column` must be names of `x`.*No synonyms will be applied due to the following missing columns: `B`"
     ),
-    regexp="All columns in `synonyms` other than the `replacement_column`, `verbatim_column`, and `preferred_column` must be names of `x`.",
-    fixed=TRUE
+    d1
   )
-  
 })
 
 context("correct_case")
