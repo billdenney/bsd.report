@@ -108,22 +108,29 @@ replace_synonym_list <- function(x, synonyms,
       ignore.case=pattern_ignore_case,
       value=TRUE
     )
-  mask_has_column <-
-    sapply(
-      synonyms[matched_names],
-      FUN=function(current_synonym) any(current_synonym$Column %in% names(x))
+  if (length(matched_names)) {
+    mask_has_column <-
+      sapply(
+        synonyms[matched_names],
+        FUN=function(current_synonym) any(current_synonym$Column %in% names(x))
+      )
+    matched_names_with_col <- matched_names[mask_has_column]
+    message(
+      "Using the following names as synonyms for possible replacement: ",
+      paste("`", matched_names_with_col, "`", sep="", collapse=", ")
     )
-  matched_names_with_col <- matched_names[mask_has_column]
-  message(
-    "Using the following names as synonyms for possible replacement: ",
-    paste("`", matched_names_with_col, "`", sep="", collapse=", ")
-  )
-  replace_synonym(
-    x,
-    synonyms=
-      synonyms[matched_names_with_col],
-    ...
-  )
+    ret <-
+      replace_synonym(
+        x,
+        synonyms=
+          synonyms[matched_names_with_col],
+        ...
+      )
+  } else {
+    message("No synonym data.frames found in the list for possible replacement.")
+    ret <- x
+  }
+  ret
 }
 
 #' @rdname replace_synonym

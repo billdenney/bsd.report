@@ -258,3 +258,31 @@ test_that("correct_case errors", {
     fixed=TRUE
   )
 })
+
+test_that("replace_synonym_list", {
+  d1 <- data.frame(A=c("A", "B", "C", "a"), stringsAsFactors=FALSE)
+  s1 <- data.frame(Column="A", Verbatim="A", Preferred="apple", stringsAsFactors=FALSE)
+  s2 <- data.frame(Column="A", Verbatim="B", Preferred="bear", stringsAsFactors=FALSE)
+  expect_equal(
+    expect_message(
+      replace_synonym_list(
+        d1,
+        list("Synonyms A"=s1, "Synonyms B"=s2)
+      ),
+      regexp="Using the following names as synonyms for possible replacement: `Synonyms A`, `Synonyms B`",
+      fixed=TRUE
+    ),
+    data.frame(A=c("apple", "bear", "C", "apple"), stringsAsFactors=FALSE)
+  )
+  expect_equal(
+    expect_message(
+      replace_synonym_list(
+        d1,
+        list("foo A"=s1, "foo B"=s2)
+      ),
+      regexp="No synonym data.frames found in the list for possible replacement.",
+      fixed=TRUE
+    ),
+    d1
+  )
+})
