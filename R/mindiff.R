@@ -10,7 +10,10 @@
 #' @export
 mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-last")) {
   tie <- match.arg(tie)
-  if (length(choices) > 0) {
+  if (length(x) == 0) {
+    warning("`x` is zero-length, cannot match to any `choices`.")
+    x
+  } else if (length(choices) > 0) {
     choices <- sort(choices)
     distances <- abs(sapply(x, FUN="-", choices))
     apply(X=distances,
@@ -27,14 +30,16 @@ mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-l
               } else if (tie == "median-last") {
                 ret <- ret[ceiling(length(ret)/2)]
               } else {
-                stop("Invalid value for 'tie' argument")
+                # This should never happen as it should already be caught by
+                # match.arg above.
+                stop("Invalid value for `tie` argument, please report this as a bug.") # nocov
               }
             }
             choices[ret]
           },
           tie=tie)
   } else {
-    stop("No choices given.")
+    stop("No `choices` given.")
   }
 }
 
@@ -55,7 +60,10 @@ mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-l
 #' @export
 mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na")) {
   none <- match.arg(none)
-  if (length(choices) > 0) {
+  if (length(x) == 0) {
+    warning("`x` is zero-length, cannot match to any `choices`.")
+    x
+  } else if (length(choices) > 0) {
     choices <- sort(choices)
     distances <- sapply(x, FUN="-", choices)
     if (is.null(nrow(distances))) {
@@ -66,9 +74,9 @@ mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na"
           MARGIN=2,
           FUN=function(x, none) {
             if (include_zero) {
-              ret <- which(x >= 0)
+              ret <- which(x >= 0 & !is.na(x))
             } else {
-              ret <- which(x > 0)
+              ret <- which(x > 0 & !is.na(x))
             }
             if (length(ret) > 0) {
               min(x[ret])
@@ -77,12 +85,14 @@ mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na"
             } else if (none == "na") {
               NA
             } else {
-              stop("Invalid value for 'none' argument")
+              # This should never happen as it should already be caught by
+              # match.arg above.
+              stop("Invalid value for 'none' argument, please report this as a bug.") # nocov
             }
           },
           none=none)
   } else {
-    warning("No choices given, returning NA")
-    rep(NA, length(x))
+    warning("No `choices` given, returning NA")
+    x[NA]
   }
 }
