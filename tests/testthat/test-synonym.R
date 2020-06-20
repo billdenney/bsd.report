@@ -288,3 +288,55 @@ test_that("replace_synonym_list", {
     d1
   )
 })
+
+test_that("synonym errors", {
+  expect_error(
+    replace_synonym_list(x=1, synonyms=list("A")),
+    regexp="All `synonyms` must be named",
+    fixed=TRUE
+  )
+  expect_error(
+    replace_synonym_list(x=1, synonyms=list(A="A", "B")),
+    regexp="All `synonyms` must be named",
+    fixed=TRUE
+  )
+  expect_error(
+    replace_synonym_list(x=1, synonyms=data.frame(A=1)),
+    regexp="`synonyms` must be a list and not a data.frame (see `replace_synonym()` for using a data.frame).",
+    fixed=TRUE
+  )
+  expect_error(
+    replace_synonym_list(x=1, synonyms=c(A=1)),
+    regexp="`synonyms` must be a list and not a data.frame (see `replace_synonym()` for using a data.frame).",
+    fixed=TRUE
+  )
+})
+
+test_that("replace_synonym warnings", {
+  expect_equal(
+    expect_warning(
+      replace_synonym(
+        x=
+          data.frame(
+            A=rep(c("A", "B"), each=2),
+            Column=letters[1:4],
+            stringsAsFactors=FALSE
+          ),
+        synonyms=
+          data.frame(
+            A="A",
+            Column="Column",
+            Verbatim=c("a", "c"),
+            Preferred=c("apple", "cherry"),
+            stringsAsFactors=FALSE
+          )
+      ),
+      regexp="`replacement_column` (Column) is in `names(x)`.  Renaming it in `synonyms`.",
+      fixed=TRUE
+    ),
+    dplyr::tibble(
+      A=rep(c("A", "B"), each=2),
+      Column=c("apple", "b", "c", "d")
+    )
+  )
+})

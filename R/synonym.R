@@ -181,6 +181,7 @@ replace_synonym.data.frame <- function(x, synonyms, ignore_case=TRUE, ...,
     stop("`synonyms[[preferred_column]]` must be a character column.")
   }
   if (replacement_column %in% names(x)) {
+    warning("`replacement_column` (", replacement_column, ") is in `names(x)`.  Renaming it in `synonyms`.  If it is intended to be used for row-matching, please change `replacement_column`.")
     orig_replacement_column <- replacement_column
     replacement_column <- paste0(max(names(x)), "X")
     names(synonyms)[names(synonyms) %in% orig_replacement_column] <- replacement_column
