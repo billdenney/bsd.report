@@ -75,11 +75,11 @@ test_that("join_control algorithm errors", {
   
   expect_error(
     join_control(x, y, join_fun=dplyr::left_join, x_control="foo", y_control="any"),
-    regexp='should be one of .any., .all., .unique.'
+    regexp='should be one of'
   )
   expect_error(
     join_control(x, y, join_fun=dplyr::left_join, x_control="any", y_control="foo"),
-    regexp='should be one of .any., .all., .unique.'
+    regexp='should be one of'
   )
 })
 
