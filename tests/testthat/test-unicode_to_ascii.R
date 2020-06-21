@@ -1,6 +1,6 @@
 context("unicode_to_ascii")
 
-test_that("unicode_to_ascii", {
+test_that("unicode_to_ascii operation on simple types", {
   expect_equal(
     expect_message(
       unicode_to_ascii("\u03bc", verbose=TRUE),
@@ -16,7 +16,7 @@ test_that("unicode_to_ascii", {
     expect_message(
       unicode_to_ascii(c("\u03bc", NA), verbose=TRUE)
     ),
-    "u"
+    c("u", NA)
   )
   expect_equal(
     expect_silent(unicode_to_ascii("\u03bc", verbose=FALSE)),
@@ -67,6 +67,9 @@ test_that("unicode_to_ascii", {
     ),
     as.POSIXct("2020-06-20")
   )
+})
+
+test_that("unicode_to_ascii operation on complex types", {
   expect_equal(
     expect_message(
       unicode_to_ascii(
@@ -78,7 +81,7 @@ test_that("unicode_to_ascii", {
         ),
         verbose=TRUE
       ),
-      regexp="Unicode to ascii current column number and name: 2, Character",
+      regexp="Unicode to ascii current column number and name: 2, `Character`",
       fixed=TRUE
     ),
     data.frame(
@@ -87,5 +90,13 @@ test_that("unicode_to_ascii", {
       Number=1:4,
       stringsAsFactors=FALSE
     )
+  )
+  expect_equal(
+    expect_message(
+      unicode_to_ascii(list(A="\u4e01", B=c("A", "\u03bc")), verbose=TRUE),
+      regexp="Unicode to ascii current list element number and name: 1, `A`",
+      fixed=TRUE
+    ),
+    list(A="ding", B=c("A", "u"))
   )
 })

@@ -7,6 +7,7 @@
 \alias{unicode_to_ascii.factor}
 \alias{unicode_to_ascii.logical}
 \alias{unicode_to_ascii.data.frame}
+\alias{unicode_to_ascii.list}
 \title{Convert from Unicode to ASCII}
 \usage{
 unicode_to_ascii(x, ...)
@@ -27,6 +28,8 @@ unicode_to_ascii(x, ...)
 \method{unicode_to_ascii}{logical}(x, verbose = FALSE, ...)
 
 \method{unicode_to_ascii}{data.frame}(x, verbose = FALSE, ...)
+
+\method{unicode_to_ascii}{list}(x, verbose = FALSE, ...)
 }
 \arguments{
 \item{x}{Object that may contain character strings for conversion.}

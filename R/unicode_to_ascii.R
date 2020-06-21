@@ -78,7 +78,23 @@ unicode_to_ascii.logical <-
 #' @export
 unicode_to_ascii.data.frame <- function(x, verbose=FALSE, ...) {
   for (idx in seq_along(x)) {
-    if (verbose) message("Unicode to ascii current column number and name: ", idx, ", ", names(x)[idx])
+    if (verbose) message("Unicode to ascii current column number and name: ", idx, ", `", names(x)[idx], "`")
+    x[[idx]] <- unicode_to_ascii(x[[idx]], verbose=verbose, ...)
+  }
+  x
+}
+
+#' @rdname unicode_to_ascii
+#' @export
+unicode_to_ascii.list <- function(x, verbose=FALSE, ...) {
+  x_names <-
+    if (is.null(names(x))) {
+      rep("NULL", length(x))
+    } else {
+      names(x)
+    }
+  for (idx in seq_along(x)) {
+    if (verbose) message("Unicode to ascii current list element number and name: ", idx, ", `", x_names[idx], "`")
     x[[idx]] <- unicode_to_ascii(x[[idx]], verbose=verbose, ...)
   }
   x
