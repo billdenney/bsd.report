@@ -13,6 +13,12 @@ test_that("unicode_to_ascii", {
     "u"
   )
   expect_equal(
+    expect_message(
+      unicode_to_ascii(c("\u03bc", NA), verbose=TRUE)
+    ),
+    "u"
+  )
+  expect_equal(
     expect_silent(unicode_to_ascii("\u03bc", verbose=FALSE)),
     "u"
   )

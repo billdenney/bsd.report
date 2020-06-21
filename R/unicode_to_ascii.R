@@ -38,7 +38,10 @@ unicode_to_ascii.character <- function(x, verbose=FALSE,
     ret <- stringi::stri_trans_general(ret, id="Any-Latin;Greek-Latin;Latin-ASCII")
   }
   if (verbose) {
-    if (changes <- sum(x != ret)) {
+    changes <-
+      sum(is.na(x) != is.na(ret)) +
+      sum(x[!is.na(x)] != ret[!is.na(x)])
+    if (changes > 0) {
       message(
         changes,
         ngettext(
