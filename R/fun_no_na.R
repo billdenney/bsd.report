@@ -45,3 +45,16 @@ min_no_na <- function(x, zero_len=NULL) {
 median_no_na <- function(x, zero_len=NULL) {
   fun_no_na(x, stats::median, zero_len=zero_len)
 }
+
+#' @describeIn fun_no_na Median
+#' @export
+mean_no_na <- function(x, zero_len=NULL) {
+  fun_no_na(x, base::mean, zero_len=zero_len)
+}
+
+#' @describeIn fun_no_na Median
+#' @export
+#' @importFrom stats sd
+sd_no_na <- function(x, zero_len=NULL) {
+  fun_no_na(x, stats::sd, zero_len=zero_len)
+}

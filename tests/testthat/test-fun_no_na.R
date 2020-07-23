@@ -17,5 +17,7 @@ test_that("fun_no_na", {
   expect_equal(min_no_na(c(1, 2, NA)), 1)
   expect_equal(min_no_na(NA), NA)
   
-  expect_equal(median_no_na(c(1, 2, NA)), 1.5)
+  expect_equal(median_no_na(c(1, 2, 4, NA)), 2)
+  expect_equal(mean_no_na(c(1, 2, 4, NA)), 7/3)
+  expect_equal(sd_no_na(c(1, 2, 4, NA)), sd(c(1, 2, 4)))
 })
