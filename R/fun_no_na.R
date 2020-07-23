@@ -21,7 +21,7 @@ fun_no_na <- function(x, FUN, zero_len=NULL) {
       stop("`zero_len` must be `NULL` or `NA`.")
     }
   } else if (all(is.na(x))) {
-    x[NA]
+    x[1][NA]
   } else {
     FUN(x[!is.na(x)], na.rm=TRUE)
   }
@@ -29,32 +29,32 @@ fun_no_na <- function(x, FUN, zero_len=NULL) {
 
 #' @describeIn fun_no_na Maximum
 #' @export
-max_no_na <- function(x, zero_len=NULL) {
-  fun_no_na(x, max, zero_len=zero_len)
+max_no_na <- function(x, zero_len=NA) {
+  fun_no_na(x, base::max, zero_len=zero_len)
 }
 
 #' @describeIn fun_no_na Minimum
 #' @export
-min_no_na <- function(x, zero_len=NULL) {
-  fun_no_na(x, min, zero_len=zero_len)
+min_no_na <- function(x, zero_len=NA) {
+  fun_no_na(x, base::min, zero_len=zero_len)
 }
 
 #' @describeIn fun_no_na Median
 #' @export
 #' @importFrom stats median
-median_no_na <- function(x, zero_len=NULL) {
+median_no_na <- function(x, zero_len=NA) {
   fun_no_na(x, stats::median, zero_len=zero_len)
 }
 
 #' @describeIn fun_no_na Median
 #' @export
-mean_no_na <- function(x, zero_len=NULL) {
+mean_no_na <- function(x, zero_len=NA) {
   fun_no_na(x, base::mean, zero_len=zero_len)
 }
 
 #' @describeIn fun_no_na Median
 #' @export
 #' @importFrom stats sd
-sd_no_na <- function(x, zero_len=NULL) {
+sd_no_na <- function(x, zero_len=NA) {
   fun_no_na(x, stats::sd, zero_len=zero_len)
 }

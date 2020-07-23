@@ -12,15 +12,15 @@ controlled output.}
 \usage{
 fun_no_na(x, FUN, zero_len = NULL)
 
-max_no_na(x, zero_len = NULL)
+max_no_na(x, zero_len = NA)
 
-min_no_na(x, zero_len = NULL)
+min_no_na(x, zero_len = NA)
 
-median_no_na(x, zero_len = NULL)
+median_no_na(x, zero_len = NA)
 
-mean_no_na(x, zero_len = NULL)
+mean_no_na(x, zero_len = NA)
 
-sd_no_na(x, zero_len = NULL)
+sd_no_na(x, zero_len = NA)
 }
 \arguments{
 \item{x}{The object to perform the operation on.}
