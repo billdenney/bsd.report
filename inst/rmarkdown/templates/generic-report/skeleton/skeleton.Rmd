@@ -45,10 +45,14 @@ knitr::opts_chunk$set(
   message=FALSE
 )
 library(TopicLongTable)
+# Make sure that TopicLongTables are correctly formatted with a sufficient
+# number of compilation passes
+options(tinytex.compile.min_times = 4)
 library(knitr)
 library(bsd.report)
 library(tidyverse)
 library(cowplot)
+theme_set(theme_cowplot())
 library(assertr)
 library(pander)
 panderOptions("table.split.table", 1e6)
