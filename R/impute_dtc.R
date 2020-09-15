@@ -29,54 +29,25 @@
 #'
 #' @param data A data.frame or equivalent object with at least the columns
 #'   defined in the details section.
+#' @param use_ntod Should the median time for the nominal time of day (NTOD) be
+#'   used to impute times?  NTOD is the nominal time since first dose (NTSFD)
+#'   modulo 24.  If \code{FALSE}, nominal times of day are considered completely
+#'   separately.  If \code{TRUE}, the events at a nominal time of day within a
+#'   study are considered to happen at approximately the same time of day and
+#'   times are imputed when missing.
 #' @return `data` with the columns "ADTC_IMPUTE_METHOD" and "ADTC_IMPUTED"
 #'   added.
+#' @family Imputation
+#' @family Date/time imputation
 #' @export
 #' @importFrom dplyr `%>%` case_when group_by mutate select ungroup
-#' @importFrom tidyr extract
-impute_dtc <- function(data) {
-  if (any(c("DATE_PART", "TIME_PART", "current_impute") %in% names(data))) {
-    stop("`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.")
-  }
+impute_dtc <- function(data, use_ntod=FALSE) {
+  ret_prep <- impute_dtc_separate(data)
   ret <-
-    data %>%
-    # Separate the date and time
-    tidyr::extract(
-      col="ADTC",
-      into=c("DATE_PART", "TIME_PART"),
-      regex=
-        paste0(
-          "^",
-          "([0-9]{4}-[0-9]{2}-[0-9]{2})",
-          "(?:T",
-          "(",
-          "(?:UN|[0-9]{2}):", # hours
-          "(?:UN|[0-9]{2})", # minutes
-          "(?::(?:UN|[0-9]{2}))?", # maybe seconds
-          ")",
-          ")?$"
-        ),
-      remove=FALSE,
-      convert=FALSE
-    ) %>%
-    dplyr::mutate(
-      # Set unknown times to missing
-      TIME_PART=
-        dplyr::case_when(
-          grepl(x=TIME_PART, pattern="^(UN:?)+$")~NA_character_,
-          TRUE~TIME_PART
-        ),
-      # Capture observed DTC and unknown DTC
-      ADTC_IMPUTE_METHOD=
-        dplyr::case_when(
-          !is.na(DATE_PART) & !is.na(TIME_PART)~"Observed date and time",
-          is.na(NTSFD)~"Unscheduled measurement (missing NTSFD)",
-          TRUE~NA_character_
-        )
-    ) %>%
+    ret_prep %>%
     dplyr::group_by(STUDYID, USUBJID, NTSFD) %>%
-    # Will not impute multiple dates within the same NTSFD (may be a bug if an
-    # event occurs near midnight)
+    # Will not impute multiple dates within the same NTSFD (may be a incorrect
+    # if an event occurs near midnight)
     dplyr::mutate(
       current_impute=length(unique(na.omit(DATE_PART))),
       DATE_PART=
@@ -139,6 +110,53 @@ impute_dtc <- function(data) {
     ) %>%
     dplyr::select(-DATE_PART, -TIME_PART, -current_impute)
   ret
+}
+
+#' Separate the date and time parts for imputation
+#' @inheritParams impute_dtc
+#' @return A dataset with the DATE_PART and TIME_PART separated from the ADTC
+#'   column.
+#' @noRd
+#' @importFrom tidyr extract
+impute_dtc_separate <- function(data) {
+  if (any(c("DATE_PART", "TIME_PART", "current_impute") %in% names(data))) {
+    stop("`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.")
+  }
+  data %>%
+    # Separate the date and time
+    tidyr::extract(
+      col="ADTC",
+      into=c("DATE_PART", "TIME_PART"),
+      regex=
+        paste0(
+          "^",
+          "([0-9]{4}-[0-9]{2}-[0-9]{2})",
+          "(?:T",
+          "(",
+          "(?:UN|[0-9]{2}):", # hours
+          "(?:UN|[0-9]{2})", # minutes
+          "(?::(?:UN|[0-9]{2}))?", # maybe seconds
+          ")",
+          ")?$"
+        ),
+      remove=FALSE,
+      convert=FALSE
+    ) %>%
+    dplyr::mutate(
+      # Set unknown times to missing
+      TIME_PART=
+        dplyr::case_when(
+          grepl(x=TIME_PART, pattern="^(UN:?)+$")~NA_character_,
+          TRUE~TIME_PART
+        ),
+      # Capture observed DTC and unknown DTC
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          !is.na(DATE_PART) & !is.na(TIME_PART)~"Observed date and time",
+          is.na(NTSFD)~"Unscheduled measurement (missing NTSFD)",
+          TRUE~NA_character_
+        )
+    )
 }
 
 utils::globalVariables(

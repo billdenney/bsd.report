@@ -4,11 +4,18 @@
 \alias{impute_dtc}
 \title{Impute dates and times when data are missing.}
 \usage{
-impute_dtc(data)
+impute_dtc(data, use_ntod = FALSE)
 }
 \arguments{
 \item{data}{A data.frame or equivalent object with at least the columns
 defined in the details section.}
+
+\item{use_ntod}{Should the median time for the nominal time of day (NTOD) be
+used to impute times?  NTOD is the nominal time since first dose (NTSFD)
+modulo 24.  If \code{FALSE}, nominal times of day are considered completely
+separately.  If \code{TRUE}, the events at a nominal time of day within a
+study are considered to happen at approximately the same time of day and
+times are imputed when missing.}
 }
 \value{
 `data` with the columns "ADTC_IMPUTE_METHOD" and "ADTC_IMPUTED"
@@ -45,3 +52,5 @@ Columns used in calculation are:
   identifier, and nominal time since first dose.}
 }
 }
+\concept{Date/time imputation}
+\concept{Imputation}
