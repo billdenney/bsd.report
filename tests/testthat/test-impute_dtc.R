@@ -172,4 +172,22 @@ test_that("impute_dtc_ntod", {
     ),
     info="ADTC is left alone"
   )
+  expect_equal(
+    impute_dtc_ntod(data.frame(STUDYID=1, USUBJID=1, NTSFD=0:1, ADTC=c("2020-02-21T08:09", "2020-02-21"))),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=0:1, ADTC=c("2020-02-21T08:09", "2020-02-21"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", NA_character_),
+      ADTC_IMPUTED=c("2020-02-21T08:09", NA_character_)
+    ),
+    info="No imputation for different NTOD"
+  )
+  expect_equal(
+    impute_dtc_ntod(data.frame(STUDYID=1, USUBJID=1, NTSFD=c(0, 24), ADTC=c("2020-02-21T08:09", "2020-02-22"))),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=c(0, 24), ADTC=c("2020-02-21T08:09", "2020-02-22"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Median time within the nominal time of day for the subject"),
+      ADTC_IMPUTED=c("2020-02-21T08:09", "2020-02-22T08:09")
+    ),
+    info="Imputation within NTOD"
+  )
 })
