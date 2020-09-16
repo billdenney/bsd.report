@@ -29,19 +29,13 @@
 #'
 #' @param data A data.frame or equivalent object with at least the columns
 #'   defined in the details section.
-#' @param use_ntod Should the median time for the nominal time of day (NTOD) be
-#'   used to impute times?  NTOD is the nominal time since first dose (NTSFD)
-#'   modulo 24.  If \code{FALSE}, nominal times of day are considered completely
-#'   separately.  If \code{TRUE}, the events at a nominal time of day within a
-#'   study are considered to happen at approximately the same time of day and
-#'   times are imputed when missing.
 #' @return `data` with the columns "ADTC_IMPUTE_METHOD" and "ADTC_IMPUTED"
 #'   added.
 #' @family Imputation
 #' @family Date/time imputation
 #' @export
 #' @importFrom dplyr `%>%` case_when group_by mutate select ungroup
-impute_dtc <- function(data, use_ntod=FALSE) {
+impute_dtc <- function(data) {
   ret_prep <- impute_dtc_separate(data)
   ret <-
     ret_prep %>%
@@ -60,9 +54,9 @@ impute_dtc <- function(data, use_ntod=FALSE) {
         dplyr::case_when(
           !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
           (current_impute > 1) & is.na(ADTC_IMPUTE_METHOD)~
-            "Multiple dates observed during the same nominal time, not imputing.",
+            "Multiple dates observed during the same nominal time, not imputing",
           (current_impute == 0) & is.na(ADTC_IMPUTE_METHOD)~
-            "No dates observed during the nominal time, not imputing.",
+            "No dates observed during the nominal time, not imputing",
           TRUE~NA_character_
         )
     ) %>%
@@ -82,18 +76,18 @@ impute_dtc <- function(data, use_ntod=FALSE) {
         dplyr::case_when(
           !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
           current_impute~
-            "Single time measurment observed for a nominal time.",
+            "Single time measurment observed for a nominal time",
           TRUE~NA_character_
         )
     ) %>%
     # Check to see if additional imputation is required
     dplyr::mutate(
-      current_impute=is.na(ADTC_IMPUTE_METHOD),
       TIME_PART=
         dplyr::case_when(
           !is.na(TIME_PART)~TIME_PART,
-          current_impute~median_character(TIME_PART, na.rm=TRUE),
+          is.na(ADTC_IMPUTE_METHOD)~median_character(TIME_PART, na.rm=TRUE),
         ),
+      current_impute=is.na(ADTC_IMPUTE_METHOD) & !is.na(TIME_PART),
       ADTC_IMPUTE_METHOD=
         dplyr::case_when(
           !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
@@ -146,7 +140,7 @@ impute_dtc_separate <- function(data) {
       # Set unknown times to missing
       TIME_PART=
         dplyr::case_when(
-          grepl(x=TIME_PART, pattern="^(UN:?)+$")~NA_character_,
+          grepl(x=TIME_PART, pattern="UN")~NA_character_,
           TRUE~TIME_PART
         ),
       # Capture observed DTC and unknown DTC
