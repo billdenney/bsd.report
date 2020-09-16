@@ -126,4 +126,20 @@ test_that("impute_dtc", {
       ADTC_IMPUTED=NA_character_
     )
   )
+  
+  expect_error(
+    impute_dtc(data.frame(DATE_PART=1)),
+    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc(data.frame(TIME_PART=1)),
+    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc(data.frame(current_impute=1)),
+    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
+    fixed=TRUE
+  )
 })
