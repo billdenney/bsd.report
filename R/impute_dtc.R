@@ -106,6 +106,58 @@ impute_dtc <- function(data) {
   ret
 }
 
+#' @describeIn impute_dtc imputes based on the typical nominal time of day for a
+#'   subject.
+#' @param na_ntod What nominal time of day should unscheduled measurements be
+#'   imputed as?  (Often \code{0} is selected, but missing is the default.)
+#' @export
+impute_dtc_ntod <- function(data, na_notd=NA_real_, override_multiple_dates=TRUE) {
+  ret_prep <- impute_dtc_separate(data)
+  if (!("ADTC_IMPUTED" %in% names(ret_prep))) {
+    ret_prep$ADTC_IMPUTED <- NA_character_
+  }
+  if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep))) {
+    ret_prep$ADTC_IMPUTE_METHOD <- NA_character_
+  }
+  multiple_dates_text <- "Multiple dates observed during the same nominal time, not imputing"
+  ret_prep$ADTC_IMPUTE_METHOD[
+    override_multiple_dates &
+      ret_prep$ADTC_IMPUTE_METHOD %in% multiple_dates_text] <- NA_character_
+  ret_prep$NTOD <-
+    ifelse(
+      is.na(ret_prep$NTSFD),
+      na_ntod,
+      ret_prep$NTSFD %% 24
+    )
+  ret <-
+    ret_prep %>%
+    dplyr::group_by(STUDYID, USUBJID, NTOD) %>%
+    mutate(
+      current_impute=!is.na(NTOD) & !all(is.na(TIME_PART)) & is.na(TIME_PART),
+      TIME_PART=
+        case_when(
+          !is.na(TIME_PART)~TIME_PART,
+          !is.na(NTOD)~median_character(unique(TIME_PART), na.rm=TRUE),
+          TRUE~TIME_PART
+        )
+    ) %>%
+    ungroup() %>%
+    dplyr::mutate(
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          current_impute~"Median time within the nominal time of day for the subject",
+          TRUE~ADTC_IMPUTE_METHOD
+        ),
+      ADTC_IMPUTED=
+        dplyr::case_when(
+          is.na(DATE_PART) | is.na(TIME_PART)~NA_character_,
+          TRUE~paste(DATE_PART, TIME_PART, sep="T")
+        )
+    ) %>%
+    dplyr::select(-DATE_PART, -TIME_PART, -NTOD, -current_impute)
+  ret
+}
+
 #' Separate the date and time parts for imputation
 #' @inheritParams impute_dtc
 #' @return A dataset with the DATE_PART and TIME_PART separated from the ADTC
@@ -141,6 +193,7 @@ impute_dtc_separate <- function(data) {
       TIME_PART=
         dplyr::case_when(
           grepl(x=TIME_PART, pattern="UN")~NA_character_,
+          TIME_PART %in% ""~NA_character_,
           TRUE~TIME_PART
         ),
       # Capture observed DTC and unknown DTC

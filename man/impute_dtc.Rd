@@ -2,13 +2,19 @@
 % Please edit documentation in R/impute_dtc.R
 \name{impute_dtc}
 \alias{impute_dtc}
+\alias{impute_dtc_ntod}
 \title{Impute dates and times when data are missing.}
 \usage{
 impute_dtc(data)
+
+impute_dtc_ntod(data, na_notd = NA_real_, override_multiple_dates = TRUE)
 }
 \arguments{
 \item{data}{A data.frame or equivalent object with at least the columns
 defined in the details section.}
+
+\item{na_ntod}{What nominal time of day should unscheduled measurements be
+imputed as?  (Often \code{0} is selected, but missing is the default.)}
 }
 \value{
 `data` with the columns "ADTC_IMPUTE_METHOD" and "ADTC_IMPUTED"
@@ -45,5 +51,11 @@ Columns used in calculation are:
   identifier, and nominal time since first dose.}
 }
 }
+\section{Functions}{
+\itemize{
+\item \code{impute_dtc_ntod}: imputes based on the typical nominal time of day for a
+subject.
+}}
+
 \concept{Date/time imputation}
 \concept{Imputation}
