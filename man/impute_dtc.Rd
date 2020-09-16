@@ -7,7 +7,7 @@
 \usage{
 impute_dtc(data)
 
-impute_dtc_ntod(data, na_notd = NA_real_, override_multiple_dates = TRUE)
+impute_dtc_ntod(data, na_ntod = NA_real_, override_multiple_dates = TRUE)
 }
 \arguments{
 \item{data}{A data.frame or equivalent object with at least the columns

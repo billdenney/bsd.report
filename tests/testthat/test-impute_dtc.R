@@ -201,4 +201,16 @@ test_that("impute_dtc_ntod", {
     ),
     info="Multiple dates are overridden"
   )
+  expect_equal(
+    impute_dtc_ntod(
+      impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"))),
+      override_multiple_dates=FALSE
+    ),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Multiple dates observed during the same nominal time, not imputing"),
+      ADTC_IMPUTED=c("2020-02-01T08:09:10", NA_character_)
+    ),
+    info="Multiple dates are not overridden"
+  )
 })
