@@ -190,4 +190,15 @@ test_that("impute_dtc_ntod", {
     ),
     info="Imputation within NTOD"
   )
+  expect_equal(
+    impute_dtc_ntod(
+      impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN")))
+    ),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Median time within the nominal time of day for the subject"),
+      ADTC_IMPUTED=c("2020-02-01T08:09:10", "2020-02-03T08:09:10")
+    ),
+    info="Multiple dates are overridden"
+  )
 })
