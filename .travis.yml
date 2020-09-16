@@ -2,6 +2,8 @@
 
 language: R
 cache: packages
+# Work around https://github.com/r-lib/roxygen2/issues/1121
+warnings_are_errors: false
 
 r:
   - release
