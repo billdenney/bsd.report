@@ -18,10 +18,10 @@ test_that("impute_dtc_separate", {
     data.frame(
       ADTC="2020-02-01T08:09:UN",
       DATE_PART="2020-02-01",
-      TIME_PART=NA_character_,
+      TIME_PART="08:09",
       NTSFD=0,
       ADTC_IMPUTED=NA_character_,
-      ADTC_IMPUTE_METHOD=NA_character_
+      ADTC_IMPUTE_METHOD="Observed date and time"
     )
   )
   expect_equal(

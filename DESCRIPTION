@@ -1,10 +1,11 @@
 Package: bsd.report
 Title: Assistance with Report Writing
-Version: 0.0.0.9084
+Version: 0.0.0.9085
 Authors@R: person("William", "Denney", email = "wdenney@humanpredictions.com", role = c("aut", "cre"))
 Description: Report writing can be made easier by using some simplifying
   functions to help with the text and the conversion to knitr/rmarkdown.
-  These functions help with converting R into usable text.
+  These functions help with converting R into usable text.  There are many
+  other functions in here, too.
 Depends:
   R (>= 3.5)
 Imports:

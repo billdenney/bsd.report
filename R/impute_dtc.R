@@ -144,7 +144,7 @@ impute_dtc_ntod <- function(data, na_ntod=NA_real_) {
     ) %>%
     dplyr::group_by(STUDYID, USUBJID, NTOD) %>%
     dplyr::mutate(
-      current_impute=!is.na(NTOD) & is.na(TIME_PART) & any(!is.na(TIME_PART)),
+      current_impute=!is.na(NTOD) & !is.na(DATE_PART) & is.na(TIME_PART) & any(!is.na(TIME_PART)),
       TIME_PART=
         case_when(
           current_impute~median_character(unique(TIME_PART), na.rm=TRUE),
@@ -178,18 +178,40 @@ impute_dtc_separate <- function(data) {
   if (any(c("DATE_PART", "TIME_PART", "current_impute") %in% names(data))) {
     stop("`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.")
   }
-  ret_prep <- data
-  if (!("ADTC_IMPUTED" %in% names(ret_prep))) {
-    impute_column <- "ADTC"
-    ret_prep$ADTC_IMPUTED <- NA_character_
+  ret_prep_cols <- data
+  if (!("ADTC_IMPUTED" %in% names(ret_prep_cols))) {
+    ret_prep_cols$ADTC_IMPUTED <- NA_character_
+    use_impute_column <- FALSE
   } else {
-    impute_column <- "ADTC_IMPUTED"
+    use_impute_column <- TRUE
   }
-  if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep))) {
-    ret_prep$ADTC_IMPUTE_METHOD <- NA_character_
+  if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep_cols))) {
+    ret_prep_cols$ADTC_IMPUTE_METHOD <- NA_character_
+  }
+  ret_prep <- impute_dtc_extract(ret_prep_cols, impute_column="ADTC")
+  if (use_impute_column) {
+    ret_prep_impute <- impute_dtc_extract(ret_prep, impute_column="ADTC_IMPUTED")
+    mask_use_date_part <- !is.na(ret_prep_impute$DATE_PART) & is.na(ret_prep$DATE_PART)
+    mask_use_time_part <- !is.na(ret_prep_impute$TIME_PART) & is.na(ret_prep$TIME_PART)
+    ret_prep$DATE_PART[mask_use_date_part] <- ret_prep_impute$DATE_PART[mask_use_date_part]
+    ret_prep$TIME_PART[mask_use_time_part] <- ret_prep_impute$TIME_PART[mask_use_time_part]
   }
   ret_prep %>%
-    # Separate the date and time
+    # Capture observed date/times
+    dplyr::mutate(
+      current_impute=!is.na(DATE_PART) & !is.na(TIME_PART) & is.na(ADTC_IMPUTE_METHOD),
+      ADTC_IMPUTE_METHOD=
+        case_when(
+          is.na(ADTC_IMPUTE_METHOD) & current_impute~"Observed date and time",
+          TRUE~ADTC_IMPUTE_METHOD
+        )
+    ) %>%
+    select(-current_impute)
+}
+
+impute_dtc_extract <- function(data, impute_column) {
+  # Separate the date and time
+  data %>%
     tidyr::extract(
       col=impute_column,
       into=c("DATE_PART", "TIME_PART"),
@@ -209,6 +231,13 @@ impute_dtc_separate <- function(data) {
       convert=FALSE
     ) %>%
     dplyr::mutate(
+      # drop :00 or :UN seconds
+      TIME_PART=
+        gsub(
+          x=TIME_PART,
+          pattern="(.{2}:.{2}):(?:00|UN)$",
+          replacement="\\1"
+        ),
       # Set unknown times to missing
       TIME_PART=
         dplyr::case_when(
@@ -216,17 +245,7 @@ impute_dtc_separate <- function(data) {
           TIME_PART %in% ""~NA_character_,
           TRUE~TIME_PART
         )
-    ) %>%
-    # Capture observed date/times
-    dplyr::mutate(
-      current_impute=!is.na(DATE_PART) & !is.na(TIME_PART) & is.na(ADTC_IMPUTE_METHOD),
-      ADTC_IMPUTE_METHOD=
-        case_when(
-          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Observed date and time", sep="; "),
-          TRUE~ADTC_IMPUTE_METHOD
-        )
-    ) %>%
-    select(-current_impute)
+    )
 }
 
 utils::globalVariables(
