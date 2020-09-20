@@ -40,58 +40,71 @@ impute_dtc <- function(data) {
   ret <-
     ret_prep %>%
     dplyr::group_by(STUDYID, USUBJID, NTSFD) %>%
-    # Will not impute multiple dates within the same NTSFD (may be a incorrect
-    # if an event occurs near midnight)
+    # If there is only one date/time for an NTSFD, use that.
     dplyr::mutate(
-      current_impute=length(unique(na.omit(DATE_PART))),
+      # single_date and single_time only apply to scheduled measurements.
+      # Unscheduled measurements are not imputed with those assumptions.
+      single_date=!any(is.na(NTSFD)) & (length(unique(na.omit(DATE_PART))) == 1),
+      single_time=!any(is.na(NTSFD)) & (length(unique(na.omit(TIME_PART))) == 1),
+      current_impute=is.na(DATE_PART) & is.na(TIME_PART) & single_date & single_time,
       DATE_PART=
         dplyr::case_when(
-          !is.na(DATE_PART)~DATE_PART,
-          current_impute == 1~c(unique(na.omit(DATE_PART)), NA_character_)[1],
+          current_impute~c(unique(na.omit(DATE_PART)), NA_character_)[1],
           TRUE~DATE_PART
         ),
-      ADTC_IMPUTE_METHOD=
-        dplyr::case_when(
-          !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
-          (current_impute > 1) & is.na(ADTC_IMPUTE_METHOD)~
-            "Multiple dates observed during the same nominal time, not imputing",
-          (current_impute == 0) & is.na(ADTC_IMPUTE_METHOD)~
-            "No dates observed during the nominal time, not imputing",
-          TRUE~NA_character_
-        )
-    ) %>%
-    # Check to see if only a single time value exists within an interval, and if
-    # so, use that time.
-    dplyr::mutate(
-      current_impute=
-        (length(unique(na.omit(TIME_PART))) == 1) &
-        is.na(ADTC_IMPUTE_METHOD),
       TIME_PART=
         dplyr::case_when(
-          !is.na(TIME_PART)~TIME_PART,
           current_impute~c(unique(na.omit(TIME_PART)), NA_character_)[1],
           TRUE~TIME_PART
         ),
       ADTC_IMPUTE_METHOD=
         dplyr::case_when(
-          !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
-          current_impute~
-            "Single time measurment observed for a nominal time",
-          TRUE~NA_character_
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Single date/time for the nominal time", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
         )
     ) %>%
-    # Check to see if additional imputation is required
+    # Will not impute multiple dates within the same NTSFD (may be a incorrect
+    # if an event occurs near midnight)
     dplyr::mutate(
-      TIME_PART=
+      current_impute=is.na(DATE_PART) & single_date,
+      DATE_PART=
         dplyr::case_when(
-          !is.na(TIME_PART)~TIME_PART,
-          is.na(ADTC_IMPUTE_METHOD)~median_character(TIME_PART, na.rm=TRUE),
+          current_impute == 1~c(unique(na.omit(DATE_PART)), NA_character_)[1],
+          TRUE~DATE_PART
         ),
-      current_impute=is.na(ADTC_IMPUTE_METHOD) & !is.na(TIME_PART),
       ADTC_IMPUTE_METHOD=
         dplyr::case_when(
-          !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
-          current_impute~"Median time within the observed nominal times"
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Single date for the nominal time", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
+        )
+    ) %>%
+    # Check to see if only a single time value exists within an interval, and if
+    # so, use that time.
+    dplyr::mutate(
+      current_impute=is.na(TIME_PART) & single_date & single_time,
+      TIME_PART=
+        dplyr::case_when(
+          current_impute~c(unique(na.omit(TIME_PART)), NA_character_)[1],
+          TRUE~TIME_PART
+        ),
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Single time measurment observed for a nominal time", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
+        )
+    ) %>%
+    # If multiple times occur at the same NTSFD but all on the same date, take the median.
+    dplyr::mutate(
+      current_impute=is.na(TIME_PART) & any(!is.na(TIME_PART)) & single_date,
+      TIME_PART=
+        dplyr::case_when(
+          current_impute~median_character(TIME_PART, na.rm=TRUE),
+          TRUE~TIME_PART
+        ),
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Median time within the observed nominal times", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
         )
     ) %>%
     dplyr::ungroup() %>%
@@ -102,7 +115,7 @@ impute_dtc <- function(data) {
           TRUE~paste(DATE_PART, TIME_PART, sep="T")
         )
     ) %>%
-    dplyr::select(-DATE_PART, -TIME_PART, -current_impute)
+    dplyr::select(-DATE_PART, -TIME_PART, -current_impute, -single_date, -single_time)
   ret
 }
 
@@ -110,21 +123,9 @@ impute_dtc <- function(data) {
 #'   (NTOD) for a subject.
 #' @param na_ntod What nominal time of day should unscheduled measurements be
 #'   imputed as?  (Often \code{0} is selected, but missing is the default.)
-#' @param override_multiple_dates If something was not imputed due to multiple
-#'   dates for the same nominal time, should it be imputed with NTOD?
 #' @export
-impute_dtc_ntod <- function(data, na_ntod=NA_real_, override_multiple_dates=TRUE) {
+impute_dtc_ntod <- function(data, na_ntod=NA_real_) {
   ret_prep <- impute_dtc_separate(data)
-  if (!("ADTC_IMPUTED" %in% names(ret_prep))) {
-    ret_prep$ADTC_IMPUTED <- NA_character_
-  }
-  if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep))) {
-    ret_prep$ADTC_IMPUTE_METHOD <- NA_character_
-  }
-  multiple_dates_text <- "Multiple dates observed during the same nominal time, not imputing"
-  ret_prep$ADTC_IMPUTE_METHOD[
-    override_multiple_dates &
-      (ret_prep$ADTC_IMPUTE_METHOD %in% multiple_dates_text)] <- NA_character_
   ret_prep$NTOD <-
     ifelse(
       is.na(ret_prep$NTSFD),
@@ -133,25 +134,30 @@ impute_dtc_ntod <- function(data, na_ntod=NA_real_, override_multiple_dates=TRUE
     )
   ret <-
     ret_prep %>%
+    dplyr::mutate(
+      current_impute=is.na(NTSFD) & !is.na(NTOD),
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Assumed nominal time of day for unscheduled measure", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
+        )
+    ) %>%
     dplyr::group_by(STUDYID, USUBJID, NTOD) %>%
-    mutate(
-      current_impute=!is.na(NTOD) & is.na(ADTC_IMPUTE_METHOD) & is.na(TIME_PART),
+    dplyr::mutate(
+      current_impute=!is.na(NTOD) & is.na(TIME_PART) & any(!is.na(TIME_PART)),
       TIME_PART=
         case_when(
-          !is.na(TIME_PART)~TIME_PART,
           current_impute~median_character(unique(TIME_PART), na.rm=TRUE),
           TRUE~TIME_PART
+        ),
+      ADTC_IMPUTE_METHOD=
+        dplyr::case_when(
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Median time within the nominal time of day for the subject", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
         )
     ) %>%
     ungroup() %>%
     dplyr::mutate(
-      # Did imputation actually occur?
-      current_impute=current_impute & !is.na(TIME_PART),
-      ADTC_IMPUTE_METHOD=
-        dplyr::case_when(
-          current_impute~"Median time within the nominal time of day for the subject",
-          TRUE~ADTC_IMPUTE_METHOD
-        ),
       ADTC_IMPUTED=
         dplyr::case_when(
           is.na(DATE_PART) | is.na(TIME_PART)~NA_character_,
@@ -173,6 +179,9 @@ impute_dtc_separate <- function(data) {
     stop("`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.")
   }
   ret_prep <- data
+  if (!("ADTC_IMPUTED" %in% names(ret_prep))) {
+    ret_prep$ADTC_IMPUTED <- NA_character_
+  }
   if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep))) {
     ret_prep$ADTC_IMPUTE_METHOD <- NA_character_
   }
@@ -203,21 +212,24 @@ impute_dtc_separate <- function(data) {
           grepl(x=TIME_PART, pattern="UN")~NA_character_,
           TIME_PART %in% ""~NA_character_,
           TRUE~TIME_PART
-        ),
-      # Capture observed DTC and unknown DTC
-      ADTC_IMPUTE_METHOD=
-        dplyr::case_when(
-          !is.na(ADTC_IMPUTE_METHOD)~ADTC_IMPUTE_METHOD,
-          !is.na(DATE_PART) & !is.na(TIME_PART)~"Observed date and time",
-          is.na(NTSFD)~"Unscheduled measurement (missing NTSFD)",
-          TRUE~NA_character_
         )
-    )
+    ) %>%
+    # Capture observed date/times
+    dplyr::mutate(
+      current_impute=!is.na(DATE_PART) & !is.na(TIME_PART) & is.na(ADTC_IMPUTE_METHOD),
+      ADTC_IMPUTE_METHOD=
+        case_when(
+          current_impute~paste_missing(ADTC_IMPUTE_METHOD, "Observed date and time", sep="; "),
+          TRUE~ADTC_IMPUTE_METHOD
+        )
+    ) %>%
+    select(-current_impute)
 }
 
 utils::globalVariables(
   c(
     "ADTC_IMPUTE_METHOD", "current_impute", "DATE_PART", "NTOD", "NTSFD",
+    "single_date", "single_time",
     "STUDYID", "TIME_PART", "USUBJID"
   )
 )

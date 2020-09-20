@@ -7,7 +7,7 @@
 \usage{
 impute_dtc(data)
 
-impute_dtc_ntod(data, na_ntod = NA_real_, override_multiple_dates = TRUE)
+impute_dtc_ntod(data, na_ntod = NA_real_)
 }
 \arguments{
 \item{data}{A data.frame or equivalent object with at least the columns
@@ -53,8 +53,8 @@ Columns used in calculation are:
 }
 \section{Functions}{
 \itemize{
-\item \code{impute_dtc_ntod}: imputes based on the typical nominal time of day for a
-subject.
+\item \code{impute_dtc_ntod}: imputes based on the typical nominal time of day
+(NTOD) for a subject.
 }}
 
 \concept{Date/time imputation}
