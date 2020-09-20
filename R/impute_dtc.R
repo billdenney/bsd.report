@@ -180,7 +180,10 @@ impute_dtc_separate <- function(data) {
   }
   ret_prep <- data
   if (!("ADTC_IMPUTED" %in% names(ret_prep))) {
+    impute_column <- "ADTC"
     ret_prep$ADTC_IMPUTED <- NA_character_
+  } else {
+    impute_column <- "ADTC_IMPUTED"
   }
   if (!("ADTC_IMPUTE_METHOD" %in% names(ret_prep))) {
     ret_prep$ADTC_IMPUTE_METHOD <- NA_character_
@@ -188,7 +191,7 @@ impute_dtc_separate <- function(data) {
   ret_prep %>%
     # Separate the date and time
     tidyr::extract(
-      col="ADTC",
+      col=impute_column,
       into=c("DATE_PART", "TIME_PART"),
       regex=
         paste0(
