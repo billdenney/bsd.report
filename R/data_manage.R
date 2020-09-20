@@ -85,10 +85,36 @@ check_expected_cols <- function(data, cols) {
 #' Output a data.frame with numeric columns on the left.
 #' 
 #' @param x A data.frame or similar object
+#' @param time_num_cols Columns to round to \code{time_num_precision}
+#' @param time_num_precision Precision (\code{1/time_num_precision}) to use for
+#'   rounding
 #' @family Data Management
 #' @export
-nonmem_column_order <- function(x) {
+nonmem_column_order <- function(x,
+                                time_num_cols=c("TSFM", "TSFD", "TAD", "NTSFM", "NTSFD", "NTAD"),
+                                time_num_precision=3600) {
   numeric_cols <- names(x)[sapply(X=x, FUN=is.numeric)]
+  for (rounding_col in intersect(numeric_cols, time_num_cols)) {
+    x[[rounding_col]] <-
+      round_to_precision(
+        x=x[[rounding_col]],
+        digits=ceiling(log10(time_num_precision))
+      )
+  }
   other_cols <- setdiff(names(x), numeric_cols)
   x[, c(numeric_cols, other_cols), drop=FALSE]
+}
+
+round_to_precision <- function(x, digits=6) {
+  ret <- sprintf(paste0("%.", digits, "f"), x)
+  # Drop all zeros after the decimal place to nothing
+  ret <- gsub(x=ret, pattern="\\.0+$", replacement="")
+  ret <-
+    gsub(
+      x=ret,
+      pattern="(\\.[0-9].*?)0+$",
+      replacement="\\1"
+    )
+  ret[is.na(x)] <- NA_character_
+  ret
 }

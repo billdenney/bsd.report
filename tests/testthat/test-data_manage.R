@@ -109,3 +109,22 @@ test_that("nonmem_column_order", {
     info="One column maintains being a data.frame (non-numeric)"
   )
 })
+
+test_that("round_to_precision", {
+  expect_equal(
+    round_to_precision(1111.111111111),
+    round_to_precision(1111.111111111, digits=6)
+  )
+  expect_equal(round_to_precision(1), "1")
+  expect_equal(round_to_precision(1.1), "1.1")
+  expect_equal(round_to_precision(1.111111111), "1.111111")
+  expect_equal(round_to_precision(1.111111111, digits=4), "1.1111")
+  expect_equal(round_to_precision(-1), "-1")
+  expect_equal(round_to_precision(-1.1), "-1.1")
+  expect_equal(round_to_precision(-1.111111111), "-1.111111")
+  expect_equal(round_to_precision(-1.111111111, digits=4), "-1.1111")
+  expect_equal(round_to_precision(NA, digits=4), NA_character_)
+  expect_equal(round_to_precision(NaN, digits=4), NA_character_)
+  expect_equal(round_to_precision(Inf, digits=4), "Inf")
+  expect_equal(round_to_precision(-Inf, digits=4), "-Inf")
+})

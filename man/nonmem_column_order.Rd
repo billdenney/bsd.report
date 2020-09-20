@@ -4,10 +4,19 @@
 \alias{nonmem_column_order}
 \title{Output a data.frame with numeric columns on the left.}
 \usage{
-nonmem_column_order(x)
+nonmem_column_order(
+  x,
+  time_num_cols = c("TSFM", "TSFD", "TAD", "NTSFM", "NTSFD", "NTAD"),
+  time_num_precision = 3600
+)
 }
 \arguments{
 \item{x}{A data.frame or similar object}
+
+\item{time_num_cols}{Columns to round to \code{time_num_precision}}
+
+\item{time_num_precision}{Precision (\code{1/time_num_precision}) to use for
+rounding}
 }
 \description{
 Output a data.frame with numeric columns on the left.
