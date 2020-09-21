@@ -290,6 +290,14 @@ test_that("impute_time_act_nom", {
     data.frame(imputed=3:1, method="Observed actual")
   )
   expect_equal(
+    expect_warning(
+      impute_time_act_nom(actual=as.double(3:1), nominal=c(1, 3, 1)),
+      regexp="Some 'actual' times are not in 'nominal' time order"
+    ),
+    data.frame(imputed=3:1, method="Observed actual"),
+    info="Output is in the same order as input"
+  )
+  expect_equal(
     impute_time_act_nom(actual=1:3, nominal=1:3),
     data.frame(imputed=1:3, method="Observed actual")
   )

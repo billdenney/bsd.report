@@ -363,7 +363,7 @@ impute_time_act_nom <- function(actual, nominal) {
     "Extrapolate backward <24h"
 
   # Reorder the data and return it with the imputation method
-  as.data.frame(ret)[ret$ROWID, c("imputed", "method")]
+  as.data.frame(ret)[order(ret$ROWID), c("imputed", "method")]
 }
 
 utils::globalVariables(
