@@ -324,7 +324,7 @@ impute_time_act_nom <- function(actual, nominal) {
     (ret$next_nominal - ret$nominal) <= 24
   mask_ordered_actual_within_24hr_both_directions[is.na(mask_ordered_actual_within_24hr_both_directions)] <- FALSE
   value_ordered_actual_within_24hr_both_directions <-
-    (ret$next_actual - ret$prior_actual)/(ret$next_nominal - ret$prior_nominal)*(ret$nominal - ret$prior_nominal) + ret$prior_nominal
+    (ret$next_actual - ret$prior_actual)/(ret$next_nominal - ret$prior_nominal)*(ret$nominal - ret$prior_nominal) + ret$prior_actual
   ret$imputed[mask_ordered_actual_within_24hr_both_directions] <-
     value_ordered_actual_within_24hr_both_directions[mask_ordered_actual_within_24hr_both_directions]
   ret$method[mask_ordered_actual_within_24hr_both_directions] <-

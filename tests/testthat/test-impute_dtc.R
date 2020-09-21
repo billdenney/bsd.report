@@ -317,6 +317,13 @@ test_that("impute_time_act_nom", {
     )
   )
   expect_equal(
+    impute_time_act_nom(actual=c(2, NA, 5), nominal=1:3),
+    data.frame(
+      imputed=c(2, 3.5, 5),
+      method=c("Observed actual", "<24 hr between two observed points", "Observed actual")
+    )
+  )
+  expect_equal(
     impute_time_act_nom(actual=c(1, NA, NA, 4), nominal=1:4),
     data.frame(
       imputed=c(1, 2, 3, 4),
