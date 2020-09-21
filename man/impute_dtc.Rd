@@ -57,5 +57,12 @@ Columns used in calculation are:
 (NTOD) for a subject.
 }}
 
+\seealso{
+Other Imputation: 
+\code{\link{impute_time_act_nom}()}
+
+Other Date/time imputation: 
+\code{\link{impute_time_act_nom}()}
+}
 \concept{Date/time imputation}
 \concept{Imputation}

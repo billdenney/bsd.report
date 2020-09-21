@@ -276,3 +276,86 @@ test_that("impute_dtc_ntod", {
     info="Unscheduled measurements with and assumed time of day are not imputed, if there are not other measurements at the same time of day."
   )
 })
+
+test_that("impute_time_act_nom", {
+  expect_equal(
+    impute_time_act_nom(actual=1:3, nominal=rep(NA_real_, 3)),
+    data.frame(imputed=1:3, method="Observed actual")
+  )
+  expect_equal(
+    expect_warning(
+      impute_time_act_nom(actual=3:1, nominal=1:3),
+      regexp="Some 'actual' times are not in 'nominal' time order"
+    ),
+    data.frame(imputed=3:1, method="Observed actual")
+  )
+  expect_equal(
+    impute_time_act_nom(actual=1:3, nominal=1:3),
+    data.frame(imputed=1:3, method="Observed actual")
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA, 3), nominal=1:3),
+    data.frame(
+      imputed=1:3,
+      method=c("Observed actual", "<24 hr between two observed points", "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA, 4), nominal=1:3),
+    data.frame(
+      imputed=c(1, 2.5, 4),
+      method=c("Observed actual", "<24 hr between two observed points", "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA, NA, 4), nominal=1:4),
+    data.frame(
+      imputed=c(1, 2, 3, 4),
+      method=c("Observed actual", rep("<24 hr between two observed points", 2), "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA, NA, 5), nominal=1:4),
+    data.frame(
+      imputed=c(1, 7/3, 11/3, 5),
+      method=c("Observed actual", rep("<24 hr between two observed points", 2), "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA), nominal=1:2),
+    data.frame(
+      imputed=c(1, 2),
+      method=c("Observed actual", "Extrapolate forward <24h")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(NA, 2), nominal=1:2),
+    data.frame(
+      imputed=c(1, 2),
+      method=c("Extrapolate backward <24h", "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(1, NA, 50), nominal=c(1:2, 48)),
+    data.frame(
+      imputed=c(1, 2, 50),
+      method=c("Observed actual", "Extrapolate forward <24h", "Observed actual")
+    )
+  )
+  expect_equal(
+    impute_time_act_nom(actual=c(2, NA, 48), nominal=c(1, 47:48)),
+    data.frame(
+      imputed=c(2, 47, 48),
+      method=c("Observed actual", "Extrapolate backward <24h", "Observed actual")
+    )
+  )
+
+  expect_equal(
+    impute_time_act_nom(actual=c(2, NA, 48), nominal=c(1, 47, 96)),
+    data.frame(
+      imputed=c(2, NA, 48),
+      method=c("Observed actual", NA, "Observed actual")
+    ),
+    info="Imputation only occurs within 24 nominal hours of an actual time"
+  )
+})
