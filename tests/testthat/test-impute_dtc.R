@@ -295,6 +295,7 @@ test_that("impute_time_act_nom", {
       regexp="Some 'actual' times are not in 'nominal' time order"
     ),
     data.frame(imputed=3:1, method="Observed actual"),
+    check.attributes = FALSE,
     info="Output is in the same order as input"
   )
   expect_equal(
