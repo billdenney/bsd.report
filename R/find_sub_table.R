@@ -67,9 +67,12 @@ find_sub_table <- function(data, value_search, edge_search, ...) {
     edge_search[[direction]] <- search_fun
   }
   if (is.function(value_search)) {
-    value_location <- value_search(data, ...)
+    value_location <- value_search(data=data, ...)
   } else {
-    value_location <- value_search_default(data, value_search, ...)
+    value_location <- value_search_default(data=data, value_search, ...)
+  }
+  if (!all(c("row", "col") %in% names(value_location))) {
+    stop("value_search() must return a data.frame with column names 'row' and 'col'")
   }
   ret <- list()
   for (i in seq_len(nrow(value_location))) {
@@ -77,17 +80,23 @@ find_sub_table <- function(data, value_search, edge_search, ...) {
     found_edges <- list()
     for (direction in names(edge_search)) {
       found_edges[[direction]] <-
-        edge_search[[direction]](data,
-                                 value_location[i,1],
-                                 value_location[i,2],
-                                 direction,
-                                 found_edges, ...)
+        edge_search[[direction]](
+          data=data,
+          row=value_location$row[i],
+          column=value_location$col[i],
+          direction=direction,
+          found_edges=found_edges,
+          ...
+        )
     }
     # final_edges are absolute rows and columns within the data
-    final_edges <- list(up=value_location[i,1] - found_edges$up,
-                        down=value_location[i,1] + found_edges$down,
-                        left=value_location[i,2] - found_edges$left,
-                        right=value_location[i,2] + found_edges$right)
+    final_edges <-
+      list(
+        up=value_location$row[i] - found_edges$up,
+        down=value_location$row[i] + found_edges$down,
+        left=value_location$col[i] - found_edges$left,
+        right=value_location$col[i] + found_edges$right
+      )
     extracted <-
       data[final_edges$up:final_edges$down,
            final_edges$left:final_edges$right,
@@ -154,13 +163,13 @@ search_fun_values_or_edge <- function(values, from=c("row", "column"), skip=c(0,
     start_row <- start_row + skip[1]
     start_col <- start_col + skip[2]
     if (direction %in% "up") {
-      ret <- which(rev(data[1:start_row,start_col]) %in% values)
+      ret <- which(rev(unlist(data[1:start_row,start_col])) %in% values)
     } else if (direction %in% "down") {
-      ret <- which(data[start_row:nrow(data),start_col] %in% values)
+      ret <- which(unlist(data[start_row:nrow(data),start_col]) %in% values)
     } else if (direction %in% "left") {
-      ret <- which(rev(data[start_row,1:start_col]) %in% values)
+      ret <- which(rev(unlist(data[start_row,1:start_col])) %in% values)
     } else if (direction %in% "right") {
-      ret <- which(data[start_row,start_col:ncol(data)] %in% values)
+      ret <- which(unlist(data[start_row,start_col:ncol(data)]) %in% values)
     } else {
       stop("Unrecognized direction: ", direction)
     }
@@ -169,6 +178,7 @@ search_fun_values_or_edge <- function(values, from=c("row", "column"), skip=c(0,
   }
 }
 
+#' @importFrom dplyr bind_rows
 value_search_general <- function(data, value, ..., match_fun) {
   ret <- data.frame()
   for (i in seq_along(data)) {
@@ -181,13 +191,19 @@ value_search_general <- function(data, value, ..., match_fun) {
 }
 
 value_search_default <- function(data, value, ...) {
-  value_search_general(data, value=NULL, ...,
-                       match_fun=function(x, ...) x %in% value)
+  value_search_general(
+    data=data,
+    value=NULL, ...,
+    match_fun=function(x, ...) x %in% value
+  )
 }
 
 value_search_regex <- function(data, value_pattern, ...) {
-  value_search_general(data, value=NULL, ...,
-                       match_fun=function(x, ...) {
-                         grepl(value_pattern, x, ...)
-                       })
+  value_search_general(
+    data=data,
+    value=NULL, ...,
+    match_fun=function(x, ...) {
+      grepl(value_pattern, x, ...)
+    }
+  )
 }
