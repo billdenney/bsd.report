@@ -69,6 +69,100 @@ test_that("join_control works as expected", {
   )
 })
 
+test_that("join_control row counts in output are maintained", {
+  one_row_df <- data.frame(A=1, B=2)
+  two_row_df <- data.frame(A=1:2, C=3)
+  five_row_df <- data.frame(A=1:5, D=3)
+  expect_equal(
+    join_control(
+      x=one_row_df, y=two_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      x_fraction=1, y_fraction=0.5
+    ),
+    data.frame(A=1, B=2, C=3)
+  )
+  expect_error(
+    join_control(
+      x=one_row_df, y=two_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      x_fraction=1, y_fraction=0.75
+    ),
+    regexp="Not enough rows from `y` are in the returned value (2 expected and 1 found)",
+    fixed=TRUE
+  )
+  expect_equal(
+    join_control(
+      x=one_row_df, y=two_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      overlap_fraction=1
+    ),
+    data.frame(A=1, B=2, C=3)
+  )
+  expect_equal(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique"
+    ),
+    data.frame(A=1:5, D=3, B=c(2, rep(NA, 4)))
+  )
+  expect_equal(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      x_count=5
+    ),
+    data.frame(A=1:5, D=3, B=c(2, rep(NA, 4))),
+    info="Test x_count"
+  )
+  expect_equal(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      y_count=1
+    ),
+    data.frame(A=1:5, D=3, B=c(2, rep(NA, 4))),
+    info="Test y_count (success)"
+  )
+  expect_equal(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      y_count=2
+    ),
+    regexp="For y: 'count' must be between 1 and nrow(data) (1), if not NA.",
+    fixed=TRUE,
+    info="Test y_count (failure)"
+  )
+  expect_equal(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      overlap_count=1
+    ),
+    data.frame(A=1:5, D=3, B=c(2, rep(NA, 4))),
+    info="Test overlap_count (success)"
+  )
+  expect_error(
+    join_control(
+      x=five_row_df, y=one_row_df,
+      join_fun=dplyr::left_join,
+      x_control="all", y_control="unique",
+      overlap_count=2
+    ),
+    regexp="Not enough overlapping rows `x` and `y` are in the returned value (2 expected and 1 found)",
+    fixed=TRUE,
+    info="Test overlap_count (failure)"
+  )
+})
+
 test_that("join_control algorithm errors", {
   x <- data.frame()
   y <- data.frame()
@@ -80,6 +174,103 @@ test_that("join_control algorithm errors", {
   expect_error(
     join_control(x, y, join_fun=dplyr::left_join, x_control="any", y_control="foo"),
     regexp='should be one of'
+  )
+})
+
+test_that("join_control_check_count_fraction", {
+  testdata <- data.frame(A=1:5)
+  expect_equal(
+    join_control_check_count_fraction(
+      fraction=NA_real_, count=NA_integer_,
+      data=testdata, value_name="x"
+    ),
+    0L
+  )
+  expect_equal(
+    join_control_check_count_fraction(
+      fraction=1, count=NA_integer_,
+      data=testdata, value_name="x"
+    ),
+    5L
+  )
+  expect_equal(
+    join_control_check_count_fraction(
+      fraction=0.5, count=NA_integer_,
+      data=testdata, value_name="x"
+    ),
+    3L,
+    info="Rounding goes to up (ceiling())"
+  )
+  expect_equal(
+    join_control_check_count_fraction(
+      fraction=NA_real_, count=2,
+      data=testdata, value_name="x"
+    ),
+    2L
+  )
+})
+test_that("join_control_check_count_fraction expected errors", {
+  expect_error(
+    expect_warning(
+      join_control_check_count_fraction(
+        fraction="A", count=NA_integer_,
+        data=testdata, value_name="x"
+      ),
+      regexp="NAs introduced by coercion"
+    ),
+    regexp="For x: `fraction` was not a valid double",
+    fixed=TRUE
+  )
+  expect_error(
+    expect_warning(
+      join_control_check_count_fraction(
+        fraction=NA_real_, count="A",
+        data=testdata, value_name="x"
+      ),
+      regexp="NAs introduced by coercion"
+    ),
+    regexp="For x: `count` was not a valid integer",
+    fixed=TRUE
+  )
+  expect_error(
+    join_control_check_count_fraction(
+      fraction=1, count=1,
+      data=testdata, value_name="x"
+    ),
+    regexp="For x: Both `count` and `fraction` cannot be provided",
+    fixed=TRUE
+  )
+  expect_error(
+    join_control_check_count_fraction(
+      fraction=NA_real_, count=0,
+      data=testdata, value_name="x"
+    ),
+    regexp="For x: 'count' must be between 1 and nrow(data) (5), if not NA.",
+    fixed=TRUE
+  )
+  expect_error(
+    join_control_check_count_fraction(
+      fraction=NA_real_, count=10,
+      data=testdata, value_name="x"
+    ),
+    regexp="For x: 'count' must be between 1 and nrow(data) (5), if not NA.",
+    fixed=TRUE
+  )
+  expect_error(
+    join_control_check_count_fraction(
+      fraction=-1, count=NA_integer_,
+      data=testdata, value_name="x"
+    ),
+    regexp="For x: 'fraction' must be >0 and <=1",
+    fixed=TRUE
+  )
+  expect_error(
+    join_control_check_count_fraction(
+      fraction=2, count=NA_integer_,
+      data=testdata, value_name="x"
+    ),
+    regexp="For x: 'fraction' must be >0 and <=1",
+    fixed=TRUE
   )
 })
 

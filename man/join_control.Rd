@@ -7,7 +7,20 @@
 \title{Perform join where the outcome of the join is verifed to match an expected
 pattern.}
 \usage{
-join_control(x, y, join_fun, x_control = "any", y_control = "any", ...)
+join_control(
+  x,
+  y,
+  join_fun,
+  x_control = "any",
+  y_control = "any",
+  x_fraction = NA_real_,
+  y_fraction = NA_real_,
+  x_count = NA_integer_,
+  y_count = NA_integer_,
+  overlap_fraction = NA_real_,
+  overlap_count = NA_integer_,
+  ...
+)
 
 join_many_to_one(x, y)
 
@@ -17,10 +30,20 @@ join_one_to_one(x, y)
 \item{x, y}{tbls to join}
 
 \item{join_fun}{Any function that can combine x and y (called as
-\code{join_fun(x, y, ...)}).  Typically this will be one of \code{dplyr::left_join},
-\code{dplyr::right_join}, etc.}
+\code{join_fun(x, y, ...)}).  Typically this will be one of
+\code{dplyr::left_join}, \code{dplyr::right_join}, etc.}
 
-\item{x_control, y_control}{What outcome is expected from the \code{x}, and \code{y} tbls? Default is "any" (see details).}
+\item{x_control, y_control}{What outcome is expected from the \code{x}, and
+\code{y} tbls? Default is "any" (see details).}
+
+\item{x_fraction, y_fraction, x_count, y_count}{What fraction or count of the
+rows of \code{x} and \code{y} must be in the final data?  Fractions are
+converted to row counts by rounding up to the nearest integer.}
+
+\item{overlap_fraction, overlap_count}{What fraction or count of the rows of
+the return value must overlap (i.e. have rows from both) \code{x} and
+\code{y}?  Fractions are converted to row counts by rounding up to the
+nearest integer.}
 
 \item{...}{Passed to \code{join_fun()}}
 }
@@ -47,8 +70,8 @@ Options for \code{x_control} and \code{y_control} are below and may be
 }
 
 The combination of \code{x_control=c("all", "unique", "nomissing")} (or
-\code{y_control}) is a common need to confirm that all values are present exactly
-one time and that there are no missing values.
+\code{y_control}) is a common need to confirm that all values are present
+exactly one time and that there are no missing values.
 }
 \section{Functions}{
 \itemize{
