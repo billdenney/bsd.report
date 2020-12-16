@@ -10,7 +10,7 @@
 #'   time.}
 #' \item{\code{"unique"}: A row may appear in the output zero or one time.}
 #' \item{\code{"missing"}: At least one row must not match in the new dataset (the values
-#'    must be missing).  This option is rarely used.}
+#'   must be missing).  This option is rarely used.}
 #' \item{\code{"nomissing"}: All rows must match in the new dataset (the values must not
 #'   be missing).}
 #' }
@@ -79,7 +79,7 @@ join_control <- function(x, y, join_fun, x_control="any", y_control="any", ...) 
 join_control_detect <- function(x, control, detect_column, msg_prefix, by_cols) {
   # The na.omit() is because NA values are managed by "missing" and "nomissing"
   all_in <- all(detect_column[[1]] %in% stats::na.omit(x[[names(detect_column)]]))
-  uniq_in <- !any(duplicated(x[[names(detect_column)]]))
+  uniq_in <- !any(duplicated(na.omit(x[[names(detect_column)]])))
   missing_in <- any(is.na(x[[names(detect_column)]]))
   nomissing_in <- !missing_in
   if ("any" %in% control) {

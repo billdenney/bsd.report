@@ -41,7 +41,7 @@ Options for \code{x_control} and \code{y_control} are below and may be
   time.}
 \item{\code{"unique"}: A row may appear in the output zero or one time.}
 \item{\code{"missing"}: At least one row must not match in the new dataset (the values
-   must be missing).  This option is rarely used.}
+  must be missing).  This option is rarely used.}
 \item{\code{"nomissing"}: All rows must match in the new dataset (the values must not
   be missing).}
 }
