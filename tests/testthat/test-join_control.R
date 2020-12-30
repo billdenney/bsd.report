@@ -129,7 +129,7 @@ test_that("join_control row counts in output are maintained", {
     data.frame(A=1:5, D=3, B=c(2, rep(NA, 4))),
     info="Test y_count (success)"
   )
-  expect_equal(
+  expect_error(
     join_control(
       x=five_row_df, y=one_row_df,
       join_fun=dplyr::left_join,
@@ -210,6 +210,7 @@ test_that("join_control_check_count_fraction", {
   )
 })
 test_that("join_control_check_count_fraction expected errors", {
+  testdata <- data.frame(A=1:5)
   expect_error(
     expect_warning(
       join_control_check_count_fraction(
