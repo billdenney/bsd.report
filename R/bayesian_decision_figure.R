@@ -57,8 +57,9 @@ bayesian_decision_figure <- function(n,
   x_min_prep <- min(c(add_points_scaled, mean_stop + mean_to_edge))
   # Make the range symmetric around the reference values
   diff_max <- max(c(x_max_prep - urv_scaled, lrv_scaled - x_min_prep))
-  x_max <- urv_scaled + diff_max
-  x_min <- lrv_scaled - diff_max
+  x_range <- outer(X=c(lrv_scaled, urv_scaled), Y=c(-1, 1)*diff_max, FUN="+")
+  x_max <- max(x_range)
+  x_min <- min(x_range)
   d_plot_p <-
     tibble::tibble(
       x=
