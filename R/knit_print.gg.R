@@ -4,15 +4,24 @@
 #' @param ... Passed to \code{print}.
 #' @param fig_prefix,fig_suffix Character strings passed to \code{cat} before
 #'   and after printing \code{x} (if not missing).
+#' @param filename Save the figure to the filename, if provided
+#' @param width,height,units passed to \code{ggplot2::ggsave()}
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg_list}}
 #' @export
-knit_print.gg <- function(x, ..., fig_prefix, fig_suffix) {
+knit_print.gg <- function(x, ..., fig_prefix, fig_suffix, filename=NULL, width=6, height=4, units="in") {
   cat("\n\n")
   if (!missing(fig_prefix)) {
     cat(fig_prefix)
   }
   print(x, ...)
+  if (!is.null(filename)) {
+    ggplot2::ggsave(
+      filename=filename,
+      plot=x,
+      width=width, height=height, units=units
+    )
+  }
   if (!missing(fig_suffix)) {
     cat(fig_suffix)
   }
@@ -27,8 +36,13 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix) {
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg}}
 #' @export
-knit_print.gg_list <- function(x, ..., fig_suffix="\n\n") {
-  lapply(X=x, FUN=knit_print, ..., fig_suffix=fig_suffix)
+knit_print.gg_list <- function(x, ..., filename=NULL, fig_suffix="\n\n") {
+  purrr::pmap(
+    .l=list(x=x, filename=filename),
+    .f=knit_print,
+    fig_suffix=fig_suffix,
+    ...
+  )
   invisible(x)
 }
 

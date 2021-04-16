@@ -4,7 +4,16 @@
 \alias{knit_print.gg}
 \title{Print a ggplot object with space around it}
 \usage{
-\method{knit_print}{gg}(x, ..., fig_prefix, fig_suffix)
+\method{knit_print}{gg}(
+  x,
+  ...,
+  fig_prefix,
+  fig_suffix,
+  filename,
+  width = 6,
+  height = 4,
+  units = "in"
+)
 }
 \arguments{
 \item{x}{The plot object}
@@ -13,6 +22,10 @@
 
 \item{fig_prefix, fig_suffix}{Character strings passed to \code{cat} before
 and after printing \code{x} (if not missing).}
+
+\item{filename}{Save the figure to the filename, if provided}
+
+\item{width, height, units}{passed to \code{ggplot2::ggsave()}}
 }
 \value{
 \code{x} invisibly
