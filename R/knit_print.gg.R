@@ -37,11 +37,17 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix, filename=NULL, width=6
 #' @seealso \code{\link{knit_print.gg}}
 #' @export
 knit_print.gg_list <- function(x, ..., filename=NULL, fig_suffix="\n\n") {
-  purrr::pmap(
-    .l=list(x=x, filename=filename),
-    .f=knit_print,
-    fig_suffix=fig_suffix,
-    ...
+  stopifnot("`filename` must be either NULL or the same length as `x`"=is.null(filename) | length(filename) == length(x))
+  lapply(
+    X=seq_along(x),
+    FUN=function(idx) {
+      knit_print(
+        x=x[[idx]],
+        ...,
+        filename=filename[[idx]],
+        fig_suffix=fig_suffix
+      )
+    }
   )
   invisible(x)
 }
