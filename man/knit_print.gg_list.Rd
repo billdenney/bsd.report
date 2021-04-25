@@ -4,12 +4,14 @@
 \alias{knit_print.gg_list}
 \title{Print a list of ggplot objects with space around each}
 \usage{
-\method{knit_print}{gg_list}(x, ..., fig_suffix = "\\n\\n")
+\method{knit_print}{gg_list}(x, ..., filename = NULL, fig_suffix = "\\n\\n")
 }
 \arguments{
 \item{x}{A list of plot objects}
 
 \item{...}{Passed to \code{knit_print}.}
+
+\item{filename}{Save the figure to the filename, if provided}
 
 \item{fig_suffix}{Character strings passed to \code{cat} before
 and after printing \code{x} (if not missing).}

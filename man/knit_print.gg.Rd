@@ -9,7 +9,7 @@
   ...,
   fig_prefix,
   fig_suffix,
-  filename,
+  filename = NULL,
   width = 6,
   height = 4,
   units = "in"
