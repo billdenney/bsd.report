@@ -5,9 +5,14 @@
 \alias{sprintf_data_frame_single}
 \title{Create new columns in a data.frame with sprintf results}
 \usage{
-sprintf_data_frame(data, ...)
+sprintf_data_frame(data, ..., factor_out_if_factor_in = TRUE, ordered = NULL)
 
-sprintf_data_frame_single(data, format)
+sprintf_data_frame_single(
+  data,
+  format,
+  factor_out_if_factor_in = TRUE,
+  ordered = NULL
+)
 }
 \arguments{
 \item{data}{the data to use for formatting}
@@ -15,6 +20,13 @@ sprintf_data_frame_single(data, format)
 \item{...}{a named list of character vectors.  Names are new columns for
 \code{data}, and values are sent to \code{format} in
 \code{sprintf_data_frame_single}.}
+
+\item{factor_out_if_factor_in}{If any of the input columns are factors, make
+the output column a factor in the same order as the input column factors}
+
+\item{ordered}{If \code{factor_out_if_factor_in} converts the output to a
+factor, pass to \code{base::factor}.  If \code{NULL}, then it is set to
+\code{TRUE} if any of the input columns are ordered factors.}
 
 \item{format}{A named character vector where the names are column names in
 \code{data} and the values are sprintf format strings for the column.}
