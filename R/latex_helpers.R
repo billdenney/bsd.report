@@ -25,5 +25,5 @@ latex_label <- function(x) {
 #' @export
 #' @importFrom Hmisc latexTranslate
 latex_label_clean <- function(x) {
-  Hmisc::latexTranslate(gsub(pattern="[ _]", replacement="-", x=x))
+  gsub(x=x, pattern="[^A-Za-z0-9:-]+", replacement="-")
 }
