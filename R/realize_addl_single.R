@@ -30,7 +30,7 @@ realize_addl_single <- function(time, evid, addl=0, ii=0) {
     for (idx in seq_len(nrow(doses))) {
       ret_tmp <-
         data.frame(
-          time=doses$time[idx] + ii*seq(from=0, to=doses$addl[idx]),
+          time=doses$time[idx] + doses$ii[idx]*seq(from=0, to=doses$addl[idx]),
           # If the first evid is 4, keep that and then the subsequent evid are 1
           # to prevent resetting.
           evid=c(doses$evid[idx], rep(1, doses$addl[idx])),
