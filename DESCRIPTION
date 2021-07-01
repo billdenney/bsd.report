@@ -1,6 +1,6 @@
 Package: bsd.report
 Title: Various functions invluding assistance with report writing
-Version: 0.0.0.9099
+Version: 0.0.0.9100
 Authors@R: person("William", "Denney", email = "wdenney@humanpredictions.com", role = c("aut", "cre"))
 Description: Report writing can be made easier by using some simplifying
   functions to help with the text and the conversion to knitr/rmarkdown.

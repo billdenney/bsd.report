@@ -14,12 +14,12 @@ realize_addl_single <- function(time, evid, addl=0, ii=0) {
   stopifnot(is.numeric(evid))
   stopifnot(is.numeric(addl))
   stopifnot(is.numeric(ii))
-  stopifnot("addl must not be non-negative"=all(addl >= 0))
-  stopifnot("ii must not be non-negative"=all(ii >= 0))
-  stopifnot("addl must be an integer"=all(as.integer(addl) == addl))
   inputs <- data.frame(time, evid, addl, ii)
   # Only keep doses
   doses <- inputs[inputs$evid %in% c(1, 4), ]
+  stopifnot("addl must not be non-negative"=all(doses$addl >= 0))
+  stopifnot("ii must not be non-negative"=all(doses$ii >= 0))
+  stopifnot("addl must be an integer"=all(as.integer(doses$addl) == doses$addl))
   stopifnot("time on dosing rows must not be NA"=!any(is.na(doses$time)))
   stopifnot("addl on dosing rows must not be NA"=!any(is.na(doses$addl)))
   stopifnot("ii on dosing rows must not be NA"=!any(is.na(doses$ii)))
