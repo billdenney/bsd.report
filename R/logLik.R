@@ -13,10 +13,13 @@ NA_logLik_ <- structure(NA_real_, df=NA_integer_, class="logLik")
 #' @importFrom xpose get_prm
 #' @importFrom stats logLik
 logLik.xpose_data <- function(object, ...) {
-  structure(
-    -0.5*as.numeric(rev(object$summary$value[object$summary$label == "ofv"])[1]),
-    df=sum(!xpose::get_prm(object)$fixed),
-    class="logLik"
+  tryCatch(
+    structure(
+      -0.5*as.numeric(rev(object$summary$value[object$summary$label == "ofv"])[1]),
+      df=sum(!xpose::get_prm(object)$fixed),
+      class="logLik"
+    ),
+    error=function(e) NA_logLik_
   )
 }
 
