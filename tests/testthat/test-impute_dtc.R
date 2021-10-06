@@ -98,15 +98,15 @@ test_that("impute_dtc", {
     tibble::tibble(
       STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-01TUN:UN:UN"),
       ADTC_IMPUTED="2020-02-01T08:09:10",
-      ADTC_IMPUTE_METHOD=c("Observed date and time", "Single time measurment observed for a nominal time")
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Single time measurement observed for a nominal time")
     )
   )
   expect_equal(
     impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"))),
     tibble::tibble(
       STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"),
-      ADTC_IMPUTED=c("2020-02-01T08:09:10", NA_character_),
-      ADTC_IMPUTE_METHOD=c("Observed date and time", NA_character_)
+      ADTC_IMPUTED=c("2020-02-01T08:09:10", "2020-02-03T08:09:10"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Single time measurement observed for a nominal time of day")
     )
   )
   expect_equal(
@@ -148,18 +148,68 @@ test_that("impute_dtc", {
   
   expect_error(
     impute_dtc(data.frame(DATE_PART=1)),
-    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
+    regexp="`data` cannot have columns named 'DATE_PART' or 'TIME_PART' as those are used internally.",
     fixed=TRUE
   )
   expect_error(
     impute_dtc(data.frame(TIME_PART=1)),
-    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
+    regexp="`data` cannot have columns named 'DATE_PART' or 'TIME_PART' as those are used internally.",
     fixed=TRUE
   )
-  expect_error(
-    impute_dtc(data.frame(current_impute=1)),
-    regexp="`data` cannot have columns named 'DATE_PART', 'TIME_PART', or 'current_impute' as those are used internally.",
-    fixed=TRUE
+})
+
+# impute_dtc_helper functions ####
+
+## impute_dtc_helper_time_ntod ####
+
+test_that("impute_dtc_helper_time_ntod", {
+  expect_equal(
+    impute_dtc_helper_time_ntod(date="A", time="B", ntime=1, method=NA_character_),
+    tibble(date="A", time="B", ntime=1, method=NA_character_)
+  )
+  expect_equal(
+    impute_dtc_helper_time_ntod(
+      date=rep("A", 2),
+      time=c("B", NA),
+      ntime=rep(1, 2),
+      method=rep(NA_character_, 2)
+    ),
+    tibble(
+      date="A", time="B", ntime=1,
+      method=c(NA_character_, "Single time measurement observed for a nominal time of day")
+    )
+  )
+  expect_equal(
+    impute_dtc_helper_time_ntod(
+      date=rep(NA_character_, 3),
+      time=c("B", "C", NA),
+      ntime=c(0, 24, 48),
+      method=rep(NA_character_, 3)
+    ),
+    tibble(
+      date=NA_character_,
+      time=c("B", "C", "B"),
+      ntime=c(0, 24, 48),
+      method=c(NA, NA, "Median time within the observed nominal time of day")
+    )
+  )
+  expect_equal(
+    impute_dtc_helper_time_ntod(
+      date=LETTERS,
+      time=c(letters[1:10], rep(NA, 16)),
+      ntime=c(0:25),
+      method=rep(NA_character_, 26)
+    ),
+    tibble(
+      date=LETTERS,
+      time=c(letters[1:10], rep(NA, 14), "a", "b"),
+      ntime=0:25,
+      method=
+        c(
+          rep(NA_character_, 24),
+          rep("Single time measurement observed for a nominal time of day", 2)
+        )
+    )
   )
 })
 
@@ -201,17 +251,6 @@ test_that("impute_dtc_ntod", {
       ADTC_IMPUTE_METHOD=c("Observed date and time", "Median time within the nominal time of day for the subject")
     ),
     info="Imputation within NTOD"
-  )
-  expect_equal(
-    impute_dtc_ntod(
-      impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN")))
-    ),
-    tibble::tibble(
-      STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", "2020-02-03TUN:UN:UN"),
-      ADTC_IMPUTED=c("2020-02-01T08:09:10", "2020-02-03T08:09:10"),
-      ADTC_IMPUTE_METHOD=c("Observed date and time", "Median time within the nominal time of day for the subject")
-    ),
-    info="Multiple dates are overridden"
   )
   expect_equal(
     impute_dtc_ntod(
