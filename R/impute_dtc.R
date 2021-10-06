@@ -211,41 +211,108 @@ impute_dtc_separate <- function(data) {
 
 impute_dtc_extract <- function(data, impute_column) {
   # Separate the date and time
-  data %>%
+  pattern_ymd_hms <-
+    paste0(
+      "^",
+      # year-month-day
+      "([0-9]{4}-[0-9]{2}-[0-9]{2})",
+      # maybe time
+      "(?:T",
+      # if time, then require hours and minutes
+      "(",
+      # Flexibly allow 1- or 2-digit hours (to be confirmed valid and fixed as
+      # 2-digit later)
+      "(?:UN|[0-9]{1,2}):", # hours
+      "(?:UN|[0-9]{2})", # minutes
+      "(?::(?:UN|[0-9]{2}))?", # maybe seconds
+      ")",
+      ")?$"
+    )
+  ret <-
+    data %>%
     tidyr::extract(
       col=impute_column,
       into=c("DATE_PART", "TIME_PART"),
-      regex=
-        paste0(
-          "^",
-          "([0-9]{4}-[0-9]{2}-[0-9]{2})",
-          "(?:T",
-          "(",
-          "(?:UN|[0-9]{2}):", # hours
-          "(?:UN|[0-9]{2})", # minutes
-          "(?::(?:UN|[0-9]{2}))?", # maybe seconds
-          ")",
-          ")?$"
-        ),
+      regex=pattern_ymd_hms,
       remove=FALSE,
       convert=FALSE
     ) %>%
     dplyr::mutate(
-      # drop :00 or :UN seconds
-      TIME_PART=
-        gsub(
-          x=TIME_PART,
-          pattern="(.{2}:.{2}):(?:00|UN)$",
-          replacement="\\1"
-        ),
-      # Set unknown times to missing
-      TIME_PART=
-        dplyr::case_when(
-          grepl(x=TIME_PART, pattern="UN")~NA_character_,
-          TIME_PART %in% ""~NA_character_,
-          TRUE~TIME_PART
-        )
+      TIME_PART=impute_dtc_simplify_time(TIME_PART)
     )
+  ret
+}
+
+#' Confirm that the value looks like a time, and remove fully unknown times and
+#' zero seconds
+#' 
+#' A time is a 12- or 24-hour time possibly with "UN" as specified by the CDISC
+#' SDTM standard.  It may be of the format "" (empty string), #:##, #:##:##,
+#' ##:##, ##:##:##, #:##:UN, ##:##:UN, UN:UN, or UN:UN:UN (where # is a valid
+#' number only allowing hours from 00-23, and "UN" signifies that the value is
+#' unknown).
+#' 
+#' @param x A character vector that looks like a time (see details)
+#' @param drop_zero_seconds Drop :00 for seconds (keeping only hours and
+#'   minutes)
+#' @return A character vector that is simplified and is a time.  Zero will be
+#'   prepended to single-digit hours.
+impute_dtc_simplify_time <- function(x, drop_zero_seconds=FALSE) {
+  if (all(is.na(x))) {
+    return(rep(NA_character_, length(x)))
+  }
+  stopifnot("x must be a character"=is.character(x))
+  x_trimmed <- trimws(x)
+  x_drop_unknown <-
+    ifelse(
+      x_trimmed %in% c("", "UN:UN", "UN:UN:UN"),
+      NA_character_,
+      x_trimmed
+    )
+  # Drop :UN seconds
+  pattern_unknown_seconds <- "^((?:[0-9]|[01][0-9]|2[0-3]):[0-9]{2}):UN$"
+  x_drop_unknown_seconds <-
+    gsub(
+      x=x_drop_unknown,
+      pattern=pattern_unknown_seconds,
+      replacement="\\1"
+    )
+  # Confirm valid time formats
+  pattern_maybe_seconds <- "^((?:[0-9]|[01][0-9]|2[0-3]):[0-9]{2})(?::[0-9]{2})?$"
+  good_times <-
+    grepl(x=x_drop_unknown_seconds, pattern=pattern_maybe_seconds) |
+    is.na(x_drop_unknown_seconds)
+  if (!all(good_times)) {
+    invalid_times <- unique(x[!good_times])
+    stop(
+      "x must look like a time (see help).  Invalid values: ",
+      paste0(
+        '"', invalid_times[seq_len(min(length(invalid_times), 5))], '"',
+        collapse=", "
+      )
+    )
+  }
+  # Ensure 2-digit hours
+  pattern_single_digit_hour <- "^([0-9]):"
+  x_two_digit_hour <-
+    gsub(
+      x=x_drop_unknown_seconds,
+      pattern=pattern_single_digit_hour,
+      replacement="0\\1:"
+    )
+  # drop :00 seconds
+  if (drop_zero_seconds) {
+    pattern_zero_seconds <- "^((?:[01][0-9]|2[0-3]):[0-9]{2}):00$"
+    x_zero_seconds <-
+      gsub(
+        x=x_two_digit_hour,
+        pattern=pattern_zero_seconds,
+        replacement="\\1"
+      )
+  } else {
+    x_zero_seconds <- x_two_digit_hour
+  }
+  x_zero_seconds
 }
 
 #' Impute actual time using nominal time when actual is unavailable

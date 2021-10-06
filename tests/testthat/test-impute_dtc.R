@@ -1,4 +1,4 @@
-context("impute_dtc")
+# impute_dtc_separate ####
 
 test_that("impute_dtc_separate", {
   # Decreasing amounts of precision
@@ -24,16 +24,10 @@ test_that("impute_dtc_separate", {
       ADTC_IMPUTE_METHOD="Observed date and time"
     )
   )
-  expect_equal(
+  expect_error(
     impute_dtc_separate(data=data.frame(ADTC="2020-02-01T08:UN:UN", NTSFD=0)),
-    data.frame(
-      ADTC="2020-02-01T08:UN:UN",
-      DATE_PART="2020-02-01",
-      TIME_PART=NA_character_,
-      NTSFD=0,
-      ADTC_IMPUTED=NA_character_,
-      ADTC_IMPUTE_METHOD=NA_character_
-    )
+    regexp='x must look like a time (see help).  Invalid values: "08:UN:UN"',
+    fixed=TRUE
   )
   expect_equal(
     impute_dtc_separate(data=data.frame(ADTC="2020-02-01TUN:UN:UN", NTSFD=0)),
@@ -71,6 +65,8 @@ test_that("impute_dtc_separate", {
     info="Missing time part yields NA"
   )
 })
+
+# impute_dtc ####
 
 test_that("impute_dtc", {
   expect_equal(
@@ -166,6 +162,8 @@ test_that("impute_dtc", {
     fixed=TRUE
   )
 })
+
+# impute_dtc_ntod ####
 
 test_that("impute_dtc_ntod", {
   expect_equal(
@@ -277,6 +275,8 @@ test_that("impute_dtc_ntod", {
   )
 })
 
+# impute_time_act_nom ####
+
 test_that("impute_time_act_nom", {
   expect_equal(
     impute_time_act_nom(actual=1:3, nominal=rep(NA_real_, 3)),
@@ -373,5 +373,61 @@ test_that("impute_time_act_nom", {
       method=c("Observed actual", NA, "Observed actual")
     ),
     info="Imputation only occurs within 24 nominal hours of an actual time"
+  )
+})
+
+# impute_dtc_simplify_time ####
+
+test_that("impute_dtc_simplify_time errors", {
+  expect_equal(
+    impute_dtc_simplify_time(
+      c(
+        " ", "UN:UN", "UN:UN:UN",
+        "1:23:UN ", "1:23", "01:23",
+        "1:23:45", "01:23:45"
+      )
+    ),
+    c(
+      rep(NA, 3),
+      rep("01:23", 3),
+      rep("01:23:45", 2)
+    )
+  )
+  # NA input always returns NA_character_, regardless of class
+  expect_equal(
+    impute_dtc_simplify_time(rep(NA, 2)),
+    rep(NA_character_, 2)
+  )
+})
+
+test_that("impute_dtc_simplify_time errors", {
+  expect_error(
+    impute_dtc_simplify_time(1),
+    regexp="x must be a character"
+  )
+  expect_error(
+    impute_dtc_simplify_time("00"),
+    regexp="x must look like a time (see help)",
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc_simplify_time(c("00", NA)),
+    regexp='x must look like a time (see help).  Invalid values: "00"',
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc_simplify_time(c("00", NA, "00:00", "A")),
+    regexp='x must look like a time (see help).  Invalid values: "00", "A"',
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc_simplify_time(c("00", NA, "00:00", "A")),
+    regexp='x must look like a time (see help).  Invalid values: "00", "A"',
+    fixed=TRUE
+  )
+  expect_error(
+    impute_dtc_simplify_time(c("00", NA, "25:00", "A")),
+    regexp='x must look like a time (see help).  Invalid values: "00", "25:00", "A"',
+    fixed=TRUE
   )
 })
