@@ -11,10 +11,10 @@
 
 \item{...}{Passed to \code{knit_print}.}
 
-\item{filename}{Save the figure to the filename, if provided}
-
-\item{fig_suffix}{Character strings passed to \code{cat} before
-and after printing \code{x} (if not missing).}
+\item{filename}{Save the figure to the filename, if provided.  If the
+filename contains "%d" (optionally with sprintf-formatting instructions
+such as "%03d"), then the filename will be run through
+\code{sprintf(filename, seq_along(x))} to generate the filename.}
 }
 \value{
 \code{x} invisibly

@@ -32,11 +32,20 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix, filename=NULL, width=6
 #' Print a list of ggplot objects with space around each
 #' @param x A list of plot objects
 #' @param ... Passed to \code{knit_print}.
+#' @param filename Save the figure to the filename, if provided.  If the
+#'   filename contains "%d" (optionally with sprintf-formatting instructions
+#'   such as "%03d"), then the filename will be run through
+#'   \code{sprintf(filename, seq_along(x))} to generate the filename.
 #' @inheritParams knit_print.gg
 #' @return \code{x} invisibly
 #' @seealso \code{\link{knit_print.gg}}
 #' @export
 knit_print.gg_list <- function(x, ..., filename=NULL, fig_suffix="\n\n") {
+  if (!is.null(filename)) {
+    if (grepl(x=filename, pattern="%[0-9]*d")) {
+      filename <- sprintf(filename, seq_along(x))
+    }
+  }
   stopifnot("`filename` must be either NULL or the same length as `x`"=is.null(filename) | length(filename) == length(x))
   lapply(
     X=seq_along(x),
