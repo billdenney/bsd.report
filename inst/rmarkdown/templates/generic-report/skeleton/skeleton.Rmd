@@ -6,19 +6,12 @@ output:
   pdf_document:
     toc: yes
     toc_depth: 6
+urlcolor: blue
+linkcolor: blue
+toccolor: blue
 header-includes:
 #- \usepackage{siunitx}
-# Enable use of the TopicLongTable R package
-- \usepackage{topiclongtable}
-# Enable the \FloatBarrier command, and default to keeping floats within
-# the section defining the float.
-- \usepackage[section]{placeins}
-# Allow the \blandscape and \elandscape commands to start and end landsape
-# sections of the document.  (Note that any \blandscape must have a matching
-# \elandscape.)
-- \usepackage{pdflscape}
-- \newcommand{\blandscape}{\begin{landscape}}
-- \newcommand{\elandscape}{\end{landscape}}
+# For the title page (mainly)
 # For the title page (mainly)
 - \newcommand{\reportstatus}{Draft}
 #- \newcommand{\reportnumber}{}
@@ -27,12 +20,12 @@ header-includes:
 # For the signature blocks
 #- \newcommand{\reviewername}{}
 #- \newcommand{\approvername}{}
-- \hypersetup{colorlinks,breaklinks,urlcolor=[rgb]{0,0,1},linkcolor=[rgb]{0,0,1}}
 - \input{fancytitle.tex}
 ---
 
 \listoffigures
 \listoftables
+\bookmarksetup{startatroot}
 
 # Version History
 

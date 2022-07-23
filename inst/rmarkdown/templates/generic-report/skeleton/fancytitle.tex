@@ -1,3 +1,87 @@
+%%% Allow the \blandscape and \elandscape commands to start and end landsape
+%%% sections of the document.  (Note that any \blandscape must have a matching
+%%% \elandscape.)
+\usepackage{pdflscape}
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+
+%%% Enable use of the TopicLongTable R package
+\usepackage{topiclongtable}
+%%% Enable the \FloatBarrier command, and default to keeping floats within
+%%% the section defining the float.
+\usepackage[section]{placeins}
+
+\usepackage{currfile}
+\usepackage{bookmark}
+
+%%% Generate bookmarks for the table of contents, list of figures, and list of tables
+\makeatletter
+\pretocmd\tableofcontents{%
+\pdfbookmark[0]{\contentsname}{toc}%
+}
+\makeatother
+
+\makeatletter
+\pretocmd\listoffigures{%
+\pdfbookmark[0]{\listfigurename}{lof}%
+}
+\makeatother
+
+\makeatletter
+\pretocmd\listoftables{%
+\pdfbookmark[0]{\listtablename}{lot}%
+}
+\makeatother
+
+%%% Generate bookmarks for all figures
+\makeatletter
+\pretocmd\endfigure{%
+\addtocontents{lof}{\protect{%
+    \bookmark[
+    rellevel=1,
+    keeplevel,
+    dest=\@currentHref,
+    ]{Figure \thefigure: \@currentlabelname}}}%
+\bookmark[
+rellevel=1,
+keeplevel,
+dest=\@currentHref,
+ ]{Figure \thefigure: \@currentlabelname}%
+}{}{\errmessage{Patching \noexpand\endfigure failed}}
+\makeatother
+
+%%% Generate bookmarks for all tables
+\makeatletter
+\pretocmd\endtable{%
+\addtocontents{lot}{\protect{%
+    \bookmark[
+    rellevel=1,
+    keeplevel,
+    dest=\@currentHref,
+    ]{Table \thetable: \@currentlabelname}}}%
+\bookmark[
+rellevel=1,
+keeplevel,
+dest=\@currentHref,
+ ]{Table \thetable: \@currentlabelname}%
+}{}{\errmessage{Patching \noexpand\endtabular failed}}
+
+\pretocmd\endlongtable{%
+\addtocontents{lot}{\protect{%
+    \bookmark[
+    rellevel=1,
+    keeplevel,
+    dest=\@currentHref,
+    ]{Table \thetable: \@currentlabelname}}}%
+\bookmark[
+rellevel=1,
+keeplevel,
+dest=\@currentHref,
+ ]{Table \thetable: \@currentlabelname}%
+}{}{\errmessage{Patching \noexpand\endtabular failed}}
+
+\makeatother
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
@@ -25,6 +109,7 @@
 \def\@maketitle{%
   \newpage
   \null
+  \bookmark[level=0,keeplevel,dest=@currentHref]{Title Page}
   \begin{center}%
   \let \footnote \thanks
     {\LARGE \@title \par}%
