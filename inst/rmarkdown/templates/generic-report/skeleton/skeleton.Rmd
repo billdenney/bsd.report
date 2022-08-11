@@ -10,8 +10,6 @@ urlcolor: blue
 linkcolor: blue
 toccolor: blue
 header-includes:
-#- \usepackage{siunitx}
-# For the title page (mainly)
 # For the title page (mainly)
 - \newcommand{\reportstatus}{Draft}
 #- \newcommand{\reportnumber}{}

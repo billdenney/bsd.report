@@ -33,55 +33,45 @@
 }
 \makeatother
 
-%%% Generate bookmarks for all figures
+%%% Generate bookmarks within the list of figures and list of tables
+\NewCommandCopy\oricontentsline\contentsline
 \makeatletter
-\pretocmd\endfigure{%
-\addtocontents{lof}{\protect{%
+\RenewDocumentCommand\contentsline{mmmm}
+{%
+  \oricontentsline{#1}{#2}{#3}{#4}%
+  {\let\numberline\@gobble
     \bookmark[
-    rellevel=1,
-    keeplevel,
-    dest=\@currentHref,
-    ]{Figure \thefigure: \@currentlabelname}}}%
-\bookmark[
-rellevel=1,
-keeplevel,
-dest=\@currentHref,
- ]{Figure \thefigure: \@currentlabelname}%
-}{}{\errmessage{Patching \noexpand\endfigure failed}}
-\makeatother
+      rellevel=1,
+      keeplevel,
+      dest=#4,
+    ]{#2}}%
+}
 
-%%% Generate bookmarks for all tables
+%%% Generate bookmarks for all figures and tables
 \makeatletter
-\pretocmd\endtable{%
-\addtocontents{lot}{\protect{%
-    \bookmark[
-    rellevel=1,
-    keeplevel,
-    dest=\@currentHref,
-    ]{Table \thetable: \@currentlabelname}}}%
-\bookmark[
-rellevel=1,
-keeplevel,
-dest=\@currentHref,
- ]{Table \thetable: \@currentlabelname}%
-}{}{\errmessage{Patching \noexpand\endtabular failed}}
+\patchcmd\Hy@writebookmark{\def\BKM@type}{\edef\BKM@type}{}{\fail}
 
-\pretocmd\endlongtable{%
-\addtocontents{lot}{\protect{%
-    \bookmark[
-    rellevel=1,
-    keeplevel,
-    dest=\@currentHref,
-    ]{Table \thetable: \@currentlabelname}}}%
-\bookmark[
-rellevel=1,
-keeplevel,
-dest=\@currentHref,
- ]{Table \thetable: \@currentlabelname}%
-}{}{\errmessage{Patching \noexpand\endtabular failed}}
+\def\toclevel@figure{\inteval{\BKM@currentlevel+1}}
+\def\toclevel@table{\inteval{\BKM@currentlevel+1}}
+
+\AddToHook{env/figure/begin}{%
+  \hypersetup{bookmarkstype=lof,bookmarksnumbered}%
+  \def\Hy@numberline#1{\figurename{} #1 }%
+  \bookmarksetup{keeplevel}}
+  
+\AddToHook{env/table/begin}{%
+  \hypersetup{bookmarkstype=lot,bookmarksnumbered}%
+  \def\Hy@numberline#1{\tablename{} #1 }%
+  \bookmarksetup{keeplevel}}
+  
+\AddToHook{env/longtable/begin}{%
+  \hypersetup{bookmarkstype=lot,bookmarksnumbered}%
+  \def\Hy@numberline#1{\tablename{} #1 }%
+  \bookmarksetup{keeplevel}}
 
 \makeatother
 
+%%% Setup the headers and footers
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
