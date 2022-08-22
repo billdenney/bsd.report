@@ -15,6 +15,7 @@
 \usepackage{bookmark}
 
 %%% Generate bookmarks for the table of contents, list of figures, and list of tables
+\usepackage{etoolbox}
 \makeatletter
 \pretocmd\tableofcontents{%
 \pdfbookmark[0]{\contentsname}{toc}%
