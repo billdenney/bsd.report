@@ -37,12 +37,12 @@ Convert a value from something old to something new (using gsub)
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: Convert all columns (unless excluded)
+\item \code{translate_value(data.frame)}: Convert all columns (unless excluded)
 
-\item \code{factor}: Convert the levels
+\item \code{translate_value(factor)}: Convert the levels
 
-\item \code{character}: Use gsub.
+\item \code{translate_value(character)}: Use gsub.
 
-\item \code{default}: No translation done.
+\item \code{translate_value(default)}: No translation done.
+
 }}
-

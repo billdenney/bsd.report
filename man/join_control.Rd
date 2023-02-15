@@ -75,10 +75,10 @@ exactly one time and that there are no missing values.
 }
 \section{Functions}{
 \itemize{
-\item \code{join_many_to_one}: For the common task of many-to-one mapping, the
+\item \code{join_many_to_one()}: For the common task of many-to-one mapping, the
 helper function `join_many_to_one()` works.
 
-\item \code{join_one_to_one}: For the common task of one-to-one mapping, the
+\item \code{join_one_to_one()}: For the common task of one-to-one mapping, the
 helper function `join_one_to_one()` works.
-}}
 
+}}

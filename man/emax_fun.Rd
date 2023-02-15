@@ -35,6 +35,6 @@ The equation for the Emax function is
 }
 \section{Functions}{
 \itemize{
-\item \code{inverse_emax}: Inverse emax
-}}
+\item \code{inverse_emax()}: Inverse emax
 
+}}
