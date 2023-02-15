@@ -92,13 +92,14 @@ vec_arith.ggmulti.labels <- function(op, x, y, ...) {
 }
 
 #' @export
-ggplot.ggmulti <- function(data = NULL, mapping = aes(), ..., environment = parent.frame()) {
+ggplot.ggmulti <- function(data = NULL, mapping = aes(), ..., environment = parent.frame(), fig_suffix = "\n\n") {
   for (i in seq_along(data)) {
     current_fig <- vctrs::field(data[[i]], "figure")[[1]]
     if (length(current_fig) == 0 || identical(NA, current_fig)) {
       warning("No figure for input index ", i)
     } else {
       print(current_fig)
+      cat(fig_suffix)
     }
   }
 }
