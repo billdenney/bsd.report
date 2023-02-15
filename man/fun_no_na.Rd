@@ -38,17 +38,17 @@ controlled output.
 }
 \section{Functions}{
 \itemize{
-\item \code{max_no_na}: Maximum
+\item \code{max_no_na()}: Maximum
 
-\item \code{min_no_na}: Minimum
+\item \code{min_no_na()}: Minimum
 
-\item \code{median_no_na}: Median
+\item \code{median_no_na()}: Median
 
-\item \code{mean_no_na}: Median
+\item \code{mean_no_na()}: Median
 
-\item \code{sd_no_na}: Median
+\item \code{sd_no_na()}: Median
+
 }}
-
 \examples{
 min_no_na(c(NA, 3))
 min_no_na(double(), zero_len=NULL)

@@ -17,7 +17,7 @@ unicode_to_ascii(x, ...)
 \method{unicode_to_ascii}{character}(
   x,
   verbose = FALSE,
-  pattern = c("µ", "µ"),
+  pattern = c("μ", "µ"),
   replacement = c("u", "u"),
   general_conversion = TRUE,
   ...

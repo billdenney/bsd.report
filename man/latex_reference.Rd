@@ -44,12 +44,12 @@ Generate a latex label or reference to the label
 }
 \section{Functions}{
 \itemize{
-\item \code{latex_label}: Generate a latex label (location to be found by a reference).
+\item \code{latex_label()}: Generate a latex label (location to be found by a reference).
 
-\item \code{latex_label_clean}: Clean latex labels so that they are usable
+\item \code{latex_label_clean()}: Clean latex labels so that they are usable
 (remove spaces and pass through \code{Hmisc::latexTranslate}).
 
-\item \code{latex_label_first_last}: Generate a latex label for the first and last of
+\item \code{latex_label_first_last()}: Generate a latex label for the first and last of
 a list of objects with blanks between
-}}
 
+}}

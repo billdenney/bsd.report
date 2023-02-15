@@ -41,10 +41,10 @@ Create new columns in a data.frame with sprintf results
 }
 \section{Functions}{
 \itemize{
-\item \code{sprintf_data_frame_single}: Generate a character vector based on sprintf
+\item \code{sprintf_data_frame_single()}: Generate a character vector based on sprintf
 input formats
-}}
 
+}}
 \examples{
 sprintf_data_frame(
   data=mtcars,

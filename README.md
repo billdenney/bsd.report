@@ -1,9 +1,9 @@
 # bsd.report
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/billdenney/bsd.report/branch/master/graph/badge.svg)](https://codecov.io/gh/billdenney/bsd.report?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/billdenney/bsd.report/branch/main/graph/badge.svg)](https://codecov.io/gh/billdenney/bsd.report?branch=main)
 [![CRAN status](https://www.r-pkg.org/badges/version/bsd.report)](https://CRAN.R-project.org/package=bsd.report)
-[![R build status](https://github.com/billdenney/bsd.report/workflows/R-CMD-check/badge.svg)](https://github.com/billdenney/bsd.report/actions)
+[![R-CMD-check](https://github.com/billdenney/bsd.report/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/billdenney/bsd.report/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of `bsd.report` is to assist with a variety of aspects of data

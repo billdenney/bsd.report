@@ -30,13 +30,13 @@ See \code{stats::logLik()} for use
 }
 \section{Functions}{
 \itemize{
-\item \code{logLik.NULL}: logLik for NULL returns an NA object
+\item \code{logLik(`NULL`)}: logLik for NULL returns an NA object
 
-\item \code{logLik.logical}: logLik for NA returns an NA object
+\item \code{logLik(logical)}: logLik for NA returns an NA object
 
-\item \code{logLik.try-error}: logLik for try-error returns an NA object
+\item \code{logLik(`try-error`)}: logLik for try-error returns an NA object
+
 }}
-
 \seealso{
 \code{\link{NA_logLik_}}
 }

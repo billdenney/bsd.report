@@ -2,7 +2,8 @@
 #'
 #' @param x The plot object
 #' @param ... Passed to \code{print}.
-#' @param fig_prefix,fig_suffix Character strings passed to \code{cat} before
+#' @param fig_prefix See \code{fig_suffix}
+#' @param fig_suffix Character strings passed to \code{cat} before
 #'   and after printing \code{x} (if not missing).
 #' @param filename Save the figure to the filename, if provided
 #' @param width,height,units passed to \code{ggplot2::ggsave()}
@@ -62,7 +63,7 @@ knit_print.gg_list <- function(x, ..., filename=NULL, fig_suffix="\n\n") {
 }
 
 #' Make a gg_list object (a list of ggplots) for knit_printing
-#' 
+#'
 #' @param x The list
 #' @return A gg_list object (just adding the class to the list)
 #' @export
