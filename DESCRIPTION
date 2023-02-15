@@ -1,6 +1,6 @@
 Package: bsd.report
 Title: Various Functions Including Assistance with Report Writing
-Version: 0.0.0.9105
+Version: 0.0.0.9106
 Authors@R: person("William", "Denney", email = "wdenney@humanpredictions.com", role = c("aut", "cre"))
 Description: Report writing can be made easier by using some simplifying
   functions to help with the text and the conversion to knitr/rmarkdown.
@@ -9,28 +9,29 @@ Description: Report writing can be made easier by using some simplifying
 Depends:
   R (>= 3.5)
 Imports:
-  cowplot,
-  digest,
-  dplyr,
-  forcats,
-  ggplot2,
-  Hmisc,
-  knitr,
-  PKNCA,
-  purrr,
-  qpdf,
-  stats,
-  stringi,
-  tibble,
-  tidyr,
-  utils,
-  xpose,
-  zoo
+    cowplot,
+    digest,
+    dplyr,
+    forcats,
+    ggplot2,
+    Hmisc,
+    knitr,
+    PKNCA,
+    purrr,
+    qpdf,
+    stats,
+    stringi,
+    tibble,
+    tidyr,
+    utils,
+    vctrs,
+    xpose,
+    zoo
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests:
-  covr,
-  testthat
+    covr,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.2.3
 URL: https://billdenney.github.io/bsd.report/
