@@ -53,10 +53,10 @@ Columns used in calculation are:
 }
 \section{Functions}{
 \itemize{
-\item \code{impute_dtc_ntod}: imputes based on the typical nominal time of day
+\item \code{impute_dtc_ntod()}: imputes based on the typical nominal time of day
 (NTOD) for a subject.
-}}
 
+}}
 \seealso{
 Other Imputation: 
 \code{\link{impute_time_act_nom}()}

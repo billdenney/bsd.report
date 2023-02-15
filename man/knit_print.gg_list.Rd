@@ -15,6 +15,9 @@
 filename contains "%d" (optionally with sprintf-formatting instructions
 such as "%03d"), then the filename will be run through
 \code{sprintf(filename, seq_along(x))} to generate the filename.}
+
+\item{fig_suffix}{Character strings passed to \code{cat} before
+and after printing \code{x} (if not missing).}
 }
 \value{
 \code{x} invisibly

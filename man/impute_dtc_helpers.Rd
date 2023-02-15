@@ -33,16 +33,16 @@ there is only one date/time combo in the interval.
 }
 \section{Functions}{
 \itemize{
-\item \code{impute_dtc_helper_single_datetime}: Impute for a single date/time within a
+\item \code{impute_dtc_helper_single_datetime()}: Impute for a single date/time within a
 scheduled nominal time
 
-\item \code{impute_dtc_helper_single_date}: Impute for a single date within a scheduled
+\item \code{impute_dtc_helper_single_date()}: Impute for a single date within a scheduled
 nominal time
 
-\item \code{impute_dtc_helper_median_time}: Impute for the median time within a scheduled
+\item \code{impute_dtc_helper_median_time()}: Impute for the median time within a scheduled
 nominal time if all happen on the same date
 
-\item \code{impute_dtc_helper_time_ntod}: Impute for the median time within a scheduled
+\item \code{impute_dtc_helper_time_ntod()}: Impute for the median time within a scheduled
 nominal time of day
-}}
 
+}}

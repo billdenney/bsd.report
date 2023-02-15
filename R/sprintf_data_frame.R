@@ -1,5 +1,5 @@
 #' Create new columns in a data.frame with sprintf results
-#' 
+#'
 #' @param data the data to use for formatting
 #' @param ... a named list of character vectors.  Names are new columns for
 #'   \code{data}, and values are sent to \code{format} in
@@ -65,7 +65,7 @@ sprintf_data_frame_single <- function(data, format, factor_out_if_factor_in=TRUE
         ordered <- any(sapply(X=d_inputs, FUN=is.ordered))
       }
       d_inputs$rowid <- seq_len(nrow(d_inputs))
-      d_inputs <- dplyr::arrange(.data=d_inputs, dplyr::across(.cols=everything()))
+      d_inputs <- dplyr::arrange(.data=d_inputs, dplyr::across(.cols=dplyr::everything()))
       ret <- base::factor(ret, levels=unique(ret)[d_inputs$rowid], ordered=ordered)
     }
   }

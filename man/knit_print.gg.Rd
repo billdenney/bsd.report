@@ -20,7 +20,9 @@
 
 \item{...}{Passed to \code{print}.}
 
-\item{fig_prefix, fig_suffix}{Character strings passed to \code{cat} before
+\item{fig_prefix}{See \code{fig_suffix}}
+
+\item{fig_suffix}{Character strings passed to \code{cat} before
 and after printing \code{x} (if not missing).}
 
 \item{filename}{Save the figure to the filename, if provided}

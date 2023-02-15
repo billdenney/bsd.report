@@ -9,8 +9,7 @@ pdf_combine_multi(input, pages, output = NULL, password = "")
 \arguments{
 \item{input}{path or url to the input pdf file}
 
-\item{pages}{a vector with page numbers so select. Negative numbers
-means removing those pages (same as R indexing)}
+\item{pages}{a vector with page numbers to rotate}
 
 \item{output}{base path of the output file(s)}
 
