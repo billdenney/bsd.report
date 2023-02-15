@@ -1,5 +1,5 @@
 Package: bsd.report
-Title: Various functions including assistance with report writing
+Title: Various Functions Including Assistance with Report Writing
 Version: 0.0.0.9105
 Authors@R: person("William", "Denney", email = "wdenney@humanpredictions.com", role = c("aut", "cre"))
 Description: Report writing can be made easier by using some simplifying
@@ -33,3 +33,4 @@ Suggests:
   covr,
   testthat
 RoxygenNote: 7.2.3
+URL: https://billdenney.github.io/bsd.report/
