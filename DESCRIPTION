@@ -9,23 +9,24 @@ Description: Report writing can be made easier by using some simplifying
 Depends:
   R (>= 3.5)
 Imports:
-  cowplot,
-  digest,
-  dplyr,
-  forcats,
-  ggplot2,
-  Hmisc,
-  knitr,
-  PKNCA,
-  purrr,
-  qpdf,
-  stats,
-  stringi,
-  tibble,
-  tidyr,
-  utils,
-  xpose,
-  zoo
+    cowplot,
+    digest,
+    dplyr,
+    forcats,
+    ggplot2,
+    Hmisc,
+    knitr,
+    PKNCA,
+    purrr,
+    qpdf,
+    stats,
+    stringi,
+    tibble,
+    tidyr,
+    utils,
+    vctrs,
+    xpose,
+    zoo
 License: AGPL-3
 Encoding: UTF-8
 LazyData: true
