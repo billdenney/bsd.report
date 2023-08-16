@@ -1,13 +1,13 @@
 #' Print a ggplot object with space around it
 #'
 #' @param x The plot object
-#' @param ... Passed to \code{print}.
-#' @param fig_prefix See \code{fig_suffix}
-#' @param fig_suffix Character strings passed to \code{cat} before
-#'   and after printing \code{x} (if not missing).
+#' @param ... Passed to `print`.
+#' @param fig_prefix See `fig_suffix`
+#' @param fig_suffix Character strings passed to `cat` before and after printing
+#'   `x` (if not missing).
 #' @param filename Save the figure to the filename, if provided
-#' @param width,height,units passed to \code{ggplot2::ggsave()}
-#' @return \code{x} invisibly
+#' @param width,height,units passed to `ggplot2::ggsave()`
+#' @return `x` invisibly
 #' @seealso \code{\link{knit_print.gg_list}}
 #' @export
 knit_print.gg <- function(x, ..., fig_prefix, fig_suffix, filename=NULL, width=6, height=4, units="in") {
@@ -39,7 +39,7 @@ knit_print.gg <- function(x, ..., fig_prefix, fig_suffix, filename=NULL, width=6
 #'   \code{sprintf(filename, seq_along(x))} to generate the filename.
 #' @inheritParams knit_print.gg
 #' @return \code{x} invisibly
-#' @seealso \code{\link{knit_print.gg}}
+#' @seealso `[knit_print.gg]`
 #' @export
 knit_print.gg_list <- function(x, ..., filename=NULL, fig_suffix="\n\n") {
   if (!is.null(filename)) {

@@ -18,19 +18,19 @@
 \arguments{
 \item{x}{The plot object}
 
-\item{...}{Passed to \code{print}.}
+\item{...}{Passed to `print`.}
 
-\item{fig_prefix}{See \code{fig_suffix}}
+\item{fig_prefix}{See `fig_suffix`}
 
-\item{fig_suffix}{Character strings passed to \code{cat} before
-and after printing \code{x} (if not missing).}
+\item{fig_suffix}{Character strings passed to `cat` before and after printing
+`x` (if not missing).}
 
 \item{filename}{Save the figure to the filename, if provided}
 
-\item{width, height, units}{passed to \code{ggplot2::ggsave()}}
+\item{width, height, units}{passed to `ggplot2::ggsave()`}
 }
 \value{
-\code{x} invisibly
+`x` invisibly
 }
 \description{
 Print a ggplot object with space around it

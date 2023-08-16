@@ -17,7 +17,7 @@ unicode_to_ascii(x, ...)
 \method{unicode_to_ascii}{character}(
   x,
   verbose = FALSE,
-  pattern = c("μ", "µ"),
+  pattern = c("<U+03BC>", "<U+00B5>"),
   replacement = c("u", "u"),
   general_conversion = TRUE,
   ...
