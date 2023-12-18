@@ -50,7 +50,9 @@
 
 %%% Generate bookmarks for all figures and tables
 \makeatletter
-\patchcmd\Hy@writebookmark{\def\BKM@type}{\edef\BKM@type}{}{\fail}
+% \patchcmd\Hy@writebookmark appears to no longer be necessary as of 2023-12-18
+% possibly due to recent updates in either the hyperref or bookmark package
+%\patchcmd\Hy@writebookmark{\def\BKM@type}{\edef\BKM@type}{}{\fail}
 
 \def\toclevel@figure{\inteval{\BKM@currentlevel+1}}
 \def\toclevel@table{\inteval{\BKM@currentlevel+1}}
