@@ -49,10 +49,8 @@
 }
 
 %%% Generate bookmarks for all figures and tables
+%%% based on https://tex.stackexchange.com/questions/653591/add-pdf-bookmarks-to-list-of-figures-list-of-tables-and-figure-and-table-capti/653605
 \makeatletter
-% \patchcmd\Hy@writebookmark appears to no longer be necessary as of 2023-12-18
-% possibly due to recent updates in either the hyperref or bookmark package
-%\patchcmd\Hy@writebookmark{\def\BKM@type}{\edef\BKM@type}{}{\fail}
 
 \def\toclevel@figure{\inteval{\BKM@currentlevel+1}}
 \def\toclevel@table{\inteval{\BKM@currentlevel+1}}
