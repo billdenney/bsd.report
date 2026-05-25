@@ -58,7 +58,6 @@ mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-l
 #'   (with a warning).
 #' @seealso \code{\link{mindiff}}
 #' @export
-#' @importFrom tidyr fill
 mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na")) {
   none <- match.arg(none)
   if (length(x) == 0) {
@@ -69,27 +68,20 @@ mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na"
     warning("No `choices` given, returning NA")
     return(x[NA])
   }
-  df <- data.frame(
-    value      = c(choices, x),
-    choice_val = c(choices, rep(NA_real_, length(x))),
-    is_x       = c(rep(FALSE, length(choices)), rep(TRUE, length(x))),
-    orig_idx   = c(rep(NA_integer_, length(choices)), seq_along(x))
-  )
-  # Sort by value.  At ties, choices sort before x when include_zero=TRUE so
-  # a measurement exactly at a dose time gives TAD=0; x sorts before choices
-  # when include_zero=FALSE to exclude the coincident dose.
-  if (include_zero) {
-    df <- df[order(df$value, df$is_x), ]
-  } else {
-    df <- df[order(df$value, !df$is_x), ]
-  }
-  # Forward-fill the most recent choice value to every subsequent row.
-  df <- tidyr::fill(df, "choice_val", .direction="down")
-  # Compute TAD for x rows and restore original order.
-  x_rows <- df[df$is_x, ]
-  result  <- x_rows$value - x_rows$choice_val
+  choices <- sort(choices)
+  # findInterval() is a C-level binary search: for each x[i] it returns the
+  # index of the largest choices[j] satisfying the boundary condition.
+  # include_zero=TRUE  → largest j where choices[j] <= x[i]  (left.open=FALSE)
+  # include_zero=FALSE → largest j where choices[j] <  x[i]  (left.open=TRUE)
+  idx <- findInterval(x, choices, left.open=!include_zero)
+  # Use pmax to avoid zero-index subscripting (R drops 0-index silently).
+  # The result for idx==0 rows is overwritten below.
+  result <- x - choices[pmax(idx, 1L)]
+  no_prior <- idx == 0L
   if (none == "negative") {
-    result[is.na(result)] <- x_rows$value[is.na(result)] - min(choices)
+    result[no_prior] <- x[no_prior] - choices[1L]
+  } else {
+    result[no_prior] <- NA_real_
   }
-  result[order(x_rows$orig_idx)]
+  result
 }
