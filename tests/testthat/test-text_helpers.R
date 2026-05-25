@@ -11,6 +11,19 @@ test_that("comma_and", {
   expect_equal(expect_warning(comma_and(c())), "")
 })
 
+test_that("make_ci with numeric=TRUE returns transformed point estimate", {
+  expect_equal(make_ci(1, 1, numeric=TRUE), 1, check.attributes=FALSE)
+  expect_equal(make_ci(1, 1, numeric=TRUE, transform=exp), exp(1), check.attributes=FALSE)
+})
+
+test_that("make_ci with character-returning transform uses format_character", {
+  xform <- function(m) matrix(as.character(round(m, 2)), nrow=nrow(m))
+  result <- make_ci(1, 1, transform=xform)
+  expect_type(result, "character")
+  result_fmt <- make_ci(1, 1, transform=xform, format_character="<%s>")
+  expect_match(result_fmt, "^<")
+})
+
 test_that("make_ci", {
   expect_equal(make_ci(NA, NA), NA_character_, check.attributes=FALSE)
   expect_equal(make_ci(1, NA), "1 [NA]", check.attributes=FALSE)

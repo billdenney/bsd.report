@@ -9,7 +9,7 @@ pdf_combine_multi <- function(input, pages, output=NULL, password="") {
   output <- normalizePath(output, mustWork = FALSE)
   if (missing(pages)) {
     # If pages is not supplied, combine all pages for all inputs
-    combine_input <- input
+    combine_inputs <- input
   } else {
     stopifnot(length(input) == length(pages))
     stopifnot(is.list(pages))
@@ -23,7 +23,7 @@ pdf_combine_multi <- function(input, pages, output=NULL, password="") {
         )
     }
   }
-  ret <- qpdf::pdf_combine(infiles=combine_inputs, outfile=output, password=password)
+  ret <- qpdf::pdf_combine(input=combine_inputs, output=output, password=password)
   if (!missing(pages)) {
     # clean up temporary files
     file.remove(combine_inputs)

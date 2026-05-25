@@ -110,6 +110,13 @@ test_that("nonmem_column_order", {
   )
 })
 
+test_that("nonmem_column_order rounds time_num_cols via round_to_precision", {
+  d <- data.frame(TSFM=3601.5, A="A", stringsAsFactors=FALSE)
+  result <- nonmem_column_order(d)
+  expect_equal(names(result)[1], "TSFM")
+  expect_equal(result[["TSFM"]], "3601.5")
+})
+
 test_that("round_to_precision", {
   expect_equal(
     round_to_precision(1111.111111111),
