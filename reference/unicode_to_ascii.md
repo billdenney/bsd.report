@@ -26,6 +26,12 @@ unicode_to_ascii(x, ...)
 # S3 method for class 'logical'
 unicode_to_ascii(x, verbose = FALSE, ...)
 
+# S3 method for class '`NULL`'
+unicode_to_ascii(x, verbose = FALSE, ...)
+
+# S3 method for class 'numeric'
+unicode_to_ascii(x, verbose = FALSE, ...)
+
 # S3 method for class 'data.frame'
 unicode_to_ascii(x, verbose = FALSE, ...)
 

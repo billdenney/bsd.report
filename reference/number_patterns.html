@@ -43,38 +43,57 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
 
-<ul><li><p>naturalpositive integers without a sign</p></li>
-<li><p>nonnegative_integer_no_signonly digits</p></li>
-<li><p>integeran optional +- at the beginning followed by only digits
-    (note that "-0" is valid)</p></li>
-<li><p>float_no_signdigits, a decimal point, and more digits</p></li>
-<li><p>float_or_integer_relaxedan optional +- followed by one of the
+<dl><dt>natural</dt>
+<dd><p>positive integers without a sign</p></dd>
+
+  <dt>nonnegative_integer_no_sign</dt>
+<dd><p>only digits</p></dd>
+
+  <dt>integer</dt>
+<dd><p>an optional +- at the beginning followed by only digits
+    (note that "-0" is valid)</p></dd>
+
+  <dt>float_no_sign</dt>
+<dd><p>digits, a decimal point, and more digits</p></dd>
+
+  <dt>float_or_integer_relaxed</dt>
+<dd><p>an optional +- followed by one of the
     following:</p><ul><li><p>digits</p></li>
 <li><p>digits then a decimal point</p></li>
 <li><p>a decimal point then digits</p></li>
 <li><p>digits then a decimal point then digits</p></li>
-</ul></li>
-<li><p>float_or_integer_strictan optional +- followed by digits optionally
+</ul></dd>
+
+  <dt>float_or_integer_strict</dt>
+<dd><p>an optional +- followed by digits optionally
     followed by a decimal point and digits (starting or ending with a decimal
-    point is not allowed).</p></li>
-<li><p>scientific_notationStrict scientific notation made of the
+    point is not allowed).</p></dd>
+
+  <dt>scientific_notation</dt>
+<dd><p>Strict scientific notation made of the
     following, in order:</p><ul><li><p>an optional +-</p></li>
 <li><p>a coefficient that is zero (with an optional decimal point and
-      optional additinoal zeros), a natural number, or a float that does not
+      optional additional zeros), a natural number, or a float that does not
       start with zero</p></li>
 <li><p>one of "e", "E", "d", or "D"</p></li>
 <li><p>a optional +-</p></li>
 <li><p>integer</p></li>
-</ul></li>
-<li><p>scientific_notation_relaxedRelaxed scientific notation (relaxing on
+</ul></dd>
+
+  <dt>scientific_notation_relaxed</dt>
+<dd><p>Relaxed scientific notation (relaxing on
     the coefficient rules) made of the following, in order:</p><ul><li><p>float_or_integer_relaxed</p></li>
 <li><p>one of "e", "E", "d", or "D"</p></li>
 <li><p>a optional +-</p></li>
 <li><p>integer</p></li>
-</ul></li>
-<li><p>number_relaxedAny number format above (based on
-    scientific_notation_relaxed with the exponent as an optional component</p></li>
-</ul></div>
+</ul></dd>
+
+  <dt>number_relaxed</dt>
+<dd><p>Any number format above (based on
+    scientific_notation_relaxed with the exponent as an optional component)</p></dd>
+
+
+</dl></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

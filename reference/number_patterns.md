@@ -10,17 +10,26 @@ number_patterns
 
 ## Details
 
-- naturalpositive integers without a sign
+- natural:
 
-- nonnegative_integer_no_signonly digits
+  positive integers without a sign
 
-- integeran optional +- at the beginning followed by only digits (note
-  that "-0" is valid)
+- nonnegative_integer_no_sign:
 
-- float_no_signdigits, a decimal point, and more digits
+  only digits
 
-- float_or_integer_relaxedan optional +- followed by one of the
-  following:
+- integer:
+
+  an optional +- at the beginning followed by only digits (note that
+  "-0" is valid)
+
+- float_no_sign:
+
+  digits, a decimal point, and more digits
+
+- float_or_integer_relaxed:
+
+  an optional +- followed by one of the following:
 
   - digits
 
@@ -30,17 +39,20 @@ number_patterns
 
   - digits then a decimal point then digits
 
-- float_or_integer_strictan optional +- followed by digits optionally
-  followed by a decimal point and digits (starting or ending with a
-  decimal point is not allowed).
+- float_or_integer_strict:
 
-- scientific_notationStrict scientific notation made of the following,
-  in order:
+  an optional +- followed by digits optionally followed by a decimal
+  point and digits (starting or ending with a decimal point is not
+  allowed).
+
+- scientific_notation:
+
+  Strict scientific notation made of the following, in order:
 
   - an optional +-
 
   - a coefficient that is zero (with an optional decimal point and
-    optional additinoal zeros), a natural number, or a float that does
+    optional additional zeros), a natural number, or a float that does
     not start with zero
 
   - one of "e", "E", "d", or "D"
@@ -49,8 +61,10 @@ number_patterns
 
   - integer
 
-- scientific_notation_relaxedRelaxed scientific notation (relaxing on
-  the coefficient rules) made of the following, in order:
+- scientific_notation_relaxed:
+
+  Relaxed scientific notation (relaxing on the coefficient rules) made
+  of the following, in order:
 
   - float_or_integer_relaxed
 
@@ -60,8 +74,10 @@ number_patterns
 
   - integer
 
-- number_relaxedAny number format above (based on
-  scientific_notation_relaxed with the exponent as an optional component
+- number_relaxed:
+
+  Any number format above (based on scientific_notation_relaxed with the
+  exponent as an optional component)
 
 ## Examples
 
