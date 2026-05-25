@@ -34,66 +34,16 @@
 #' @family Imputation
 #' @family Date/time imputation
 #' @export
-#' @importFrom dplyr `%>%` case_when group_by mutate select ungroup
+#' @importFrom dplyr `%>%` case_when group_by group_modify mutate select ungroup
 impute_dtc <- function(data) {
   ret_prep <- impute_dtc_separate(data)
-  ret_grouped <- dplyr::grouped_df(ret_prep, c("STUDYID", "USUBJID", "NTSFD"))
-  idx_group <- dplyr::group_indices(ret_grouped)
-  for (current_idx in seq_len(dplyr::n_groups(ret_grouped))) {
-    current_mask <- idx_group %in% current_idx
-    # Impute a single date/time within a NTSFD
-    tmp <-
-      impute_dtc_helper_single_datetime(
-        date=ret_grouped$DATE_PART[current_mask],
-        time=ret_grouped$TIME_PART[current_mask],
-        ntime=ret_grouped$NTSFD[current_mask],
-        method=ret_grouped$ADTC_IMPUTE_METHOD[current_mask]
-      )
-    # Impute a single date within a NTSFD
-    tmp <-
-      impute_dtc_helper_single_date(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    # Impute a single or median time within a NTSFD
-    tmp <-
-      impute_dtc_helper_median_time(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    tmp <-
-      impute_dtc_helper_time_ntod(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    ret_grouped$DATE_PART[current_mask] <- tmp$date
-    ret_grouped$TIME_PART[current_mask] <- tmp$time
-    ret_grouped$ADTC_IMPUTE_METHOD[current_mask] <- tmp$method
-  }
-  # Drop the "NTSFD" group
-  ret_grouped <- dplyr::grouped_df(ret_grouped, c("STUDYID", "USUBJID"))
-  idx_group <- dplyr::group_indices(ret_grouped)
-  for (current_idx in seq_len(dplyr::n_groups(ret_grouped))) {
-    current_mask <- idx_group %in% current_idx
-    # Impute a single date/time within a NTSFD
-    tmp <-
-      impute_dtc_helper_time_ntod(
-        date=ret_grouped$DATE_PART[current_mask],
-        time=ret_grouped$TIME_PART[current_mask],
-        ntime=ret_grouped$NTSFD[current_mask],
-        method=ret_grouped$ADTC_IMPUTE_METHOD[current_mask]
-      )
-    ret_grouped$DATE_PART[current_mask] <- tmp$date
-    ret_grouped$TIME_PART[current_mask] <- tmp$time
-    ret_grouped$ADTC_IMPUTE_METHOD[current_mask] <- tmp$method
-  }
-  ret <- ungroup(ret_grouped)
+  ret <-
+    ret_prep %>%
+    dplyr::group_by(STUDYID, USUBJID, NTSFD) %>%
+    dplyr::group_modify(impute_dtc_run_helpers_ntsfd) %>%
+    dplyr::group_by(STUDYID, USUBJID) %>%
+    dplyr::group_modify(impute_dtc_run_helpers_subject) %>%
+    dplyr::ungroup()
   ret$ADTC_IMPUTED <-
     ifelse(
       is.na(ret$DATE_PART) | is.na(ret$TIME_PART),
@@ -108,148 +58,117 @@ impute_dtc <- function(data) {
   ret[, setdiff(names(ret), c("DATE_PART", "TIME_PART")), drop=FALSE]
 }
 
-#' Impute the date and time within a single study/subject/nominal time where
-#' there is only one date/time combo in the interval.
-#' 
+# Called by group_modify(STUDYID, USUBJID, NTSFD).  Collapses what were four
+# sequential helper calls into one pass, computing shared values (u_date,
+# u_time, median time) once per group instead of four times.
+impute_dtc_run_helpers_ntsfd <- function(df, key) {
+  # NA NTSFD means unscheduled; skip imputation for that group.
+  if (is.na(key$NTSFD)) return(df)
+  date   <- df$DATE_PART
+  time   <- df$TIME_PART
+  method <- df$ADTC_IMPUTE_METHOD
+  u_date      <- unique(na.omit(date))
+  u_time      <- unique(na.omit(time))
+  single_date <- length(u_date) == 1L
+  single_time <- length(u_time) == 1L
+  # Step 1: both date and time missing, exactly one of each observed in group.
+  if (single_date && single_time) {
+    current_impute <- is.na(date) & is.na(time)
+    if (any(current_impute)) {
+      date[current_impute] <- u_date
+      time[current_impute] <- u_time
+      m <- method[current_impute]
+      method[current_impute] <- ifelse(
+        is.na(m), "Single date/time for the nominal time",
+        paste(m, "Single date/time for the nominal time", sep="; ")
+      )
+    }
+  }
+  # Step 2: date missing, exactly one date observed in group.
+  if (single_date) {
+    current_impute <- is.na(date)
+    if (any(current_impute)) {
+      date[current_impute] <- u_date
+      m <- method[current_impute]
+      method[current_impute] <- ifelse(
+        is.na(m), "Single date for the nominal time",
+        paste(m, "Single date for the nominal time", sep="; ")
+      )
+    }
+  }
+  # Steps 3+4: impute missing time with median observed time.
+  # Within an NTSFD group the nominal time-of-day is constant, so the NTOD
+  # candidate time equals the NTSFD candidate time.  Only the method string
+  # differs: step 3 (single_date) labels it at the NTSFD level; step 4
+  # (any date situation) labels it at the NTOD level.
+  time_new <- median_character(u_time)
+  if (!is.na(time_new)) {
+    current_impute <- is.na(time)
+    if (any(current_impute)) {
+      method_u <-
+        if (single_date) {
+          if (single_time) "Single time measurement observed for a nominal time"
+          else             "Median time within the observed nominal times"
+        } else {
+          if (single_time) "Single time measurement observed for a nominal time of day"
+          else             "Median time within the observed nominal time of day"
+        }
+      time[current_impute] <- time_new
+      m <- method[current_impute]
+      method[current_impute] <- ifelse(is.na(m), method_u, paste(m, method_u, sep="; "))
+    }
+  }
+  df$DATE_PART          <- date
+  df$TIME_PART          <- time
+  df$ADTC_IMPUTE_METHOD <- method
+  df
+}
+
+# Called by group_modify(STUDYID, USUBJID).  Applies cross-NTSFD time-of-day
+# imputation at the subject level using impute_dtc_helper_time_ntod.
+impute_dtc_run_helpers_subject <- function(df, key) {
+  tmp <- impute_dtc_helper_time_ntod(df$DATE_PART, df$TIME_PART, df$NTSFD, df$ADTC_IMPUTE_METHOD)
+  df$DATE_PART          <- tmp$date
+  df$TIME_PART          <- tmp$time
+  df$ADTC_IMPUTE_METHOD <- tmp$method
+  df
+}
+
+#' Impute for the median time within a scheduled nominal time of day
+#'
 #' @param date,time Date and time parts of the date/time (character)
 #' @param ntime Nominal time (numeric)
 #' @param method Existing imputation methods used
-#' @return A tibble with columns for date, time, ntime, and method
-#' @name impute_dtc_helpers
-NULL
-
-#' @describeIn impute_dtc_helpers Impute for a single date/time within a
-#'   scheduled nominal time
-impute_dtc_helper_single_datetime <- function(date, time, ntime, method) {
-  if (any(is.na(ntime))) {
-    # Do nothing for unscheduled measurements
-  } else {
-    u_date <- unique(na.omit(date))
-    u_time <- unique(na.omit(time))
-    single_date <- length(u_date) == 1
-    single_time <- length(u_time) == 1
-    current_impute <- is.na(date) & is.na(time) & single_date & single_time
-    date <-
-      ifelse(
-        current_impute,
-        u_date,
-        date
-      )
-    time <-
-      ifelse(
-        current_impute,
-        u_time,
-        time
-      )
-    method <-
-      ifelse(
-        current_impute,
-        paste_missing(method, "Single date/time for the nominal time", sep="; "),
-        method
-      )
-  }
-  tibble(date=date, time=time, ntime=ntime, method=method)
-}
-
-#' @describeIn impute_dtc_helpers Impute for a single date within a scheduled
-#'   nominal time
-impute_dtc_helper_single_date <- function(date, time, ntime, method) {
-  if (any(is.na(ntime))) {
-    # Do nothing for unscheduled measurements
-  } else {
-    u_date <- unique(na.omit(date))
-    single_date <- length(u_date) == 1
-    current_impute <- is.na(date) & single_date
-    date <-
-      ifelse(
-        current_impute,
-        u_date,
-        date
-      )
-    method <-
-      ifelse(
-        current_impute,
-        paste_missing(method, "Single date for the nominal time", sep="; "),
-        method
-      )
-  }
-  tibble(date=date, time=time, ntime=ntime, method=method)
-}
-
-#' @describeIn impute_dtc_helpers Impute for the median time within a scheduled
-#'   nominal time if all happen on the same date
-impute_dtc_helper_median_time <- function(date, time, ntime, method) {
-  if (any(is.na(ntime))) {
-    # Do nothing for unscheduled measurements
-  } else {
-    u_date <- unique(na.omit(date))
-    u_time <- unique(na.omit(time))
-    if (length(u_time) == 1) {
-      method_u <- "Single time measurement observed for a nominal time"
-    } else {
-      method_u <- "Median time within the observed nominal times"
-    }
-    time_new <- median_character(u_time)
-    single_date <- length(u_date) == 1
-    current_impute <- is.na(time) & !is.na(time_new) & single_date
-    time <-
-      ifelse(
-        current_impute,
-        time_new,
-        time
-      )
-    method <-
-      ifelse(
-        current_impute,
-        paste_missing(method, method_u, sep="; "),
-        method
-      )
-  }
-  tibble(date=date, time=time, ntime=ntime, method=method)
-}
-
-#' @describeIn impute_dtc_helpers Impute for the median time within a scheduled
-#'   nominal time of day
+#' @return A list with elements date, time, ntime, and method
+#' @noRd
 impute_dtc_helper_time_ntod <- function(date, time, ntime, method) {
-  ntod <- ntime %% 24
-  # Unique, non-NA nominal times of day
+  ntod   <- ntime %% 24
   u_ntod <- unique(na.omit(ntod))
-  if (length(u_ntod) == 1) {
-    u_time <- unique(na.omit(time))
-    if (length(u_time) == 1) {
-      method_u <- "Single time measurement observed for a nominal time of day"
-    } else {
-      method_u <- "Median time within the observed nominal time of day"
-    }
+  if (length(u_ntod) == 1L) {
+    u_time   <- unique(na.omit(time))
     time_new <- median_character(u_time)
-    current_impute <- is.na(time) & !is.na(time_new)
-    time <-
-      ifelse(
-        current_impute,
-        time_new,
-        time
-      )
-    method <-
-      ifelse(
-        current_impute,
-        paste_missing(method, method_u, sep="; "),
-        method
-      )
-  } else if (length(u_ntod) > 1) {
+    if (!is.na(time_new)) {
+      current_impute <- is.na(time)
+      if (any(current_impute)) {
+        method_u <- if (length(u_time) == 1L) "Single time measurement observed for a nominal time of day"
+                    else                       "Median time within the observed nominal time of day"
+        time[current_impute] <- time_new
+        m <- method[current_impute]
+        method[current_impute] <- ifelse(is.na(m), method_u, paste(m, method_u, sep="; "))
+      }
+    }
+  } else if (length(u_ntod) > 1L) {
     for (current_ntod in u_ntod) {
       current_mask <- ntod %in% current_ntod
-      tmp <-
-        impute_dtc_helper_time_ntod(
-          date=date[current_mask],
-          time=time[current_mask],
-          ntime=ntime[current_mask],
-          method=method[current_mask]
-        )
-      time[current_mask] <- tmp$time
+      tmp <- impute_dtc_helper_time_ntod(
+        date[current_mask], time[current_mask],
+        ntime[current_mask], method[current_mask]
+      )
+      time[current_mask]   <- tmp$time
       method[current_mask] <- tmp$method
     }
   }
-  tibble(date=date, time=time, ntime=ntime, method=method)
+  list(date=date, time=time, ntime=ntime, method=method)
 }
 
 #' @describeIn impute_dtc imputes based on the typical nominal time of day

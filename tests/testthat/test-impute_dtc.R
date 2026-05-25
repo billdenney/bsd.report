@@ -165,7 +165,7 @@ test_that("impute_dtc", {
 test_that("impute_dtc_helper_time_ntod", {
   expect_equal(
     impute_dtc_helper_time_ntod(date="A", time="B", ntime=1, method=NA_character_),
-    tibble(date="A", time="B", ntime=1, method=NA_character_)
+    list(date="A", time="B", ntime=1, method=NA_character_)
   )
   expect_equal(
     impute_dtc_helper_time_ntod(
@@ -174,8 +174,8 @@ test_that("impute_dtc_helper_time_ntod", {
       ntime=rep(1, 2),
       method=rep(NA_character_, 2)
     ),
-    tibble(
-      date="A", time="B", ntime=1,
+    list(
+      date=rep("A", 2), time=rep("B", 2), ntime=rep(1, 2),
       method=c(NA_character_, "Single time measurement observed for a nominal time of day")
     )
   )
@@ -186,11 +186,11 @@ test_that("impute_dtc_helper_time_ntod", {
       ntime=c(0, 24, 48),
       method=rep(NA_character_, 3)
     ),
-    tibble(
-      date=NA_character_,
+    list(
+      date=rep(NA_character_, 3),
       time=c("B", "C", "B"),
       ntime=c(0, 24, 48),
-      method=c(NA, NA, "Median time within the observed nominal time of day")
+      method=c(NA_character_, NA_character_, "Median time within the observed nominal time of day")
     )
   )
   expect_equal(
@@ -200,9 +200,9 @@ test_that("impute_dtc_helper_time_ntod", {
       ntime=c(0:25),
       method=rep(NA_character_, 26)
     ),
-    tibble(
+    list(
       date=LETTERS,
-      time=c(letters[1:10], rep(NA, 14), "a", "b"),
+      time=c(letters[1:10], rep(NA_character_, 14), "a", "b"),
       ntime=0:25,
       method=
         c(
