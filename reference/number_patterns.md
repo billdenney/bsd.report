@@ -8,10 +8,6 @@ Regular expression patterns for numbers
 number_patterns
 ```
 
-## Format
-
-An object of class `list` of length 9.
-
 ## Details
 
 - naturalpositive integers without a sign
