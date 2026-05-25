@@ -5,13 +5,6 @@ test_that("NA_logLik_", {
   expect_equal(AIC(NA_logLik_), NA_real_)
 })
 
-test_that("logLik.xpose_data tryCatch error path returns NA_logLik_", {
-  mock_xpose <- structure(list(summary=NULL), class="xpose_data")
-  result <- logLik(mock_xpose)
-  expect_true(is.na(result))
-  expect_equal(class(result), "logLik")
-})
-
 test_that("logLik for NA and NA-like objects", {
   # logical
   expect_equal(logLik(NA), NA_logLik_)

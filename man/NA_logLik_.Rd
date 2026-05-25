@@ -9,6 +9,3 @@ NA_logLik_
 \description{
 An NA-equivalent value for logLik
 }
-\seealso{
-\code{\link{logLik.xpose_data}}
-}
