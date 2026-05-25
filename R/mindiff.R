@@ -58,41 +58,38 @@ mindiff <- function(x, choices, tie=c("first", "last", "median-first", "median-l
 #'   (with a warning).
 #' @seealso \code{\link{mindiff}}
 #' @export
+#' @importFrom tidyr fill
 mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na")) {
   none <- match.arg(none)
   if (length(x) == 0) {
     warning("`x` is zero-length, cannot match to any `choices`.")
-    x
-  } else if (length(choices) > 0) {
-    choices <- sort(choices)
-    distances <- sapply(x, FUN="-", choices)
-    if (is.null(nrow(distances))) {
-      # Make it a matrix
-      distances <- t(distances)
-    }
-    apply(X=distances,
-          MARGIN=2,
-          FUN=function(x, none) {
-            if (include_zero) {
-              ret <- which(x >= 0 & !is.na(x))
-            } else {
-              ret <- which(x > 0 & !is.na(x))
-            }
-            if (length(ret) > 0) {
-              min(x[ret])
-            } else if (none == "negative") {
-              max(x)
-            } else if (none == "na") {
-              NA
-            } else {
-              # This should never happen as it should already be caught by
-              # match.arg above.
-              stop("Invalid value for 'none' argument, please report this as a bug.") # nocov
-            }
-          },
-          none=none)
-  } else {
-    warning("No `choices` given, returning NA")
-    x[NA]
+    return(x)
   }
+  if (length(choices) == 0) {
+    warning("No `choices` given, returning NA")
+    return(x[NA])
+  }
+  df <- data.frame(
+    value      = c(choices, x),
+    choice_val = c(choices, rep(NA_real_, length(x))),
+    is_x       = c(rep(FALSE, length(choices)), rep(TRUE, length(x))),
+    orig_idx   = c(rep(NA_integer_, length(choices)), seq_along(x))
+  )
+  # Sort by value.  At ties, choices sort before x when include_zero=TRUE so
+  # a measurement exactly at a dose time gives TAD=0; x sorts before choices
+  # when include_zero=FALSE to exclude the coincident dose.
+  if (include_zero) {
+    df <- df[order(df$value, df$is_x), ]
+  } else {
+    df <- df[order(df$value, !df$is_x), ]
+  }
+  # Forward-fill the most recent choice value to every subsequent row.
+  df <- tidyr::fill(df, "choice_val", .direction="down")
+  # Compute TAD for x rows and restore original order.
+  x_rows <- df[df$is_x, ]
+  result  <- x_rows$value - x_rows$choice_val
+  if (none == "negative") {
+    result[is.na(result)] <- x_rows$value[is.na(result)] - min(choices)
+  }
+  result[order(x_rows$orig_idx)]
 }

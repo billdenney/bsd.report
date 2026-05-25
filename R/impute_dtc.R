@@ -34,66 +34,36 @@
 #' @family Imputation
 #' @family Date/time imputation
 #' @export
-#' @importFrom dplyr `%>%` case_when group_by mutate select ungroup
+#' @importFrom dplyr `%>%` case_when group_by group_modify mutate select ungroup
 impute_dtc <- function(data) {
   ret_prep <- impute_dtc_separate(data)
-  ret_grouped <- dplyr::grouped_df(ret_prep, c("STUDYID", "USUBJID", "NTSFD"))
-  idx_group <- dplyr::group_indices(ret_grouped)
-  for (current_idx in seq_len(dplyr::n_groups(ret_grouped))) {
-    current_mask <- idx_group %in% current_idx
-    # Impute a single date/time within a NTSFD
-    tmp <-
-      impute_dtc_helper_single_datetime(
-        date=ret_grouped$DATE_PART[current_mask],
-        time=ret_grouped$TIME_PART[current_mask],
-        ntime=ret_grouped$NTSFD[current_mask],
-        method=ret_grouped$ADTC_IMPUTE_METHOD[current_mask]
-      )
-    # Impute a single date within a NTSFD
-    tmp <-
-      impute_dtc_helper_single_date(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    # Impute a single or median time within a NTSFD
-    tmp <-
-      impute_dtc_helper_median_time(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    tmp <-
-      impute_dtc_helper_time_ntod(
-        date=tmp$date,
-        time=tmp$time,
-        ntime=tmp$ntime,
-        method=tmp$method
-      )
-    ret_grouped$DATE_PART[current_mask] <- tmp$date
-    ret_grouped$TIME_PART[current_mask] <- tmp$time
-    ret_grouped$ADTC_IMPUTE_METHOD[current_mask] <- tmp$method
+  # group_modify strips grouping key columns from df, so reconstruct NTSFD from key.
+  run_helpers_ntsfd <- function(df, key) {
+    ntime <- rep(key$NTSFD, nrow(df))
+    tmp <- impute_dtc_helper_single_datetime(df$DATE_PART, df$TIME_PART, ntime, df$ADTC_IMPUTE_METHOD)
+    tmp <- impute_dtc_helper_single_date(tmp$date, tmp$time, tmp$ntime, tmp$method)
+    tmp <- impute_dtc_helper_median_time(tmp$date, tmp$time, tmp$ntime, tmp$method)
+    tmp <- impute_dtc_helper_time_ntod(tmp$date, tmp$time, tmp$ntime, tmp$method)
+    df$DATE_PART          <- tmp$date
+    df$TIME_PART          <- tmp$time
+    df$ADTC_IMPUTE_METHOD <- tmp$method
+    df
   }
-  # Drop the "NTSFD" group
-  ret_grouped <- dplyr::grouped_df(ret_grouped, c("STUDYID", "USUBJID"))
-  idx_group <- dplyr::group_indices(ret_grouped)
-  for (current_idx in seq_len(dplyr::n_groups(ret_grouped))) {
-    current_mask <- idx_group %in% current_idx
-    # Impute a single date/time within a NTSFD
-    tmp <-
-      impute_dtc_helper_time_ntod(
-        date=ret_grouped$DATE_PART[current_mask],
-        time=ret_grouped$TIME_PART[current_mask],
-        ntime=ret_grouped$NTSFD[current_mask],
-        method=ret_grouped$ADTC_IMPUTE_METHOD[current_mask]
-      )
-    ret_grouped$DATE_PART[current_mask] <- tmp$date
-    ret_grouped$TIME_PART[current_mask] <- tmp$time
-    ret_grouped$ADTC_IMPUTE_METHOD[current_mask] <- tmp$method
+  # NTSFD is a regular column here (not a grouping key), so df$NTSFD is available.
+  run_helpers_subject <- function(df, key) {
+    tmp <- impute_dtc_helper_time_ntod(df$DATE_PART, df$TIME_PART, df$NTSFD, df$ADTC_IMPUTE_METHOD)
+    df$DATE_PART          <- tmp$date
+    df$TIME_PART          <- tmp$time
+    df$ADTC_IMPUTE_METHOD <- tmp$method
+    df
   }
-  ret <- ungroup(ret_grouped)
+  ret <-
+    ret_prep %>%
+    dplyr::group_by(STUDYID, USUBJID, NTSFD) %>%
+    dplyr::group_modify(run_helpers_ntsfd) %>%
+    dplyr::group_by(STUDYID, USUBJID) %>%
+    dplyr::group_modify(run_helpers_subject) %>%
+    dplyr::ungroup()
   ret$ADTC_IMPUTED <-
     ifelse(
       is.na(ret$DATE_PART) | is.na(ret$TIME_PART),
