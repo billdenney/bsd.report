@@ -12,9 +12,6 @@
 - [`as.data.frame(`*`<power.htest>`*`)`](https://billdenney.github.io/bsd.report/reference/as.data.frame.power.htest.md)
   : Convert a power calculation to a table for reporting.
 
-- [`as_gg_list()`](https://billdenney.github.io/bsd.report/reference/as_gg_list.md)
-  : Make a gg_list object (a list of ggplots) for knit_printing
-
 - [`bayesian_decision_figure()`](https://billdenney.github.io/bsd.report/reference/bayesian_decision_figure.md)
   : Make a figure describing the Bayesian decision-making based on a
   range of lower and upper reference values
@@ -117,27 +114,14 @@
 - [`knit_print(`*`<formula>`*`)`](https://billdenney.github.io/bsd.report/reference/knit_print.formula.md)
   : Generate LaTeX math from an R formula
 
-- [`knit_print(`*`<gg>`*`)`](https://billdenney.github.io/bsd.report/reference/knit_print.gg.md)
-  : Print a ggplot object with space around it
-
-- [`knit_print(`*`<gg_list>`*`)`](https://billdenney.github.io/bsd.report/reference/knit_print.gg_list.md)
-  : Print a list of ggplot objects with space around each
-
 - [`knit_print(`*`<sessionInfo>`*`)`](https://billdenney.github.io/bsd.report/reference/knit_print.sessionInfo.md)
   : Print the sessionInfo in a way that is usable in knitr/rmarkdown
   reports
 
-- [`latex_reference()`](https://billdenney.github.io/bsd.report/reference/latex_reference.md)
-  [`latex_label()`](https://billdenney.github.io/bsd.report/reference/latex_reference.md)
-  [`latex_label_clean()`](https://billdenney.github.io/bsd.report/reference/latex_reference.md)
-  [`latex_label_first_last()`](https://billdenney.github.io/bsd.report/reference/latex_reference.md)
-  : Generate a latex label or reference to the label
-
-- [`logLik(`*`<xpose_data>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.xpose_data.md)
-  [`logLik(`*`<NULL>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.xpose_data.md)
-  [`logLik(`*`<logical>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.xpose_data.md)
-  [`logLik(`*`<try-error>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.xpose_data.md)
-  : Extract Log-Likelihood
+- [`logLik(`*`<NULL>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.NULL.md)
+  [`logLik(`*`<logical>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.NULL.md)
+  [`logLik(`*`<try-error>`*`)`](https://billdenney.github.io/bsd.report/reference/logLik.NULL.md)
+  : Extract Log-Likelihood for NA-like objects
 
 - [`make_ci()`](https://billdenney.github.io/bsd.report/reference/make_ci.md)
   : Make a confidence interval from a point estimate and standard error.
@@ -173,7 +157,7 @@
   : Concatenate strings dropping missing values
 
 - [`patch_data()`](https://billdenney.github.io/bsd.report/reference/patch_data.md)
-  : Patch one data set using another
+  : Patch one data set using another (deprecated)
 
 - [`pdf_combine_multi()`](https://billdenney.github.io/bsd.report/reference/pdf_combine_multi.md)
   : Combine multiple PDF files including optional selection of pages.
@@ -183,7 +167,7 @@
   all plots, and put the legend at the end.
 
 - [`realize_addl_single()`](https://billdenney.github.io/bsd.report/reference/realize_addl_single.md)
-  : Expand II and ADDL with NONMEM-like methods for a single subject
+  : Expand II and ADDL with NONMEM-like methods (removed)
 
 - [`remove_ggplot_legend()`](https://billdenney.github.io/bsd.report/reference/remove_ggplot_legend.md)
   : Remove the legend(s) from a ggplot

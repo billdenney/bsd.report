@@ -2,10 +2,10 @@
 <url><loc>https://billdenney.github.io/bsd.report/404.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/authors.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/index.html</loc></url>
+<url><loc>https://billdenney.github.io/bsd.report/news/index.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/NA_logLik_.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/add_hash_to_file.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/as.data.frame.power.htest.html</loc></url>
-<url><loc>https://billdenney.github.io/bsd.report/reference/as_gg_list.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/bayesian_decision_figure.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/check_expected_cols.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/coalesce_same.html</loc></url>
@@ -33,11 +33,8 @@
 <url><loc>https://billdenney.github.io/bsd.report/reference/intermingle_list.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/join_control.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/knit_print.formula.html</loc></url>
-<url><loc>https://billdenney.github.io/bsd.report/reference/knit_print.gg.html</loc></url>
-<url><loc>https://billdenney.github.io/bsd.report/reference/knit_print.gg_list.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/knit_print.sessionInfo.html</loc></url>
-<url><loc>https://billdenney.github.io/bsd.report/reference/latex_reference.html</loc></url>
-<url><loc>https://billdenney.github.io/bsd.report/reference/logLik.xpose_data.html</loc></url>
+<url><loc>https://billdenney.github.io/bsd.report/reference/logLik.NULL.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/make_ci.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/make_loq.html</loc></url>
 <url><loc>https://billdenney.github.io/bsd.report/reference/make_nested_id.html</loc></url>
