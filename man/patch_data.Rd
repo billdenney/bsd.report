@@ -2,41 +2,13 @@
 % Please edit documentation in R/patch_data.R
 \name{patch_data}
 \alias{patch_data}
-\title{Patch one data set using another}
+\title{Patch one data set using another (deprecated)}
 \usage{
-patch_data(
-  basedata,
-  patchdata,
-  by = dplyr::group_vars(basedata),
-  ...,
-  replace = NA,
-  do_not_replace = NA,
-  verbose = TRUE
-)
+patch_data(...)
 }
 \arguments{
-\item{basedata}{The original (source) data}
-
-\item{patchdata}{The updated data}
-
-\item{by}{The variables to match between source and updated data (all
-other columns in the updated data are used to patch the source data).}
-
 \item{...}{Ignored}
-
-\item{replace}{Values selected in \code{basedata} for replacement with values
-in \code{patchdata} (via \code{\%in\%}).  (If \code{NULL}, all values may be
-replaced.)}
-
-\item{do_not_replace}{Values in \code{patchdata} not to use for replacement
-of values in \code{basedata}.  (If \code{NULL}, all values may be used for
-replacement.)}
-
-\item{verbose}{Report on replacement count by column.}
-}
-\value{
-The \code{basedata} updated with values from \code{patchdata}
 }
 \description{
-Patch one data set using another
+Patch one data set using another (deprecated)
 }

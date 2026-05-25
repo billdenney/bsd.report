@@ -14,7 +14,6 @@ Imports:
   dplyr,
   forcats,
   ggplot2,
-  Hmisc,
   knitr,
   PKNCA,
   purrr,
@@ -24,7 +23,6 @@ Imports:
   tibble,
   tidyr,
   utils,
-  xpose,
   zoo
 License: AGPL-3
 Encoding: UTF-8
