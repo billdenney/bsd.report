@@ -77,7 +77,7 @@ mindiff_after <- function(x, choices, include_zero=TRUE, none=c("negative", "na"
   # Use pmax to avoid zero-index subscripting (R drops 0-index silently).
   # The result for idx==0 rows is overwritten below.
   result <- x - choices[pmax(idx, 1L)]
-  no_prior <- idx == 0L
+  no_prior <- !is.na(idx) & idx == 0L
   if (none == "negative") {
     result[no_prior] <- x[no_prior] - choices[1L]
   } else {
