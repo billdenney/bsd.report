@@ -6,7 +6,7 @@ missing, the first value in `missing` is used throughout.
 ## Usage
 
 ``` r
-single_value(x, missing = NA, warn_if_all_missing = FALSE, info = NULL)
+single_value(x, missing = NA, info = NULL)
 ```
 
 ## Arguments
@@ -18,10 +18,6 @@ single_value(x, missing = NA, warn_if_all_missing = FALSE, info = NULL)
 - missing:
 
   The vector of values to consider missing in `x`
-
-- warn_if_all_missing:
-
-  Generate a warning if all values are missing?
 
 - info:
 
