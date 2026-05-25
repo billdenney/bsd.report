@@ -11,7 +11,7 @@ test_that("soft_hyphenate inserts soft hyphens", {
 test_that("knit_print.sessionInfo generates session info output", {
   result <- knit_print.sessionInfo()
   expect_true(inherits(result, "knit_asis"))
-  expect_true(grepl("R version", as.character(result), fixed = TRUE))
+  expect_true(grepl(R.version$version.string, as.character(result), fixed = TRUE))
 })
 
 test_that("knit_print.sessionInfo accepts explicit sessionInfo argument", {
