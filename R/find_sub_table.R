@@ -182,7 +182,7 @@ search_fun_values_or_edge <- function(values, from=c("row", "column"), skip=c(0,
 value_search_general <- function(data, value, ..., match_fun) {
   ret <- data.frame()
   for (i in seq_along(data)) {
-    rows <- which(match_fun(data[[i]], value))
+    rows <- which(match_fun(data[[i]], value, ...))
     if (length(rows)) {
       ret <- dplyr::bind_rows(ret, data.frame(row=rows, col=i))
     }
@@ -202,7 +202,7 @@ value_search_regex <- function(data, value_pattern, ...) {
   value_search_general(
     data=data,
     value=NULL, ...,
-    match_fun=function(x, ...) {
+    match_fun=function(x, value, ...) {
       grepl(value_pattern, x, ...)
     }
   )

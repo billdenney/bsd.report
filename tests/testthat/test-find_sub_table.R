@@ -80,3 +80,10 @@ test_that("value_search_regex works", {
     data.frame(row=c(2, 6), col=1)
   )
 })
+
+test_that("value_search_regex passes ... to grepl", {
+  expect_equal(
+    value_search_regex(data=sub_table_example, value_pattern="^a", ignore.case=TRUE),
+    data.frame(row=c(2, 6), col=1)
+  )
+})

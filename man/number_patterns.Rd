@@ -10,44 +10,44 @@ number_patterns
 Regular expression patterns for numbers
 }
 \details{
-\itemize{
+\describe{
   \item{natural}{positive integers without a sign}
   \item{nonnegative_integer_no_sign}{only digits}
   \item{integer}{an optional +- at the beginning followed by only digits
     (note that "-0" is valid)}
   \item{float_no_sign}{digits, a decimal point, and more digits}
   \item{float_or_integer_relaxed}{an optional +- followed by one of the
-    following:}
+    following:
   \itemize{
-    \item{digits}
-    \item{digits then a decimal point}
-    \item{a decimal point then digits}
-    \item{digits then a decimal point then digits}
-  }
+    \item digits
+    \item digits then a decimal point
+    \item a decimal point then digits
+    \item digits then a decimal point then digits
+  }}
   \item{float_or_integer_strict}{an optional +- followed by digits optionally
     followed by a decimal point and digits (starting or ending with a decimal
     point is not allowed).}
   \item{scientific_notation}{Strict scientific notation made of the
-    following, in order:}
+    following, in order:
   \itemize{
-    \item{an optional +-}
-    \item{a coefficient that is zero (with an optional decimal point and
-      optional additinoal zeros), a natural number, or a float that does not
-      start with zero}
-    \item{one of "e", "E", "d", or "D"}
-    \item{a optional +-}
-    \item{integer}
-  }
+    \item an optional +-
+    \item a coefficient that is zero (with an optional decimal point and
+      optional additional zeros), a natural number, or a float that does not
+      start with zero
+    \item one of "e", "E", "d", or "D"
+    \item a optional +-
+    \item integer
+  }}
   \item{scientific_notation_relaxed}{Relaxed scientific notation (relaxing on
-    the coefficient rules) made of the following, in order:}
+    the coefficient rules) made of the following, in order:
   \itemize{
-    \item{float_or_integer_relaxed}
-    \item{one of "e", "E", "d", or "D"}
-    \item{a optional +-}
-    \item{integer}
-  }
+    \item float_or_integer_relaxed
+    \item one of "e", "E", "d", or "D"
+    \item a optional +-
+    \item integer
+  }}
   \item{number_relaxed}{Any number format above (based on
-    scientific_notation_relaxed with the exponent as an optional component}
+    scientific_notation_relaxed with the exponent as an optional component)}
 }
 }
 \examples{

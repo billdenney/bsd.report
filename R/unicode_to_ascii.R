@@ -66,13 +66,18 @@ unicode_to_ascii.factor <- function(x, ...) {
 
 #' @rdname unicode_to_ascii
 #' @export
-unicode_to_ascii.logical <-
-  unicode_to_ascii.NULL <-
-  unicode_to_ascii.numeric <-
-  function(x, verbose=FALSE, ...) {
-    if (verbose) message("No Unicode to ascii changes for class: ", class(x)[1])
-    x
-  }
+unicode_to_ascii.logical <- function(x, verbose=FALSE, ...) {
+  if (verbose) message("No Unicode to ascii changes for class: ", class(x)[1])
+  x
+}
+
+#' @rdname unicode_to_ascii
+#' @export
+unicode_to_ascii.NULL <- unicode_to_ascii.logical
+
+#' @rdname unicode_to_ascii
+#' @export
+unicode_to_ascii.numeric <- unicode_to_ascii.logical
 
 #' @rdname unicode_to_ascii
 #' @export
