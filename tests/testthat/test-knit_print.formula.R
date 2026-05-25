@@ -322,6 +322,56 @@ test_that("knit_print.formula, ( work correctly", {
   )
 })
 
+test_that("knit_print.formula, [ and [[ produce subscripts", {
+  expect_equal(
+    knit_print.formula(a ~ b[1]),
+    knitr::asis_output("$a \\sim {b}_{1}$", cacheable=TRUE)
+  )
+  expect_equal(
+    knit_print.formula(a ~ b[[1]]),
+    knitr::asis_output("$a \\sim {b}_{1}$", cacheable=TRUE)
+  )
+})
+
+test_that("knit_print.formula, unary - and ! work", {
+  expect_equal(
+    knit_print.formula(a ~ -b),
+    knitr::asis_output("$a \\sim -b$", cacheable=TRUE)
+  )
+  expect_equal(
+    knit_print.formula(a ~ !b),
+    knitr::asis_output("$a \\sim !b$", cacheable=TRUE)
+  )
+})
+
+test_that("knit_print.formula, scientific notation in numeric", {
+  expect_equal(
+    knit_print.formula(a ~ 1e-10),
+    knitr::asis_output("$a \\sim {1 \\times 10^{-10}}$", cacheable=TRUE)
+  )
+})
+
+test_that("knit_print.formula, named function arguments", {
+  expect_equal(
+    knit_print.formula(a ~ f(x=1)),
+    knitr::asis_output("$a \\sim f\\left(x=1\\right)$", cacheable=TRUE)
+  )
+})
+
+test_that("knit_print.formula, .default method errors for unsupported class", {
+  expect_error(
+    bsd.report:::knit_print_helper_formula(Sys.time()),
+    regexp="Cannot handle class"
+  )
+})
+
+test_that("knit_print.formula, % in character is escaped", {
+  expect_equal(
+    knit_print.formula(a ~ "A%B"),
+    knitr::asis_output("$a \\sim \\textrm{``A\\%B''}$", cacheable=TRUE)
+  )
+})
+
 test_that("knit_print.formula, replacements work", {
   expect_equal(
     knit_print.formula(a ~ (b), replacements=list(b="c_{d}")),

@@ -4,14 +4,12 @@
 \alias{single_value}
 \title{Ensure that a vector has only a single value throughout.}
 \usage{
-single_value(x, missing = NA, warn_if_all_missing = FALSE, info = NULL)
+single_value(x, missing = NA, info = NULL)
 }
 \arguments{
 \item{x}{The vector which should have a single value}
 
 \item{missing}{The vector of values to consider missing in \code{x}}
-
-\item{warn_if_all_missing}{Generate a warning if all values are missing?}
 
 \item{info}{If more than one value is found, append this to the warning or
 error to assist with determining the location of the issue.}

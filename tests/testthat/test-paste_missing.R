@@ -1,5 +1,17 @@
 context("paste_missing")
 
+test_that("paste_missing errors on unequal non-scalar argument lengths", {
+  expect_error(
+    paste_missing(1:3, 1:2),
+    regexp="Arguments must be the same length or one argument must be a scalar",
+    fixed=TRUE
+  )
+})
+
+test_that("paste_missing paste_last=TRUE converts NA to 'NA' in final arg", {
+  expect_equal(paste_missing(c("A", NA), paste_last=TRUE), c("A", "NA"))
+})
+
 test_that("standard missing paste", {
   expect_equal(
     paste_missing(), character(0),

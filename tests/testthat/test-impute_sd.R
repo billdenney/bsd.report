@@ -69,6 +69,25 @@ test_that("imputation selects the correct method", {
   )
 })
 
+test_that("imputation dispatcher handles SE, SEM, and unknown vartype", {
+  expect_equal(
+    impute_sd(point=1, var1=0.5, var2=NA_real_, n=5, vartype="SE"),
+    impute_sd_se(point=1, var1=0.5, var2=NA_real_, n=5, vartype="SE")
+  )
+  expect_equal(
+    impute_sd(point=1, var1=0.5, var2=NA_real_, n=5, vartype="SEM"),
+    impute_sd_se(point=1, var1=0.5, var2=NA_real_, n=5, vartype="SEM")
+  )
+  expect_error(
+    impute_sd(point=1, var1=1, var2=NA_real_, n=5, vartype="UNKNOWN"),
+    regexp="Unrecognized vartype"
+  )
+  expect_warning(
+    impute_sd(point=1, var1=0.05, var2=NA_real_, n=5, vartype="CV"),
+    info="CV < 1 warning through dispatcher"
+  )
+})
+
 test_that("sd imputation works", {
   expect_error(
     impute_sd_sd(point=1, var1=1, var2=NA_real_, n=5, vartype="foo"),

@@ -37,7 +37,7 @@ get_data_manage_standard_cols <- function(data, coltype) {
   }
   ucols <- unique(ret_prep[["Column Name"]])
   if (length(ucols) < length(ret_prep[["Column Name"]])) {
-    stop("Some column names are repeated, please fix in the")
+    stop("Some column names are repeated, please fix in the source data standard")
   }
   unique(ret_prep[["Column Name"]])
 }

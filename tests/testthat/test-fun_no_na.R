@@ -20,6 +20,13 @@ test_that("fun_no_na", {
     fixed=TRUE
   )
 
+  # Direct fun_no_na calls with a custom FUN
+  expect_equal(fun_no_na(c(1, 2, 3), max), 3)
+  expect_equal(fun_no_na(double(), zero_len=NULL), double())
+  expect_equal(fun_no_na(double(), zero_len=NA), NA_real_)
+  expect_error(fun_no_na(double(), zero_len="bad"), regexp="`zero_len` must be `NULL` or `NA`.", fixed=TRUE)
+  expect_equal(fun_no_na(c(NA_real_, NA_real_), max), NA_real_)
+
   expect_equal(min_no_na(c(1, 2, NA)), 1)
   expect_equal(min_no_na(NA), NA)
   

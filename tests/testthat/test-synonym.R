@@ -289,6 +289,16 @@ test_that("replace_synonym_list", {
   )
 })
 
+test_that("replace_synonym_list emits message when matched names have no matching column in x", {
+  d1 <- data.frame(A=c("A", "B"), stringsAsFactors=FALSE)
+  s_no_col <- data.frame(Column="Z", Verbatim="A", Preferred="apple", stringsAsFactors=FALSE)
+  result <- expect_message(
+    replace_synonym_list(d1, list("Synonym no col"=s_no_col)),
+    regexp="Using the following names as synonyms for possible replacement: "
+  )
+  expect_equal(result, d1)
+})
+
 test_that("synonym errors", {
   expect_error(
     replace_synonym_list(x=1, synonyms=list("A")),

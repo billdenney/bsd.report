@@ -146,6 +146,42 @@ test_that("impute_dtc", {
     )
   )
   
+  # Step 1: both date and time fully missing → impute from single observed date+time
+  expect_equal(
+    impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", NA_character_))),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=0, ADTC=c("2020-02-01T08:09:10", NA_character_),
+      ADTC_IMPUTED="2020-02-01T08:09:10",
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Single date/time for the nominal time")
+    ),
+    info="Fully missing ADTC imputed from single observed date+time in nominal time group"
+  )
+  # Step 3, single_date=FALSE, single_time=FALSE: multiple dates + multiple times → median NTOD method
+  expect_equal(
+    impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=0,
+               ADTC=c("2020-02-01T08:00:00", "2020-02-03T10:00:00", "2020-02-05"))),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=0,
+      ADTC=c("2020-02-01T08:00:00", "2020-02-03T10:00:00", "2020-02-05"),
+      ADTC_IMPUTED=c("2020-02-01T08:00:00", "2020-02-03T10:00:00", "2020-02-05T08:00:00"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time", "Observed date and time",
+                           "Median time within the observed nominal time of day")
+    ),
+    info="Multiple dates and multiple times: median time imputed with NTOD method message"
+  )
+  # Second group_modify pass: subject-level NTOD imputation across different NTSFD groups
+  expect_equal(
+    impute_dtc(data.frame(STUDYID=1, USUBJID=1, NTSFD=c(0, 24),
+               ADTC=c("2020-02-01T08:09:10", "2020-02-02"))),
+    tibble::tibble(
+      STUDYID=1, USUBJID=1, NTSFD=c(0, 24),
+      ADTC=c("2020-02-01T08:09:10", "2020-02-02"),
+      ADTC_IMPUTED=c("2020-02-01T08:09:10", "2020-02-02T08:09:10"),
+      ADTC_IMPUTE_METHOD=c("Observed date and time",
+                           "Single time measurement observed for a nominal time of day")
+    ),
+    info="Subject-level NTOD imputation: time borrowed across NTSFD groups sharing the same time of day"
+  )
   expect_error(
     impute_dtc(data.frame(DATE_PART=1)),
     regexp="`data` cannot have columns named 'DATE_PART' or 'TIME_PART' as those are used internally.",

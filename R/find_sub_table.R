@@ -171,7 +171,7 @@ search_fun_values_or_edge <- function(values, from=c("row", "column"), skip=c(0,
     } else if (direction %in% "right") {
       ret <- which(unlist(data[start_row,start_col:ncol(data)]) %in% values)
     } else {
-      stop("Unrecognized direction: ", direction)
+      stop("Unrecognized direction: ", direction) # nocov
     }
     ret <- ret - 1 - as.numeric(exclude_value)
     c(ret, found_edge)[1]

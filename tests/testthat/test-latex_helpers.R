@@ -22,6 +22,18 @@ test_that("latex_label_first_last", {
   )
 })
 
+test_that("latex_reference creates \\ref{} output", {
+  result <- latex_reference("fig:test")
+  expect_true(grepl("\\ref{fig:test}", as.character(result), fixed=TRUE))
+  expect_true(inherits(result, "knit_asis"))
+})
+
+test_that("latex_label creates \\label{} output", {
+  result <- latex_label("fig:test")
+  expect_true(grepl("\\label{fig:test}", as.character(result), fixed=TRUE))
+  expect_true(inherits(result, "knit_asis"))
+})
+
 test_that("latex_label_first_last errors", {
   expect_error(
     latex_label_first_last(1, text="fig:test"),

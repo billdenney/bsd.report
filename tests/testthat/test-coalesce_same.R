@@ -94,6 +94,10 @@ test_that("coalesce_same data.frame success", {
   )
 })
 
+test_that("coalesce_same.default skips NULL argument", {
+  expect_equal(coalesce_same(c(1, NA), NULL), c(1, NA))
+})
+
 test_that("coalesce_same data.frame warnings and errors", {
   expect_equal(
     expect_warning(
