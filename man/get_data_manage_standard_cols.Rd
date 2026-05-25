@@ -24,13 +24,13 @@ The input `data` must have columns named "Column Type" and "Column
   Name".  The "Column Type" defines arbitrary strings to be matched to subset
   for the "Column Name"s of interest.  The "Column Name" are the names
   themselves.
-  
+
 If not all "Column Type" values are in `data[["Column Type"]]`, an error will
 be raised.
 }
 \seealso{
-Other Data Management: 
-\code{\link{check_expected_cols}()},
-\code{\link{nonmem_column_order}()}
+Other Data Management:
+\code{\link[=check_expected_cols]{check_expected_cols()}},
+\code{\link[=nonmem_column_order]{nonmem_column_order()}}
 }
 \concept{Data Management}

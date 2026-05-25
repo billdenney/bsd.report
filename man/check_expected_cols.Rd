@@ -22,8 +22,8 @@ Verify that a data.frame has the expected columns present
 Either more or fewer columns are an error.
 }
 \seealso{
-Other Data Management: 
-\code{\link{get_data_manage_standard_cols}()},
-\code{\link{nonmem_column_order}()}
+Other Data Management:
+\code{\link[=get_data_manage_standard_cols]{get_data_manage_standard_cols()}},
+\code{\link[=nonmem_column_order]{nonmem_column_order()}}
 }
 \concept{Data Management}

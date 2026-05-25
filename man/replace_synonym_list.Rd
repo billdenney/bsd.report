@@ -37,7 +37,7 @@ The output of `replace_synonym()` applied to a subset of the list,
 Use a regular expression to choose the synonyms in a list to replace in a data.frame.
 }
 \seealso{
-Other Synonyms: 
-\code{\link{replace_synonym}()}
+Other Synonyms:
+\code{\link[=replace_synonym]{replace_synonym()}}
 }
 \concept{Synonyms}

@@ -74,11 +74,11 @@ replace_synonym(
 )
 }
 \seealso{
-Other Text standardization: 
-\code{\link{correct_case}()}
+Other Text standardization:
+\code{\link[=correct_case]{correct_case()}}
 
-Other Synonyms: 
-\code{\link{replace_synonym_list}()}
+Other Synonyms:
+\code{\link[=replace_synonym_list]{replace_synonym_list()}}
 }
 \concept{Synonyms}
 \concept{Text standardization}

@@ -32,5 +32,5 @@ LazyData: true
 Suggests:
   covr,
   testthat
-RoxygenNote: 7.2.3
 URL: https://billdenney.github.io/bsd.report/
+Config/roxygen2/version: 8.0.0

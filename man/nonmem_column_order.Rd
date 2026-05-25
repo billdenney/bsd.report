@@ -22,8 +22,8 @@ rounding}
 Output a data.frame with numeric columns on the left.
 }
 \seealso{
-Other Data Management: 
-\code{\link{check_expected_cols}()},
-\code{\link{get_data_manage_standard_cols}()}
+Other Data Management:
+\code{\link[=check_expected_cols]{check_expected_cols()}},
+\code{\link[=get_data_manage_standard_cols]{get_data_manage_standard_cols()}}
 }
 \concept{Data Management}

@@ -58,11 +58,11 @@ Columns used in calculation are:
 
 }}
 \seealso{
-Other Imputation: 
-\code{\link{impute_time_act_nom}()}
+Other Imputation:
+\code{\link[=impute_time_act_nom]{impute_time_act_nom()}}
 
-Other Date/time imputation: 
-\code{\link{impute_time_act_nom}()}
+Other Date/time imputation:
+\code{\link[=impute_time_act_nom]{impute_time_act_nom()}}
 }
 \concept{Date/time imputation}
 \concept{Imputation}

@@ -35,11 +35,11 @@ The rules used are the following, in order.
 }
 }
 \seealso{
-Other Imputation: 
-\code{\link{impute_dtc}()}
+Other Imputation:
+\code{\link[=impute_dtc]{impute_dtc()}}
 
-Other Date/time imputation: 
-\code{\link{impute_dtc}()}
+Other Date/time imputation:
+\code{\link[=impute_dtc]{impute_dtc()}}
 }
 \concept{Date/time imputation}
 \concept{Imputation}

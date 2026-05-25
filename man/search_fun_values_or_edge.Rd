@@ -33,8 +33,8 @@ A number for the distance to the edge.
 Go to a value or the edge
 }
 \seealso{
-Other Sub-table finding: 
-\code{\link{find_sub_table}()},
-\code{\link{search_fun_edge}()}
+Other Sub-table finding:
+\code{\link[=find_sub_table]{find_sub_table()}},
+\code{\link[=search_fun_edge]{search_fun_edge()}}
 }
 \concept{Sub-table finding}

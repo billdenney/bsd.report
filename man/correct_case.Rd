@@ -22,7 +22,7 @@ Correct the case of a vector to be in a preferred case
 correct_case(c("ABC", "Abc", "aBc", "def"), "Abc")
 }
 \seealso{
-Other Text standardization: 
-\code{\link{replace_synonym}()}
+Other Text standardization:
+\code{\link[=replace_synonym]{replace_synonym()}}
 }
 \concept{Text standardization}
