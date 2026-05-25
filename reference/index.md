@@ -86,13 +86,6 @@
   [`impute_dtc_ntod()`](https://billdenney.github.io/bsd.report/reference/impute_dtc.md)
   : Impute dates and times when data are missing.
 
-- [`impute_dtc_helper_single_datetime()`](https://billdenney.github.io/bsd.report/reference/impute_dtc_helpers.md)
-  [`impute_dtc_helper_single_date()`](https://billdenney.github.io/bsd.report/reference/impute_dtc_helpers.md)
-  [`impute_dtc_helper_median_time()`](https://billdenney.github.io/bsd.report/reference/impute_dtc_helpers.md)
-  [`impute_dtc_helper_time_ntod()`](https://billdenney.github.io/bsd.report/reference/impute_dtc_helpers.md)
-  : Impute the date and time within a single study/subject/nominal time
-  where there is only one date/time combo in the interval.
-
 - [`impute_dtc_simplify_time()`](https://billdenney.github.io/bsd.report/reference/impute_dtc_simplify_time.md)
   : Confirm that the value looks like a time, and remove fully unknown
   times and zero seconds
