@@ -13,13 +13,13 @@ translate_value <- function(x, old, new, ...) {
 
 #' @describeIn translate_value Convert all columns (unless excluded)
 #' @export
-#' @importFrom dplyr mutate_at
 translate_value.data.frame <- function(x, old, new, ..., exclude_col=NULL) {
-  dplyr::mutate_at(
-    .tbl=x,
-    .vars=setdiff(names(x), exclude_col),
-    .funs=translate_value,
-    old=old, new=new, ...
+  dplyr::mutate(
+    x,
+    dplyr::across(
+      !dplyr::any_of(exclude_col),
+      \(col) translate_value(col, old=old, new=new, ...)
+    )
   )
 }
 

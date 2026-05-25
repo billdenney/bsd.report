@@ -17,7 +17,7 @@
 #' @return An integer vector with unique identifiers that are nested with
 #'   numbers indicating group identifiers in a way that is stable to changes
 #'   within other groups.
-#' @importFrom dplyr group_by_at tibble
+#' @importFrom dplyr tibble
 #' @importFrom purrr pmap
 #' @importFrom tidyr nest unnest
 #' @export
@@ -28,7 +28,7 @@ make_nested_id <- function(..., outer=TRUE) {
     ret[[1]] <- as.integer(factor(args[[1]]))
   } else {
     # Replace the inner groups with an integer
-    ret <- tidyr::nest(dplyr::group_by_at(args, 1))
+    ret <- tidyr::nest(dplyr::group_by(args, dplyr::across(1)))
     # The following lines of code use numeric indices to ensure that name
     # clashes do not cause problems.
     ret[[2]] <- purrr::pmap(.l=list(ret[[2]]), .f=make_nested_id, outer=FALSE)

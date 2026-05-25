@@ -88,4 +88,14 @@ test_that("mindiff_after", {
       fixed=TRUE
     )
   )
+  # NA values in x must propagate as NA rather than crashing or mis-assigning.
+  # findInterval(NA, choices) returns NA; the no_prior guard must skip NA idx.
+  expect_equal(
+    mindiff_after(c(1, NA, 3), choices=c(1.5, 2.5)),
+    c(-0.5, NA_real_, 0.5)
+  )
+  expect_equal(
+    mindiff_after(c(NA, 2, NA), choices=c(1.5, 2.5), none="na"),
+    c(NA_real_, 0.5, NA_real_)
+  )
 })
