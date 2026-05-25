@@ -45,6 +45,9 @@
   [`inverse_emax()`](https://billdenney.github.io/bsd.report/reference/emax_fun.md)
   : Compute the Emax or its inverse.
 
+- [`expect_n()`](https://billdenney.github.io/bsd.report/reference/expect_n.md)
+  : Expect a certain number of values in a logical vector
+
 - [`extract_ggplot_legend()`](https://billdenney.github.io/bsd.report/reference/extract_ggplot_legend.md)
   : Extract the legend from a ggplot2 object
 
