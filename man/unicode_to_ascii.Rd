@@ -6,6 +6,8 @@
 \alias{unicode_to_ascii.character}
 \alias{unicode_to_ascii.factor}
 \alias{unicode_to_ascii.logical}
+\alias{unicode_to_ascii.NULL}
+\alias{unicode_to_ascii.numeric}
 \alias{unicode_to_ascii.data.frame}
 \alias{unicode_to_ascii.list}
 \title{Convert from Unicode to ASCII}
@@ -26,6 +28,10 @@ unicode_to_ascii(x, ...)
 \method{unicode_to_ascii}{factor}(x, ...)
 
 \method{unicode_to_ascii}{logical}(x, verbose = FALSE, ...)
+
+\method{unicode_to_ascii}{`NULL`}(x, verbose = FALSE, ...)
+
+\method{unicode_to_ascii}{numeric}(x, verbose = FALSE, ...)
 
 \method{unicode_to_ascii}{data.frame}(x, verbose = FALSE, ...)
 

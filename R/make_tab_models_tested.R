@@ -11,9 +11,9 @@ make_tab_models_tested <- function(models, caption) {
   ret <-
     models |>
     PKNCA:::AIC.list() |>
-    dplyr::select(-df, -indentation, -isBest) |>
-    tibble::rownames_to_column("Description") |>
-    dplyr::mutate(dAIC = AIC - min(AIC, na.rm = TRUE))
+    dplyr::select(!dplyr::any_of(c("df", "indentation", "isBest"))) |>
+    tibble::rownames_to_column("Description")
+  ret$dAIC <- ret$AIC - min(ret$AIC, na.rm = TRUE)
   attr(ret, "caption") <- caption
   ret
 }

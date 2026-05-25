@@ -7,7 +7,7 @@ Description: Report writing can be made easier by using some simplifying
   These functions help with converting R into usable text.  There are many
   other functions in here, too.
 Depends:
-  R (>= 3.5)
+  R (>= 4.1.0)
 Imports:
   cowplot,
   digest,
@@ -28,7 +28,6 @@ Imports:
   zoo
 License: AGPL-3
 Encoding: UTF-8
-LazyData: true
 Suggests:
   covr,
   testthat
