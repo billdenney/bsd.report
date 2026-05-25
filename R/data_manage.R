@@ -1,13 +1,13 @@
 #' Get a vector of column names expected for a dataset.
-#' 
+#'
 #' @details The input `data` must have columns named "Column Type" and "Column
 #'   Name".  The "Column Type" defines arbitrary strings to be matched to subset
 #'   for the "Column Name"s of interest.  The "Column Name" are the names
 #'   themselves.
-#'   
+#'
 #' If not all "Column Type" values are in `data[["Column Type"]]`, an error will
 #' be raised.
-#'   
+#'
 #' @param data A data.frame or similar object
 #' @param coltype A vector of values to match in the "Column Type" column of
 #'   `data` or `NULL` to match all values.
@@ -35,13 +35,17 @@ get_data_manage_standard_cols <- function(data, coltype) {
       paste0("`", missing_coltype, "`", collapse=", ")
     )
   }
-  ret_prep[["Column Name"]]
+  ucols <- unique(ret_prep[["Column Name"]])
+  if (length(ucols) < length(ret_prep[["Column Name"]])) {
+    stop("Some column names are repeated, please fix in the")
+  }
+  unique(ret_prep[["Column Name"]])
 }
 
 #' Verify that a data.frame has the expected columns present
-#' 
+#'
 #' @details Either more or fewer columns are an error.
-#' 
+#'
 #' @param data A data.frame or similar object
 #' @param cols A character vector of expected column names
 #' @return `data` where the columns are ordered according to the order in
@@ -78,12 +82,12 @@ check_expected_cols <- function(data, cols) {
       error_message_missing
     )
   }
-  # Provide the data output in the 
+  # Provide the data output in the
   data[, cols, drop=FALSE]
 }
 
 #' Output a data.frame with numeric columns on the left.
-#' 
+#'
 #' @param x A data.frame or similar object
 #' @param time_num_cols Columns to round to \code{time_num_precision}
 #' @param time_num_precision Precision (\code{1/time_num_precision}) to use for
